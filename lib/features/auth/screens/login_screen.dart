@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/common/widgets/app_back_header.dart';
 import '../../../core/common/widgets/app_bottom_nav_bar.dart';
 import '../../../core/common/widgets/app_buttons.dart';
 import '../../../core/common/widgets/app_logo.dart';
+import '../../../core/common/widgets/app_scaffold.dart';
 import '../../../core/common/widgets/app_search_field.dart';
 import '../../../core/common/widgets/app_text_field.dart';
 import '../../../core/constants/assets_const.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/utils/gap.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -31,45 +34,53 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AppLogo(images: AppAssets.img.logo),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
 
-            const Text(
-              'Login Screen',
-              style: TextStyle(
-                fontFamily: AppFonts.body,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+              Gap.h(20),
+
+              Text('Welcome Back', style: AppTextStyles.h1),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  'Please enter your email & password to access your account.',
+                  style: AppTextStyles.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
 
-            AppSearchField(
-              hint: 'Email',
-              onChanged: (value) {
-                debugPrint('Email changed: $value');
-              },
-            ),
+              Gap.h(24),
 
-            const SizedBox(height: 16),
+              AppTextField(
+                hint: 'Enter your email ',
 
-            AppTextField(
-              hint: 'Password',
+                onChanged: (value) {
+                  debugPrint('Email changed: $value');
+                },
+              ),
 
-              onChanged: (value) {
-                debugPrint('Password changed: $value');
-              },
-            ),
+              const SizedBox(height: 16),
 
-            const SizedBox(height: 16),
-            AppPrimaryButton(
-              onAsyncPressed: () => _handleLogin(),
-              label: 'Login with API Call',
-            ),
-          ],
+              AppTextField(
+                hint: '********************',
+
+                onChanged: (value) {
+                  debugPrint('Password changed: $value');
+                },
+              ),
+
+              const SizedBox(height: 16),
+              AppPrimaryButton(
+                onAsyncPressed: () => _handleLogin(),
+                label: 'Login with API Call',
+              ),
+            ],
+          ),
         ),
       ),
 
@@ -77,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
       //   label: 'Login',
       //   onAsyncPressed: () => _handleLogin(),
       // ),
-      bottomNavigationBar: AppBottomNavBar(
+      bottomBar: AppBottomNavBar(
         currentIndex: 0,
         onTap: (index) {
           debugPrint('Tapped bottom nav item $index');

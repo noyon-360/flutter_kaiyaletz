@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppLogo extends StatelessWidget {
-  final double height;
-  final double? width;
+  final double h;
+  final double? w;
   final String images;
   final double borderRadius;
   final Color? backgroundColor;
@@ -10,8 +10,8 @@ class AppLogo extends StatelessWidget {
 
   const AppLogo({
     super.key,
-    this.height = 120,
-    this.width = 120,
+    this.h = 120,
+    this.w = 120,
     required this.images,
     this.borderRadius = 0,
     this.backgroundColor,
@@ -20,7 +20,7 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget image = Image.asset(images, height: height, width: width, fit: fit);
+    Widget image = Image.asset(images, height: h, width: w, fit: fit);
 
     if (borderRadius > 0) {
       image = ClipRRect(
@@ -31,8 +31,8 @@ class AppLogo extends StatelessWidget {
 
     if (backgroundColor != null || borderRadius > 0) {
       return Container(
-        height: height,
-        width: width,
+        height: h,
+        width: w,
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(borderRadius),

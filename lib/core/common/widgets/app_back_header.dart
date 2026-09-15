@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../constants/assets_const.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_text_styles.dart';
+import '../../utils/app_svg.dart';
 
 /// Screen header with back arrow and title.
 ///
@@ -19,7 +21,7 @@ class AppBackHeader extends StatelessWidget {
     super.key,
     required this.title,
     this.onBack,
-    this.showBack = true,
+    this.showBack,
     this.trailing,
   });
 
@@ -28,23 +30,29 @@ class AppBackHeader extends StatelessWidget {
   /// Defaults to `Navigator.maybePop`.
   final VoidCallback? onBack;
 
-  /// Set false on tab screens (e.g. Catalog opened from the bottom nav).
-  final bool showBack;
+  /// Whether to show the back arrow. Defaults to `null`, which shows it
+  /// only when there's a previous route to pop back to (via
+  /// `Navigator.canPop`) — e.g. hidden automatically on tab-root screens
+  /// like Catalog opened from the bottom nav. Pass `true`/`false` to
+  /// override the auto-detection.
+  final bool? showBack;
 
   /// Optional widget on the right (e.g. an edit or share icon).
   final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
+    final canGoBack = showBack ?? Navigator.canPop(context);
     return Row(
       children: [
-        if (showBack) ...[
+        if (canGoBack) ...[
           InkResponse(
             onTap: onBack ?? () => Navigator.maybePop(context),
             radius: 20,
-            child: const Icon(
-              Icons.arrow_back,
-              size: 24,
+            child: AppSvg(
+              asset: AppAssets.icons.back,
+              width: 24,
+              height: 24,
               color: AppColors.textDark,
             ),
           ),
