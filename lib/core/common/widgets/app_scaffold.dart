@@ -26,6 +26,7 @@ class AppScaffold extends StatelessWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 20),
     this.headerGap = 20,
     this.resizeToAvoidBottomInset = true,
+    this.isUnfocus = true,
   });
 
   final Widget body;
@@ -43,6 +44,7 @@ class AppScaffold extends StatelessWidget {
   final EdgeInsets padding;
   final double headerGap;
   final bool resizeToAvoidBottomInset;
+  final bool? isUnfocus;
 
   @override
   Widget build(BuildContext context) {
@@ -51,36 +53,39 @@ class AppScaffold extends StatelessWidget {
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       bottomNavigationBar: bottomBar,
       floatingActionButton: floatingActionButton,
-      body: Stack(
-        children: [
-          if (showDecoration)
-            const Positioned(
-              top: -233,
-              right: -148,
-              child: IgnorePointer(child: _BackgroundBlob()),
-            ),
-          SafeArea(
-            bottom: bottomBar == null,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (header != null)
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      padding.left,
-                      0,
-                      padding.right,
-                      headerGap,
+      body: GestureDetector(
+        onTap: () => isUnfocus == false ? {} : FocusScope.of(context).unfocus(),
+        child: Stack(
+          children: [
+            if (showDecoration)
+              const Positioned(
+                top: -233,
+                right: -148,
+                child: IgnorePointer(child: _BackgroundBlob()),
+              ),
+            SafeArea(
+              bottom: bottomBar == null,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (header != null)
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        padding.left,
+                        0,
+                        padding.right,
+                        headerGap,
+                      ),
+                      child: header,
                     ),
-                    child: header,
+                  Expanded(
+                    child: Padding(padding: padding, child: body),
                   ),
-                Expanded(
-                  child: Padding(padding: padding, child: body),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
