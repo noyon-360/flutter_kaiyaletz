@@ -79,7 +79,7 @@ class _AnimatedActionSurfaceState extends State<_AnimatedActionSurface>
   static const _morphDuration = Duration(milliseconds: 420);
   static const _turnDuration = Duration(seconds: 1);
 
-  bool _isLoading = false;
+  final ValueNotifier<bool> _isLoading = ValueNotifier(false);
 
   /// 0 = idle shape, 1 = settled compact square.
   late final AnimationController _morphController = AnimationController(
@@ -101,18 +101,19 @@ class _AnimatedActionSurfaceState extends State<_AnimatedActionSurface>
   void dispose() {
     _morphController.dispose();
     _rotationController.dispose();
+    _isLoading.dispose();
     super.dispose();
   }
 
   Future<void> _handleTap() async {
-    if (_isLoading) return;
+    if (_isLoading.value) return;
 
     if (widget.onAsyncPressed == null) {
       widget.onSimplePressed?.call();
       return;
     }
 
-    setState(() => _isLoading = true);
+    _isLoading.value = true;
     await _morphController.forward();
     if (!mounted) return;
     _rotationController.repeat();
@@ -133,112 +134,124 @@ class _AnimatedActionSurfaceState extends State<_AnimatedActionSurface>
         ..value = 0;
 
       if (mounted) await _morphController.reverse();
-      if (mounted) setState(() => _isLoading = false);
+      if (mounted) _isLoading.value = false;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final disabled =
-        widget.onSimplePressed == null &&
-        widget.onAsyncPressed == null &&
-        !_isLoading;
-    final idleFill = disabled
-        ? (widget.disabledFillColor ?? widget.fillColor)
-        : widget.fillColor;
-    final squareSize = widget.height;
-
     return LayoutBuilder(
       builder: (context, constraints) {
         final fullWidth = widget.width.isFinite
             ? widget.width
             : constraints.maxWidth;
 
-        return AnimatedBuilder(
-          animation: Listenable.merge([_morph, _rotationController]),
-          builder: (context, _) {
-            // Cubic curves can overshoot [0, 1] by a hair of floating-point
-            // error at the boundaries; clamp before deriving anything from it.
-            final t = _morph.value.clamp(0.0, 1.0);
-            final width = fullWidth + (squareSize - fullWidth) * t;
-            final radius =
-                widget.idleRadius +
-                (widget.squareRadius - widget.idleRadius) * t;
-            // Each opacity below is itself a division, which can independently
-            // round a hair past 0/1 even when t is exactly 0 or 1 — clamp the
-            // results too, since Opacity asserts on the exact bound.
-            // Dims quickly on tap, holds while contracted, undims as it
-            // expands back — a function of shape state, not direction.
-            final dim = (1.0 - 0.08 * math.min(t / 0.2, 1.0)).clamp(0.0, 1.0);
-            // Fades out over the first third of the contraction and back in
-            // over the last third of the expansion — same function of t
-            // either way, so the fade naturally overlaps the shape change.
-            final contentOpacity = (1.0 - math.min(t / 0.33, 1.0)).clamp(
-              0.0,
-              1.0,
-            );
-            // Mirror image of contentOpacity: the wheel only appears once
-            // mostly settled, and fades (not cuts) as it un-morphs.
-            final markerOpacity = math
-                .max((t - 0.7) / 0.3, 0.0)
-                .clamp(0.0, 1.0);
-            final markerSize = squareSize * widget.markerSizeFactor;
+        return ValueListenableBuilder(
+          valueListenable: _isLoading,
+          builder: (context, isLoading, _) {
+            final disabled =
+                widget.onSimplePressed == null &&
+                widget.onAsyncPressed == null &&
+                !_isLoading.value;
+            final idleFill = disabled
+                ? (widget.disabledFillColor ?? widget.fillColor)
+                : widget.fillColor;
+            final squareSize = widget.height;
 
-            return Center(
-              child: Opacity(
-                opacity: dim,
-                child: SizedBox(
-                  width: width,
-                  height: widget.height,
-                  child: Material(
-                    color: idleFill ?? Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(radius),
-                      side: widget.borderColor == null
-                          ? BorderSide.none
-                          : BorderSide(color: widget.borderColor!),
-                    ),
-                    child: InkWell(
-                      onTap: (_isLoading || disabled) ? null : _handleTap,
-                      customBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(radius),
-                      ),
-                      splashColor: widget.splashColor,
-                      highlightColor: widget.highlightColor,
-                      child: Center(
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            if (markerOpacity > 0)
-                              Opacity(
-                                opacity: markerOpacity,
-                                child: Transform.rotate(
-                                  angle:
-                                      _rotationController.value * 2 * math.pi,
-                                  child: Container(
-                                    width: markerSize,
-                                    height: markerSize,
-                                    decoration: BoxDecoration(
-                                      color: widget.markerColor,
-                                      borderRadius: BorderRadius.circular(
-                                        markerSize * 0.28,
+            return AnimatedBuilder(
+              animation: Listenable.merge([_morph, _rotationController]),
+              builder: (context, _) {
+                // Cubic curves can overshoot [0, 1] by a hair of floating-point
+                // error at the boundaries; clamp before deriving anything from it.
+                final t = _morph.value.clamp(0.0, 1.0);
+                final width = fullWidth + (squareSize - fullWidth) * t;
+                final radius =
+                    widget.idleRadius +
+                    (widget.squareRadius - widget.idleRadius) * t;
+                // Each opacity below is itself a division, which can independently
+                // round a hair past 0/1 even when t is exactly 0 or 1 — clamp the
+                // results too, since Opacity asserts on the exact bound.
+                // Dims quickly on tap, holds while contracted, undims as it
+                // expands back — a function of shape state, not direction.
+                final dim = (1.0 - 0.08 * math.min(t / 0.2, 1.0)).clamp(
+                  0.0,
+                  1.0,
+                );
+                // Fades out over the first third of the contraction and back in
+                // over the last third of the expansion — same function of t
+                // either way, so the fade naturally overlaps the shape change.
+                final contentOpacity = (1.0 - math.min(t / 0.33, 1.0)).clamp(
+                  0.0,
+                  1.0,
+                );
+                // Mirror image of contentOpacity: the wheel only appears once
+                // mostly settled, and fades (not cuts) as it un-morphs.
+                final markerOpacity = math
+                    .max((t - 0.7) / 0.3, 0.0)
+                    .clamp(0.0, 1.0);
+                final markerSize = squareSize * widget.markerSizeFactor;
+
+                return Center(
+                  child: Opacity(
+                    opacity: dim,
+                    child: SizedBox(
+                      width: width,
+                      height: widget.height,
+                      child: Material(
+                        color: idleFill ?? Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(radius),
+                          side: widget.borderColor == null
+                              ? BorderSide.none
+                              : BorderSide(color: widget.borderColor!),
+                        ),
+                        child: InkWell(
+                          onTap: (_isLoading.value || disabled)
+                              ? null
+                              : _handleTap,
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(radius),
+                          ),
+                          splashColor: widget.splashColor,
+                          highlightColor: widget.highlightColor,
+                          child: Center(
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                if (markerOpacity > 0)
+                                  Opacity(
+                                    opacity: markerOpacity,
+                                    child: Transform.rotate(
+                                      angle:
+                                          _rotationController.value *
+                                          2 *
+                                          math.pi,
+                                      child: Container(
+                                        width: markerSize,
+                                        height: markerSize,
+                                        decoration: BoxDecoration(
+                                          color: widget.markerColor,
+                                          borderRadius: BorderRadius.circular(
+                                            markerSize * 0.28,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            if (contentOpacity > 0)
-                              Opacity(
-                                opacity: contentOpacity,
-                                child: widget.content,
-                              ),
-                          ],
+                                if (contentOpacity > 0)
+                                  Opacity(
+                                    opacity: contentOpacity,
+                                    child: widget.content,
+                                  ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         );

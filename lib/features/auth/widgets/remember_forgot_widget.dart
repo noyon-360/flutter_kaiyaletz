@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kaiyaletz/features/auth/controller/login_controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -12,51 +14,17 @@ import '../../../core/theme/app_text_styles.dart';
 class RememberForgotRow extends StatelessWidget {
   const RememberForgotRow({
     super.key,
-    required this.rememberMe,
-    required this.onRememberChanged,
     required this.onForgotTap,
   });
 
-  final bool rememberMe;
-  final ValueChanged<bool> onRememberChanged;
   final VoidCallback onForgotTap;
 
   @override
   Widget build(BuildContext context) {
+
     return Row(
       children: [
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => onRememberChanged(!rememberMe),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 20,
-                height: 20,
-                child: Checkbox(
-                  value: rememberMe,
-                  onChanged: (v) => onRememberChanged(v ?? false),
-                  activeColor: AppColors.primary,
-                  checkColor: AppColors.onPrimary,
-                  side: const BorderSide(color: AppColors.textPrimary),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  visualDensity: VisualDensity.compact,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'Remember Me',
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ],
-          ),
-        ),
+        RememberMeCheckbox(),
         const Spacer(),
         GestureDetector(
           behavior: HitTestBehavior.opaque,
@@ -72,6 +40,57 @@ class RememberForgotRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class RememberMeCheckbox extends ConsumerWidget {
+  const RememberMeCheckbox({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        final current = ref.read(loginCtrlProvider.select((s) => s.rememberMe));
+        ref.read(loginCtrlProvider.notifier).rememberMe(!current);
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Consumer(
+            builder: (context, ref, child) {
+              final rememberMe = ref.watch(
+                loginCtrlProvider.select((state) => state.rememberMe),
+              );
+
+              return SizedBox(
+                width: 20,
+                height: 20,
+                child: Checkbox(
+                  value: rememberMe,
+                  onChanged: null, // outer GestureDetector owns the toggle
+                  activeColor: AppColors.primary,
+                  checkColor: AppColors.onPrimary,
+                  side: const BorderSide(color: AppColors.textPrimary),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'Remember Me',
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textPrimary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

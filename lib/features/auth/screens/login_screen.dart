@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kaiyaletz/features/auth/controller/login_controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common/widgets/app_buttons.dart';
 import '../../../core/common/widgets/app_logo.dart';
@@ -10,31 +12,38 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/gap.dart';
 import '../widgets/remember_forgot_widget.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  bool _rememberMe = false;
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-  // Example async handler: simulates a network call so you can see the
-  // button's spinner + disabled state. Swap this for the real login call
-  // later (e.g. authController.login(email, password)).
-  Future<void> _handleLogin() async {
-    await Future.delayed(const Duration(seconds: 6));
+  // focus
+  final passFocusNode = FocusNode();
 
-    // Uncomment to test the error path — AppPrimaryButton doesn't catch
-    // this, it just resets isLoading and rethrows, so it lands here:
-    // throw Exception('Invalid credentials');
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
-    debugPrint('Login successful');
+  Future<void> login() {
+    final email = emailController.text;
+    final pass = passwordController.text.trim();
+
+    return ref.read(loginCtrlProvider.notifier).login(email, pass);
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Building LoginScreen");
+
     return AppScaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -68,11 +77,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Gap.h(8),
 
-              AppTextField(
-                hint: 'Enter your email ',
-
-                onChanged: (value) {
-                  debugPrint('Email changed: $value');
+              Consumer(
+                builder: (context, ref, child) {
+                  final isLoading = ref.watch(
+                    loginCtrlProvider.select((s) => s.isLoading),
+                  );
+                  return AppTextField(
+                    hint: 'Enter your email ',
+                    controller: emailController,
+                    textInputAction: TextInputAction.next,
+                    enabled: !isLoading,
+                  );
                 },
               ),
 
@@ -85,11 +100,19 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Gap.h(8),
 
-              AppTextField(
-                hint: 'Enter your password',
-                isPassword: true,
-                onChanged: (value) {
-                  debugPrint('Password changed: $value');
+              Consumer(
+                builder: (context, ref, child) {
+                  final isLoading = ref.watch(
+                    loginCtrlProvider.select((s) => s.isLoading),
+                  );
+                  return AppTextField(
+                    hint: 'Enter your password',
+                    controller: passwordController,
+                    focusNode: passFocusNode,
+                    textInputAction: TextInputAction.done,
+                    isPassword: true,
+                    enabled: !isLoading,
+                  );
                 },
               ),
 
@@ -97,10 +120,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
               /// [RememberForgotRow] widget for the "Remember Me" checkbox and "Forgot Password?" link.
               RememberForgotRow(
-                rememberMe: _rememberMe,
-                onRememberChanged: (value) {
-                  setState(() => _rememberMe = value);
-                },
                 onForgotTap: () {
                   debugPrint('Forgot Password tapped');
                 },
@@ -109,10 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Gap.h(24),
 
               /// [AppPrimaryButton] widget for the login action.
-              AppPrimaryButton(
-                onAsyncPressed: () => _handleLogin(),
-                label: 'Login',
-              ),
+              AppPrimaryButton(label: 'Login', onAsyncPressed: login),
 
               Gap.h(16),
 
