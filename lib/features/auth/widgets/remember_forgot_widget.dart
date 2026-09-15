@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kaiyaletz/features/auth/controller/login_controller.dart';
+import 'package:flutter_kaiyaletz/features/auth/controller/auth_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -12,16 +12,12 @@ import '../../../core/theme/app_text_styles.dart';
 /// DM Sans Regular 14 #C29266, right-aligned.
 /// Used on: Login Screen.
 class RememberForgotRow extends StatelessWidget {
-  const RememberForgotRow({
-    super.key,
-    required this.onForgotTap,
-  });
+  const RememberForgotRow({super.key, required this.onForgotTap});
 
   final VoidCallback onForgotTap;
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
       children: [
         RememberMeCheckbox(),
@@ -52,8 +48,8 @@ class RememberMeCheckbox extends ConsumerWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        final current = ref.read(loginCtrlProvider.select((s) => s.rememberMe));
-        ref.read(loginCtrlProvider.notifier).rememberMe(!current);
+        final current = ref.read(authCtrlProvider.select((s) => s.rememberMe));
+        ref.read(authCtrlProvider.notifier).rememberMe(!current);
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -61,7 +57,7 @@ class RememberMeCheckbox extends ConsumerWidget {
           Consumer(
             builder: (context, ref, child) {
               final rememberMe = ref.watch(
-                loginCtrlProvider.select((state) => state.rememberMe),
+                authCtrlProvider.select((state) => state.rememberMe),
               );
 
               return SizedBox(

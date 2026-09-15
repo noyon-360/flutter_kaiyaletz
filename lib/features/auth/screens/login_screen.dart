@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_kaiyaletz/features/auth/controller/login_controller.dart';
+import 'package:flutter_kaiyaletz/features/auth/controller/auth_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common/widgets/app_buttons.dart';
@@ -37,7 +37,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final email = emailController.text;
     final pass = passwordController.text.trim();
 
-    return ref.read(loginCtrlProvider.notifier).login(email, pass);
+    return ref.read(authCtrlProvider.notifier).login(email, pass);
   }
 
   @override
@@ -80,7 +80,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               Consumer(
                 builder: (context, ref, child) {
                   final isLoading = ref.watch(
-                    loginCtrlProvider.select((s) => s.isLoading),
+                    authCtrlProvider.select((s) => s.isLoading),
                   );
                   return AppTextField(
                     hint: 'Enter your email ',
@@ -103,7 +103,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               Consumer(
                 builder: (context, ref, child) {
                   final isLoading = ref.watch(
-                    loginCtrlProvider.select((s) => s.isLoading),
+                    authCtrlProvider.select((s) => s.isLoading),
                   );
                   return AppTextField(
                     hint: 'Enter your password',
@@ -126,6 +126,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
 
               Gap.h(24),
+
+              /// [errMsg]
+              Consumer(
+                builder: (context, ref, child) {
+                  final errMsg = ref.watch(
+                    authCtrlProvider.select((s) => s.errMsg),
+                  );
+
+                  if (errMsg.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+                  return Column(
+                    children: [
+                      Text(errMsg, style: TextStyle(color: AppColors.error)),
+                      Gap.h(8),
+                    ],
+                  );
+                },
+              ),
 
               /// [AppPrimaryButton] widget for the login action.
               AppPrimaryButton(label: 'Login', onAsyncPressed: login),
