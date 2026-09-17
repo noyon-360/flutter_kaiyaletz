@@ -15,6 +15,12 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.3.0
   flutter_riverpod: ^3.4.3
+  dartz: ^0.10.1
+  dio: ^5.11.1
+  equatable: ^3.0.0
+  connectivity_plus: ^7.3.1
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^11.2.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.4
