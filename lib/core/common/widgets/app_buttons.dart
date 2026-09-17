@@ -30,6 +30,7 @@ class _AnimatedActionSurface extends StatefulWidget {
     required this.onSimplePressed,
     required this.onAsyncPressed,
     required this.content,
+    this.onValidate,
     this.fillColor,
     this.disabledFillColor,
     this.borderColor,
@@ -66,6 +67,13 @@ class _AnimatedActionSurface extends StatefulWidget {
 
   final VoidCallback? onSimplePressed;
   final Future<void> Function()? onAsyncPressed;
+
+  /// Synchronous pre-check run right before [onAsyncPressed], before any
+  /// animation starts. Return `false` to cancel the tap silently (no
+  /// morph/spin, [onAsyncPressed] is not called) — for cheap local checks
+  /// (e.g. "do the two password fields match?") that shouldn't be mistaken
+  /// for a network call. Ignored when [onAsyncPressed] is null.
+  final bool Function()? onValidate;
 
   /// Idle-state content (an icon, or an icon+label row).
   final Widget content;
@@ -112,6 +120,8 @@ class _AnimatedActionSurfaceState extends State<_AnimatedActionSurface>
       widget.onSimplePressed?.call();
       return;
     }
+
+    if (widget.onValidate != null && !widget.onValidate!()) return;
 
     _isLoading.value = true;
     await _morphController.forward();
@@ -272,6 +282,7 @@ class AppPrimaryButton extends StatelessWidget {
     required this.label,
     this.onSimplePressed,
     this.onAsyncPressed,
+    this.onValidate,
     this.icon,
     this.width = double.infinity,
     this.height = 51,
@@ -284,6 +295,12 @@ class AppPrimaryButton extends StatelessWidget {
 
   /// Async action (API call). Button manages its own loading animation.
   final Future<void> Function()? onAsyncPressed;
+
+  /// Synchronous pre-check run before the loading animation starts. Return
+  /// `false` to cancel the tap without animating or calling
+  /// [onAsyncPressed] — use for local checks (e.g. matching password
+  /// fields) that shouldn't look like a network call.
+  final bool Function()? onValidate;
 
   /// Optional icon shown before the label.
   final Widget? icon;
@@ -304,6 +321,7 @@ class AppPrimaryButton extends StatelessWidget {
       markerColor: AppColors.onPrimary,
       onSimplePressed: onSimplePressed,
       onAsyncPressed: onAsyncPressed,
+      onValidate: onValidate,
       content: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
@@ -332,6 +350,7 @@ class AppOutlineButton extends StatelessWidget {
     required this.label,
     this.onSimplePressed,
     this.onAsyncPressed,
+    this.onValidate,
     this.color = AppColors.primary,
     this.icon,
     this.width = double.infinity,
@@ -342,6 +361,7 @@ class AppOutlineButton extends StatelessWidget {
   final String label;
   final VoidCallback? onSimplePressed;
   final Future<void> Function()? onAsyncPressed;
+  final bool Function()? onValidate;
   final Color color;
   final Widget? icon;
   final double width;
@@ -361,6 +381,7 @@ class AppOutlineButton extends StatelessWidget {
       markerColor: color,
       onSimplePressed: onSimplePressed,
       onAsyncPressed: onAsyncPressed,
+      onValidate: onValidate,
       content: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Row(
@@ -392,6 +413,7 @@ class AppDangerButton extends StatelessWidget {
     required this.label,
     this.onSimplePressed,
     this.onAsyncPressed,
+    this.onValidate,
     this.icon,
     this.width = double.infinity,
   });
@@ -399,6 +421,7 @@ class AppDangerButton extends StatelessWidget {
   final String label;
   final VoidCallback? onSimplePressed;
   final Future<void> Function()? onAsyncPressed;
+  final bool Function()? onValidate;
   final Widget? icon;
   final double width;
 
@@ -408,6 +431,7 @@ class AppDangerButton extends StatelessWidget {
       label: label,
       onSimplePressed: onSimplePressed,
       onAsyncPressed: onAsyncPressed,
+      onValidate: onValidate,
       icon: icon,
       width: width,
       height: 48,
@@ -429,6 +453,7 @@ class AppIconButton extends StatelessWidget {
     required this.icon,
     this.onSimplePressed,
     this.onAsyncPressed,
+    this.onValidate,
     this.size = 40,
     this.iconSize = 24,
     this.radius = 8,
@@ -441,6 +466,7 @@ class AppIconButton extends StatelessWidget {
     required this.icon,
     this.onSimplePressed,
     this.onAsyncPressed,
+    this.onValidate,
     this.size = 36,
     this.iconSize = 20,
     this.backgroundColor = AppColors.surfaceTag,
@@ -450,6 +476,7 @@ class AppIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onSimplePressed;
   final Future<void> Function()? onAsyncPressed;
+  final bool Function()? onValidate;
   final double size;
   final double iconSize;
   final double radius;
@@ -468,6 +495,7 @@ class AppIconButton extends StatelessWidget {
       markerSizeFactor: iconSize / size,
       onSimplePressed: onSimplePressed,
       onAsyncPressed: onAsyncPressed,
+      onValidate: onValidate,
       content: Icon(icon, size: iconSize, color: iconColor),
     );
   }
@@ -484,11 +512,13 @@ class AppFab extends StatelessWidget {
     super.key,
     this.onSimplePressed,
     this.onAsyncPressed,
+    this.onValidate,
     this.icon = Icons.add,
   });
 
   final VoidCallback? onSimplePressed;
   final Future<void> Function()? onAsyncPressed;
+  final bool Function()? onValidate;
   final IconData icon;
 
   static const _size = 56.0;
@@ -530,6 +560,7 @@ class AppFab extends StatelessWidget {
           markerSizeFactor: 24 / (_size - 4),
           onSimplePressed: onSimplePressed,
           onAsyncPressed: onAsyncPressed,
+          onValidate: onValidate,
           content: Icon(icon, size: 32, color: AppColors.onPrimary),
         ),
       ),

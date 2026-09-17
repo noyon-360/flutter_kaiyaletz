@@ -8,19 +8,27 @@ final authCtrlProvider = NotifierProvider<AuthController, AuthState>(
 class AuthState {
   final bool isLoading;
   final bool rememberMe;
-  final String errMsg;
+  final String loginErrMsg;
+  final String signupErrMsg;
 
   AuthState({
     this.isLoading = false,
     this.rememberMe = false,
-    this.errMsg = '',
+    this.loginErrMsg = '',
+    this.signupErrMsg = '',
   });
 
-  AuthState copyWith({bool? isLoading, bool? rememberMe, String? errMsg}) {
+  AuthState copyWith({
+    bool? isLoading,
+    bool? rememberMe,
+    String? loginErrMsg,
+    String? signupErrMsg,
+  }) {
     return AuthState(
       isLoading: isLoading ?? this.isLoading,
       rememberMe: rememberMe ?? this.rememberMe,
-      errMsg: errMsg ?? this.errMsg,
+      loginErrMsg: loginErrMsg ?? this.loginErrMsg,
+      signupErrMsg: signupErrMsg ?? this.signupErrMsg,
     );
   }
 }
@@ -33,19 +41,19 @@ class AuthController extends Notifier<AuthState> {
 
   /// [Funtion] login with email and pass
   Future<void> login(String email, String password) async {
-    state = state.copyWith(isLoading: true, errMsg: "");
+    state = state.copyWith(isLoading: true, loginErrMsg: "");
 
     debugPrint(email);
     debugPrint("is remember: ${state.rememberMe}");
 
     await Future.delayed(const Duration(seconds: 2));
 
-    state = state.copyWith(isLoading: false, errMsg: "Invalid Ok");
+    state = state.copyWith(isLoading: false, loginErrMsg: "Invalid Ok");
   }
 
   /// [Funtion] Signup with email, pass, confirm pass
   Future<void> signup(String email, String pass, String confirmPass) async {
-    state = state.copyWith(isLoading: true, errMsg: "");
+    state = state.copyWith(isLoading: true, loginErrMsg: "");
 
     debugPrint(email);
 

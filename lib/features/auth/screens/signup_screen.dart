@@ -11,40 +11,60 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/gap.dart';
 import '../../../core/utils/navigation.dart';
-import '../widgets/remember_forgot_widget.dart';
-import 'signup_screen.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends ConsumerStatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   // focus
   final passFocusNode = FocusNode();
+  final confirmPassFocusNode = FocusNode();
+
+  final localError = ValueNotifier<String?>(null);
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
+    passFocusNode.dispose();
+    confirmPassFocusNode.dispose();
+    localError.dispose();
     super.dispose();
   }
 
-  Future<void> login() {
+  bool validate() {
+    final pass = passwordController.text.trim();
+    final confirmPass = confirmPasswordController.text.trim();
+
+    if (pass != confirmPass) {
+      localError.value = 'Passwords do not match';
+      return false;
+    }
+
+    localError.value = null;
+    return true;
+  }
+
+  Future<void> signup() {
     final email = emailController.text;
     final pass = passwordController.text.trim();
+    final confirmPass = confirmPasswordController.text.trim();
 
-    return ref.read(authCtrlProvider.notifier).login(email, pass);
+    return ref.read(authCtrlProvider.notifier).signup(email, pass, confirmPass);
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("Building LoginScreen");
+    debugPrint("Building SignupScreen");
 
     return AppScaffold(
       body: Center(
@@ -57,14 +77,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               Gap.h(20),
 
               /// [Text] widget for the welcome message.
-              Text('Welcome Back', style: AppTextStyles.h1),
+              Text('Create Account', style: AppTextStyles.h1),
               Gap.h(8),
 
               /// [Text] widget for the welcome message.
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
-                  'Please enter your email & password to access your account.',
+                  'Please enter your information and create your account.',
                   style: AppTextStyles.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -85,7 +105,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     authCtrlProvider.select((s) => s.isLoading),
                   );
                   return AppTextField(
-                    hint: 'Enter your email ',
+                    hint: 'Enter your email',
                     controller: emailController,
                     textInputAction: TextInputAction.next,
                     enabled: !isLoading,
@@ -111,7 +131,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     hint: 'Enter your password',
                     controller: passwordController,
                     focusNode: passFocusNode,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: TextInputAction.next,
                     isPassword: true,
                     enabled: !isLoading,
                   );
@@ -120,20 +140,53 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
               Gap.h(12),
 
-              /// [RememberForgotRow] widget for the "Remember Me" checkbox and "Forgot Password?" link.
-              RememberForgotRow(
-                onForgotTap: () {
-                  debugPrint('Forgot Password tapped');
+              /// [Text] widget for the confirm password label.
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Confirm Password',
+                  style: AppTextStyles.inputLabel,
+                ),
+              ),
+              Gap.h(8),
+
+              Consumer(
+                builder: (context, ref, child) {
+                  final isLoading = ref.watch(
+                    authCtrlProvider.select((s) => s.isLoading),
+                  );
+                  return AppTextField(
+                    hint: 'Enter your confirm password',
+                    controller: confirmPasswordController,
+                    focusNode: confirmPassFocusNode,
+                    textInputAction: TextInputAction.done,
+                    isPassword: true,
+                    enabled: !isLoading,
+                  );
                 },
               ),
 
               Gap.h(24),
 
+              /// [localError]
+              ValueListenableBuilder<String?>(
+                valueListenable: localError,
+                builder: (context, error, child) {
+                  if (error == null) return const SizedBox.shrink();
+                  return Column(
+                    children: [
+                      Text(error, style: TextStyle(color: AppColors.error)),
+                      Gap.h(8),
+                    ],
+                  );
+                },
+              ),
+
               /// [errMsg]
               Consumer(
                 builder: (context, ref, child) {
                   final errMsg = ref.watch(
-                    authCtrlProvider.select((s) => s.loginErrMsg),
+                    authCtrlProvider.select((s) => s.signupErrMsg),
                   );
 
                   if (errMsg.isEmpty) {
@@ -148,17 +201,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 },
               ),
 
-              /// [AppPrimaryButton] widget for the login action.
-              AppPrimaryButton(label: 'Login', onAsyncPressed: login),
+              /// [AppPrimaryButton] widget for the signup action.
+              AppPrimaryButton(
+                label: 'Create Account',
+                onValidate: validate,
+                onAsyncPressed: signup,
+              ),
 
               Gap.h(16),
 
-              /// [Row] widget for the "Don't have an account? Sign Up" link.
+              /// [Row] widget for the "Already have an account? Sign Up" link.
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Don\'t have an account?',
+                    'Already have an account?',
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.textPrimary,
                     ),
@@ -166,7 +223,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   Gap.w(8),
                   GestureDetector(
                     onTap: () {
-                      AppNav.to(const SignupScreen());
+                      AppNav.back();
                     },
                     child: Text(
                       'Sign Up',
