@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_kaiyaletz/core/services/auth_storage_service.dart';
 import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
 import 'package:flutter_kaiyaletz/features/auth/repo/auth_repo.dart';
+import 'package:flutter_kaiyaletz/features/auth/repo/user_repo.dart';
 import 'package:flutter_kaiyaletz/features/auth/screens/login_screen.dart';
+import 'package:flutter_kaiyaletz/features/auth/screens/profile_screen.dart';
 import 'package:flutter_kaiyaletz/features/nav/screen/bottom_nav_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_provider.dart';
+import '../../../core/utils/app_snackbar.dart';
+import '../screens/otp_screen.dart';
 
 final authCtrlProvider =
     NotifierProvider.autoDispose<AuthController, AuthState>(AuthController.new);
@@ -16,12 +22,20 @@ class AuthState {
   final bool rememberMe;
   final String loginErrMsg;
   final String signupErrMsg;
+  final String resendOtpErrMsg;
+  final String verifyOtpErrMsg;
+  final String profileErrMsg;
+  final String loginButtonText;
 
   AuthState({
     this.isLoading = false,
     this.rememberMe = false,
     this.loginErrMsg = '',
     this.signupErrMsg = '',
+    this.resendOtpErrMsg = '',
+    this.verifyOtpErrMsg = '',
+    this.profileErrMsg = '',
+    this.loginButtonText = "Login",
   });
 
   AuthState copyWith({
@@ -29,12 +43,20 @@ class AuthState {
     bool? rememberMe,
     String? loginErrMsg,
     String? signupErrMsg,
+    String? resendOtpErrMsg,
+    String? verifyOtpErrMsg,
+    String? profileErrMsg,
+    String? loginButtonText,
   }) {
     return AuthState(
       isLoading: isLoading ?? this.isLoading,
       rememberMe: rememberMe ?? this.rememberMe,
       loginErrMsg: loginErrMsg ?? this.loginErrMsg,
       signupErrMsg: signupErrMsg ?? this.signupErrMsg,
+      resendOtpErrMsg: resendOtpErrMsg ?? this.resendOtpErrMsg,
+      verifyOtpErrMsg: verifyOtpErrMsg ?? this.verifyOtpErrMsg,
+      profileErrMsg: profileErrMsg ?? this.profileErrMsg,
+      loginButtonText: loginButtonText ?? this.loginButtonText,
     );
   }
 }
@@ -56,6 +78,14 @@ class AuthController extends Notifier<AuthState> {
     await result.fold(
       (f) async {
         state = state.copyWith(isLoading: false, loginErrMsg: f.message);
+
+        if (f.message.contains(
+          "Email not verified. Please verify your email first.",
+        )) {
+          await Future.delayed(const Duration(seconds: 1));
+
+          state = state.copyWith(loginButtonText: "Verify Email");
+        }
       },
       (s) async {
         final data = s.data;
@@ -78,7 +108,11 @@ class AuthController extends Notifier<AuthState> {
 
         state = state.copyWith(isLoading: false, loginErrMsg: '');
 
-        AppNav.offAll(BottomNavScreen());
+        if (data.firstName.isEmpty || data.lastName.isEmpty) {
+          AppNav.to(ProfileScreen());
+        } else {
+          AppNav.offAll(BottomNavScreen());
+        }
       },
     );
   }
@@ -90,13 +124,117 @@ class AuthController extends Notifier<AuthState> {
 
   /// [Funtion] Signup with email, pass, confirm pass
   Future<void> signup(String email, String pass, String confirmPass) async {
-    state = state.copyWith(isLoading: true, loginErrMsg: "");
+    final repo = ref.read(authRepoProvider);
 
-    debugPrint(email);
+    state = state.copyWith(isLoading: true, signupErrMsg: "");
 
-    await Future.delayed(const Duration(seconds: 2));
+    final result = await repo.signup(
+      email: email,
+      password: pass,
+      confirmPassword: confirmPass,
+    );
+
+    result.fold(
+      (f) {
+        state = state.copyWith(isLoading: false, signupErrMsg: f.message);
+      },
+      (s) {
+        AppSnackbar.success(s.message);
+        AppNav.to(OtpScreen(email: email));
+      },
+    );
 
     state = state.copyWith(isLoading: false);
+  }
+
+  /// [Funtion] Resend otp
+  Future<void> resendOtp(String email) async {
+    final repo = ref.read(authRepoProvider);
+
+    state = state.copyWith(isLoading: true, resendOtpErrMsg: "");
+
+    final result = await repo.resendOtp(email: email);
+
+    result.fold(
+      (f) {
+        state = state.copyWith(isLoading: false, signupErrMsg: f.message);
+      },
+      (s) async {
+        AppSnackbar.success(s.message);
+        await Future.delayed(const Duration(seconds: 1));
+        state = state.copyWith(loginErrMsg: '');
+        AppNav.to(OtpScreen(email: email));
+      },
+    );
+
+    state = state.copyWith(isLoading: false, resendOtpErrMsg: "");
+  }
+
+  /// [Funtion] Verify otp
+  Future<void> verifyOtp(String email, String otp) async {
+    final repo = ref.read(authRepoProvider);
+
+    state = state.copyWith(isLoading: true, verifyOtpErrMsg: "");
+
+    final result = await repo.verifyOtp(email: email, otp: otp);
+
+    result.fold(
+      (f) {
+        state = state.copyWith(isLoading: false, verifyOtpErrMsg: f.message);
+      },
+      (s) {
+        state = state.copyWith(
+          isLoading: false,
+          verifyOtpErrMsg: "",
+          loginButtonText: "Login",
+        );
+        AppSnackbar.success(s.message);
+        AppNav.offAll(LoginScreen());
+      },
+    );
+  }
+
+  /// [Funtion] Save profile (full name, contact number, address, avatar)
+  Future<void> updateProfile({
+    required String fullName,
+    required String phoneNumber,
+    required String address,
+    File? profileImage,
+  }) async {
+    final repo = ref.read(userRepoProvider);
+
+    state = state.copyWith(isLoading: true, profileErrMsg: "");
+
+    final result = await repo.updateProfile(
+      fullName: fullName,
+      phoneNumber: phoneNumber,
+      address: address,
+      profileImage: profileImage,
+    );
+
+    await result.fold(
+      (f) async {
+        state = state.copyWith(isLoading: false, profileErrMsg: f.message);
+      },
+      (s) async {
+        final nameParts = fullName.trim().split(RegExp(r'\s+'));
+        final firstName = nameParts.isNotEmpty ? nameParts.first : '';
+        final lastName = nameParts.length > 1
+            ? nameParts.sublist(1).join(' ')
+            : '';
+
+        await ref
+            .read(authStorageServiceProvider)
+            .updateBasicInfo(
+              firstName: firstName,
+              lastName: lastName,
+              profileImage: profileImage?.path,
+            );
+
+        state = state.copyWith(isLoading: false, profileErrMsg: "");
+        AppNav.offAll(BottomNavScreen());
+      },
+    );
   }
 
   /// [State]

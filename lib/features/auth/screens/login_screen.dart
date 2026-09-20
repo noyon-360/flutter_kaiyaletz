@@ -28,6 +28,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   // focus
   final passFocusNode = FocusNode();
 
+  // bool verify = false;
+
   @override
   void dispose() {
     emailController.dispose();
@@ -35,9 +37,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> login() {
+  Future<void> login(bool? verify) {
     final email = emailController.text;
     final pass = passwordController.text.trim();
+
+    if (verify == true) {
+      return ref.read(authCtrlProvider.notifier).resendOtp(email);
+    }
 
     return ref.read(authCtrlProvider.notifier).login(email, pass);
   }
@@ -136,9 +142,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     authCtrlProvider.select((s) => s.loginErrMsg),
                   );
 
-                  if (errMsg.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
+                  // if (errMsg.isEmpty) {
+                  //   return const SizedBox.shrink();
+                  // }
                   return Column(
                     children: [
                       Text(errMsg, style: TextStyle(color: AppColors.error)),
@@ -149,7 +155,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
 
               /// [AppPrimaryButton] widget for the login action.
-              AppPrimaryButton(label: 'Login', onAsyncPressed: login),
+              /// [Botton Change to Verify] Login button can be Send OTP button if user is not verified
+              Consumer(
+                builder: (context, ref, _) {
+                  final loginButtonText = ref.watch(
+                    authCtrlProvider.select((b) => b.loginButtonText),
+                  );
+                  final verify = loginButtonText == "Verify Email";
+
+                  return AppPrimaryButton(
+                    label: loginButtonText,
+                    onAsyncPressed: () => login(verify),
+                  );
+                },
+              ),
 
               Gap.h(16),
 

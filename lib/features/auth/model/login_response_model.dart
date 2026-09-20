@@ -12,10 +12,10 @@ class UserData {
   @JsonKey(name: 'public_id')
   final String? publicId;
 
-  @JsonKey(required: true, disallowNullValue: true)
+  @JsonKey(required: false, disallowNullValue: true)
   final String firstName;
 
-  @JsonKey(required: true, disallowNullValue: true)
+  @JsonKey(required: false, disallowNullValue: true)
   final String lastName;
 
   @JsonKey(required: true, disallowNullValue: true)

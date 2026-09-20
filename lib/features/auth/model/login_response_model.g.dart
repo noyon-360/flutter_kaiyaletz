@@ -28,8 +28,6 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) =>
         ],
         requiredKeys: const [
           '_id',
-          'firstName',
-          'lastName',
           'email',
           'phoneNumber',
           'address',

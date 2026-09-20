@@ -23,7 +23,7 @@ class AppScaffold extends StatelessWidget {
     this.bottomBar,
     this.floatingActionButton,
     this.showDecoration = true,
-    this.padding = const EdgeInsets.symmetric(horizontal: 20),
+    this.padding = const EdgeInsets.symmetric(horizontal: 18),
     this.headerGap = 20,
     this.resizeToAvoidBottomInset = true,
     this.isUnfocus = true,

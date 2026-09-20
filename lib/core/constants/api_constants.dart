@@ -35,29 +35,29 @@ class ApiConstants {
   };
 
   static const AuthEndpoints auth = AuthEndpoints();
+  static const UserEndpoints user = UserEndpoints();
   // static const JobsEndpoints jobs = JobsEndpoints();
 }
 
 class AuthEndpoints {
   const AuthEndpoints();
 
-  String get login => '/auth/login';
-  String get register => '/auth/register';
+  static const String _base = '/auth/';
+
+  String get login => '${_base}login';
+  String get register => '${_base}register';
+  String get resendOtp => '${_base}resend-otp';
+  String get verifyEmail => '/auth/verify-email';
+
   String get refreshToken => '/auth/refresh-token';
   String get forgotPassword => '/auth/forgot-password';
-  String get verifyOtp => '/auth/verify-otp';
   String get resetPassword => '/auth/reset-password';
 }
 
-// Example of a resource with path-parameter endpoints — copy this shape
-// for Jobs, Catalog, etc.
-//
-// class JobsEndpoints {
-//   const JobsEndpoints();
-//
-//   String get list => '/jobs';
-//   String get create => '/jobs';
-//   String detail(String id) => '/jobs/$id';
-//   String update(String id) => '/jobs/$id';
-//   String delete(String id) => '/jobs/$id';
-// }
+class UserEndpoints {
+  const UserEndpoints();
+
+  static const String _base = '/user/';
+
+  String get updateProfile => '${_base}profile';
+}

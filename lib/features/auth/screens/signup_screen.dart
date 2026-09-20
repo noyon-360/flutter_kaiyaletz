@@ -189,9 +189,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     authCtrlProvider.select((s) => s.signupErrMsg),
                   );
 
-                  if (errMsg.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
+                  // if (errMsg.isEmpty) {
+                  //   return const SizedBox.shrink();
+                  // }
                   return Column(
                     children: [
                       Text(errMsg, style: TextStyle(color: AppColors.error)),

@@ -214,6 +214,19 @@ class AuthStorageService {
 
   Future<String?> getEmail() => _secureStorage.read(key: KeyConst.email);
 
+  Future<void> updateBasicInfo({
+    required String firstName,
+    required String lastName,
+    String? profileImage,
+  }) async {
+    await Future.wait([
+      _secureStorage.write(key: KeyConst.firstName, value: firstName),
+      _secureStorage.write(key: KeyConst.lastName, value: lastName),
+      if (profileImage != null)
+        _secureStorage.write(key: KeyConst.profileImage, value: profileImage),
+    ]);
+  }
+
   Future<void> clearAuthData() async {
     await Future.wait([
       _secureStorage.delete(key: KeyConst.accessToken),
