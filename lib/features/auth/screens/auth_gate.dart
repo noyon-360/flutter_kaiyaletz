@@ -5,9 +5,8 @@ import '../../../core/api/api_client.dart';
 import '../../../core/models/session_status.dart';
 import '../../../core/providers/core_provider.dart';
 import '../../../core/utils/navigation.dart';
-import '../../home/screens/home_screen.dart';
+import '../../nav/screen/bottom_nav_screen.dart';
 import 'login_screen.dart';
-
 
 class AuthGate extends ConsumerStatefulWidget {
   const AuthGate({super.key});
@@ -36,7 +35,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
         }
         final status = snapshot.data ?? SessionStatus.guest;
         return status == SessionStatus.authenticated
-            ? const HomeScreen()
+            ? const BottomNavScreen()
             : const LoginScreen();
       },
     );
