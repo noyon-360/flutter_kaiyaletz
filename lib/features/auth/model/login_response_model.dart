@@ -65,6 +65,9 @@ class UserData {
     required this.refreshToken,
   });
 
+  // Fullname
+  String get fullName => "$firstName $lastName";
+
   factory UserData.fromJson(Map<String, dynamic> json) =>
       _$UserDataFromJson(json);
 

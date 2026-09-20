@@ -28,8 +28,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   // focus
   final passFocusNode = FocusNode();
 
-  // bool verify = false;
-
   @override
   void dispose() {
     emailController.dispose();

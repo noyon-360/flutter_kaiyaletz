@@ -3,7 +3,8 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseDomain = 'http://10.10.26.115:5001'; // [Office]
+  // static const String baseDomain = 'http://10.10.26.115:5001'; // [Office]
+  static const String baseDomain = 'http://localhost:5001'; // [Home]
 
   static const String baseUrl = '$baseDomain/api/v1';
 

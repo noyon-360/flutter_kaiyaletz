@@ -108,7 +108,7 @@ class AuthController extends Notifier<AuthState> {
 
         state = state.copyWith(isLoading: false, loginErrMsg: '');
 
-        if (data.firstName.isEmpty || data.lastName.isEmpty) {
+        if (data.fullName.isEmpty) {
           AppNav.to(ProfileScreen());
         } else {
           AppNav.offAll(BottomNavScreen());
