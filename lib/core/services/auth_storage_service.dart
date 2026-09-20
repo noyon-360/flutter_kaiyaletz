@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../constants/key_constants.dart';
 import '../models/session_status.dart';
+import '../utils/d_print.dart';
 
 /// One saved login, used for the multi-account switcher.
 class StoredAccount {
@@ -65,43 +66,40 @@ class AuthStorageService {
   AuthStorageService({FlutterSecureStorage? storage})
     : _secureStorage = storage ?? const FlutterSecureStorage();
 
-  Future<void> storeAuthData({
-    required String accessToken,
-    required String refreshToken,
-    required String userId,
-    required String role,
-    String? profileImage,
-    String? firstName,
-    String? lastName,
-    String? username,
-    String? email,
-  }) async {
+  Future<void> storeAuthData(StoredAccount account) async {
+    DPrint.log('storeAuthData: storing ${account.toJson()}');
     await Future.wait([
-      _secureStorage.write(key: KeyConst.accessToken, value: accessToken),
-      _secureStorage.write(key: KeyConst.refreshToken, value: refreshToken),
-      _secureStorage.write(key: KeyConst.userId, value: userId),
-      _secureStorage.write(key: KeyConst.role, value: role),
+      _secureStorage.write(
+        key: KeyConst.accessToken,
+        value: account.accessToken,
+      ),
+      _secureStorage.write(
+        key: KeyConst.refreshToken,
+        value: account.refreshToken,
+      ),
+      _secureStorage.write(key: KeyConst.userId, value: account.userId),
+      _secureStorage.write(key: KeyConst.role, value: account.role),
       _secureStorage.write(
         key: KeyConst.profileImage,
-        value: profileImage ?? '',
+        value: account.profileImage,
       ),
-      _secureStorage.write(key: KeyConst.firstName, value: firstName ?? ''),
-      _secureStorage.write(key: KeyConst.lastName, value: lastName ?? ''),
-      _secureStorage.write(key: KeyConst.username, value: username ?? ''),
-      _secureStorage.write(key: KeyConst.email, value: email ?? ''),
+      _secureStorage.write(key: KeyConst.firstName, value: account.firstName),
+      _secureStorage.write(key: KeyConst.lastName, value: account.lastName),
+      _secureStorage.write(key: KeyConst.username, value: account.username),
+      _secureStorage.write(key: KeyConst.email, value: account.email),
     ]);
 
     await saveAccountToList(
       StoredAccount(
-        userId: userId,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        role: role,
-        firstName: firstName ?? '',
-        lastName: lastName ?? '',
-        profileImage: profileImage ?? '',
-        username: username ?? '',
-        email: email ?? '',
+        userId: account.userId,
+        accessToken: account.accessToken,
+        refreshToken: account.refreshToken,
+        role: account.role,
+        firstName: account.firstName,
+        lastName: account.lastName,
+        profileImage: account.profileImage,
+        username: account.username,
+        email: account.email,
       ),
     );
   }
@@ -120,6 +118,7 @@ class AuthStorageService {
       key: KeyConst.accountsList,
       value: jsonEncode(accounts.map((a) => a.toJson()).toList()),
     );
+    DPrint.log('saveAccountToList: saved ${account.toJson()}');
   }
 
   Future<List<StoredAccount>> getAccountsList() async {
@@ -127,7 +126,11 @@ class AuthStorageService {
     if (jsonString == null || jsonString.isEmpty) return [];
     try {
       final list = jsonDecode(jsonString) as List;
-      return list.map((j) => StoredAccount.fromJson(j)).toList();
+      final accounts = list.map((j) => StoredAccount.fromJson(j)).toList();
+      DPrint.log(
+        'getAccountsList: loaded ${accounts.map((a) => a.toJson()).toList()}',
+      );
+      return accounts;
     } catch (_) {
       return [];
     }
@@ -136,6 +139,7 @@ class AuthStorageService {
   Future<void> switchAccount(String userId) async {
     final accounts = await getAccountsList();
     final account = accounts.firstWhere((a) => a.userId == userId);
+    DPrint.log('switchAccount: switching to ${account.toJson()}');
     await Future.wait([
       _secureStorage.write(
         key: KeyConst.accessToken,
@@ -166,6 +170,9 @@ class AuthStorageService {
     await _secureStorage.write(
       key: KeyConst.accountsList,
       value: jsonEncode(updated.map((a) => a.toJson()).toList()),
+    );
+    DPrint.log(
+      'removeAccount: removed userId=$userId, remaining ${updated.map((a) => a.toJson()).toList()}',
     );
     return await getUserId() == userId;
   }
@@ -212,6 +219,9 @@ class AuthStorageService {
       _secureStorage.delete(key: KeyConst.userId),
       _secureStorage.delete(key: KeyConst.role),
     ]);
+    DPrint.log(
+      'clearAuthData: cleared accessToken, refreshToken, userId, role',
+    );
   }
 
   Future<bool> hasStoredAccounts() async =>

@@ -1,7 +1,7 @@
 name: flutter_kaiyaletz
 description: "A new Flutter project."
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
@@ -21,6 +21,7 @@ dependencies:
   connectivity_plus: ^7.3.1
   hive_flutter: ^1.1.0
   flutter_secure_storage: ^11.2.0
+  json_annotation: ^4.12.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.4
@@ -28,6 +29,8 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+  build_runner: ^2.11.1
+  json_serializable: ^6.13.0
 
 flutter_launcher_icons:
   android: "launcher_icon"
@@ -36,7 +39,6 @@ flutter_launcher_icons:
   min_sdk_android: 21
 
 flutter:
-
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
@@ -52,7 +54,7 @@ flutter:
           weight: 400
         - asset: assets/fonts/PlayfairDisplay-SemiBold.ttf
           weight: 600
- 
+
     # Body, labels, buttons, inputs, captions
     - family: DMSans
       fonts:

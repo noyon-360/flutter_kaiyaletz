@@ -3,6 +3,7 @@ import 'package:flutter_kaiyaletz/core/providers/core_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/api_client.dart';
 import '../../../core/models/network_result.dart';
+import '../model/login_response_model.dart';
 
 final authRepoProvider = Provider<AuthRepo>((ref) {
   final apiClient = ref.watch(apiClientProvider);
@@ -11,7 +12,7 @@ final authRepoProvider = Provider<AuthRepo>((ref) {
 });
 
 abstract class AuthRepo {
-  NetworkResult<Map<String, dynamic>> login({
+  NetworkResult<UserData> login({
     required String email,
     required String password,
   });
@@ -25,14 +26,16 @@ class AuthRepoImpl implements AuthRepo {
   const AuthRepoImpl({required this.apiClient});
 
   @override
-  NetworkResult<Map<String, dynamic>> login({
+  NetworkResult<UserData> login({
     required String email,
     required String password,
   }) {
-    return apiClient.post<Map<String, dynamic>>(
+    // ApiClient already parses the outer {success, message, data} envelope,
+    // so this converter receives only the `data` object.
+    return apiClient.post<UserData>(
       endpoint: ApiConstants.auth.login,
       data: {'email': email, 'password': password},
-      fromJsonT: (json) => json as Map<String, dynamic>,
+      fromJsonT: (json) => UserData.fromJson(json as Map<String, dynamic>),
     );
   }
 

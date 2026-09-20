@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_kaiyaletz/core/services/auth_storage_service.dart';
 import 'package:flutter_kaiyaletz/features/auth/repo/auth_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../core/providers/core_provider.dart';
 
 final authCtrlProvider = NotifierProvider<AuthController, AuthState>(
   AuthController.new,
@@ -40,6 +43,8 @@ class AuthController extends Notifier<AuthState> {
     return AuthState();
   }
 
+  
+
   /// [Funtion] login with email and pass
   Future<void> login(String email, String password) async {
     final repo = ref.read(authRepoProvider);
@@ -54,19 +59,22 @@ class AuthController extends Notifier<AuthState> {
       },
       (s) async {
         final data = s.data;
-        // await ref
-        //     .read(authStorageServiceProvider)
-        //     .storeAuthData(
-        //       accessToken: data['accessToken'] ?? '',
-        //       refreshToken: data['refreshToken'] ?? '',
-        //       userId: data['userId'] ?? data['_id'] ?? '',
-        //       role: data['role'] ?? '',
-        //       firstName: data['firstName'],
-        //       lastName: data['lastName'],
-        //       profileImage: data['profileImage'],
-        //       username: data['username'],
-        //       email: data['email'],
-        //     );
+
+        final account = StoredAccount(
+          userId: data.id,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+          role: data.role,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          profileImage: data.profileImage.url,
+          email: data.email,
+        );
+
+        await ref.read(authStorageServiceProvider).storeAuthData(account);
+        if (state.rememberMe) {
+          await ref.read(authStorageServiceProvider).saveAccountToList(account);
+        }
         state = state.copyWith(isLoading: false, loginErrMsg: '');
       },
     );
