@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/app_colors.dart';
 import '../../theme/app_text_styles.dart';
+import '../../utils/app_svg.dart';
 
 /// White card that groups [SettingsTile]s with dividers.
 ///
@@ -60,7 +61,8 @@ class SettingsTile extends StatelessWidget {
     this.color,
   });
 
-  final IconData icon;
+  /// Path to the icon SVG asset (see [AppAssets.icons]).
+  final String icon;
   final String label;
   final VoidCallback? onTap;
 
@@ -78,7 +80,12 @@ class SettingsTile extends StatelessWidget {
         height: 48,
         child: Row(
           children: [
-            Icon(icon, size: 24, color: color ?? AppColors.textDark),
+            AppSvg(
+              asset: icon,
+              width: 24,
+              height: 24,
+              color: color ?? AppColors.textDark,
+            ),
             const SizedBox(width: 16),
             Expanded(
               child: Text(

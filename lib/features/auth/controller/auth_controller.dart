@@ -1,13 +1,15 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_kaiyaletz/core/services/auth_storage_service.dart';
+import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
 import 'package:flutter_kaiyaletz/features/auth/repo/auth_repo.dart';
+import 'package:flutter_kaiyaletz/features/auth/screens/login_screen.dart';
+import 'package:flutter_kaiyaletz/features/nav/screen/bottom_nav_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_provider.dart';
 
-final authCtrlProvider = NotifierProvider<AuthController, AuthState>(
-  AuthController.new,
-);
+final authCtrlProvider =
+    NotifierProvider.autoDispose<AuthController, AuthState>(AuthController.new);
 
 class AuthState {
   final bool isLoading;
@@ -43,8 +45,6 @@ class AuthController extends Notifier<AuthState> {
     return AuthState();
   }
 
-  
-
   /// [Funtion] login with email and pass
   Future<void> login(String email, String password) async {
     final repo = ref.read(authRepoProvider);
@@ -75,9 +75,17 @@ class AuthController extends Notifier<AuthState> {
         if (state.rememberMe) {
           await ref.read(authStorageServiceProvider).saveAccountToList(account);
         }
+
         state = state.copyWith(isLoading: false, loginErrMsg: '');
+
+        AppNav.offAll(BottomNavScreen());
       },
     );
+  }
+
+  Future<void> logout() async {
+    await ref.read(authStorageServiceProvider).clearAuthData();
+    AppNav.offAll(LoginScreen());
   }
 
   /// [Funtion] Signup with email, pass, confirm pass

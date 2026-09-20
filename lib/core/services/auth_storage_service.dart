@@ -212,6 +212,8 @@ class AuthStorageService {
   Future<String?> getProfileImage() =>
       _secureStorage.read(key: KeyConst.profileImage);
 
+  Future<String?> getEmail() => _secureStorage.read(key: KeyConst.email);
+
   Future<void> clearAuthData() async {
     await Future.wait([
       _secureStorage.delete(key: KeyConst.accessToken),

@@ -16,4 +16,11 @@ class Icons {
 
   static const String _base = 'assets/icons/';
   final String back = '${_base}back-icon.svg';
+
+  /// [Screen] Setting
+  ///
+  final String edit = '${_base}edit.svg';
+  final String general = '${_base}general.svg';
+  final String notification = '${_base}notification.svg';
+  final String email = '${_base}email.svg';
 }

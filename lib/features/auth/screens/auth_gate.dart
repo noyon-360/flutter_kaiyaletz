@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kaiyaletz/core/utils/d_print.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
@@ -16,27 +17,44 @@ class AuthGate extends ConsumerStatefulWidget {
 }
 
 class _AuthGateState extends ConsumerState<AuthGate> {
+  late final Future<SessionStatus> _sessionStatusFuture;
+
   @override
   void initState() {
     super.initState();
+    _sessionStatusFuture = Future.wait([
+      ref.read(authStorageServiceProvider).currentSessionStatus(),
+      Future.delayed(const Duration(milliseconds: 600)), // floor duration
+    ]).then((results) => results[0]);
     ApiClient.onSessionExpired = () => AppNav.offAll(const LoginScreen());
     ApiClient.onAuthRequired = () {};
   }
 
   @override
   Widget build(BuildContext context) {
+    DPrint.log("Auth Gate");
     return FutureBuilder<SessionStatus>(
-      future: ref.read(authStorageServiceProvider).currentSessionStatus(),
+      future: _sessionStatusFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
+
         final status = snapshot.data ?? SessionStatus.guest;
-        return status == SessionStatus.authenticated
-            ? const BottomNavScreen()
-            : const LoginScreen();
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (status == SessionStatus.authenticated) {
+            AppNav.offAll(const BottomNavScreen());
+          } else {
+            AppNav.offAll(const LoginScreen());
+          }
+        });
+
+        return const Scaffold(
+          body: SizedBox.shrink(),
+        ); // brief placeholder while navigating away
       },
     );
   }

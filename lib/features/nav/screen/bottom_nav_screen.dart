@@ -5,6 +5,8 @@ import 'package:flutter_kaiyaletz/features/home/screens/home_screen.dart';
 import 'package:flutter_kaiyaletz/features/nav/controller/bottom_nav_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../setting/screen/setting_screen.dart';
+
 class BottomNavScreen extends StatelessWidget {
   const BottomNavScreen({super.key});
 
@@ -12,7 +14,7 @@ class BottomNavScreen extends StatelessWidget {
     HomeScreen(),
     Center(child: Text("Jobs Screen")),
     Center(child: Text("Catalog Screen")),
-    Center(child: Text("Settings Screen")),
+    SettingScreen(),
   ];
 
   @override
