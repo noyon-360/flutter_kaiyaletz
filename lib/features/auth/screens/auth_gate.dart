@@ -3,8 +3,12 @@ import 'package:flutter_kaiyaletz/core/utils/d_print.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
+import '../../../core/common/widgets/app_loading_indicator.dart';
+import '../../../core/common/widgets/app_logo.dart';
+import '../../../core/constants/assets_const.dart';
 import '../../../core/models/session_status.dart';
 import '../../../core/providers/core_provider.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/navigation.dart';
 import '../../nav/screen/bottom_nav_screen.dart';
 import 'login_screen.dart';
@@ -63,6 +67,33 @@ class AuthGate extends ConsumerWidget {
       }
     });
 
-    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    return const _SplashScreen();
+  }
+}
+
+/// Branded splash shown while [sessionStatusProvider] resolves.
+class _SplashScreen extends StatelessWidget {
+  const _SplashScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundWarm,
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppLogo(
+              images: AppAssets.img.logo,
+              h: 110,
+              borderRadius: 24,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(height: 32),
+            const AppLoadingIndicator(size: 28),
+          ],
+        ),
+      ),
+    );
   }
 }
