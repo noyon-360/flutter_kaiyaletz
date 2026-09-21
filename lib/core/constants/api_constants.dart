@@ -62,6 +62,7 @@ class UserEndpoints {
 
   String get profile => '${_base}profile';
   String get changePass => '${_base}change-password';
+  String get notification => '${_base}notifications';
 }
 
 class SupportEndpoints {

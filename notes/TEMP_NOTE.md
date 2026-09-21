@@ -9,3 +9,4 @@
 # Setting Screen
 
 - Delete Account - Need to use the api.
+- Notification Setting - In here its just api calling, but its need to handle the Mobile App Permission.

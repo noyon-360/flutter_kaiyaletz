@@ -8,10 +8,10 @@ import 'package:flutter_kaiyaletz/features/profile/controller/profile_controller
 import 'package:flutter_kaiyaletz/features/support/screens/contact_us_screen.dart';
 import 'package:flutter_kaiyaletz/features/profile/screen/edit_profile_screen.dart';
 import 'package:flutter_kaiyaletz/features/profile/screen/general_settings_screen.dart';
-import 'package:flutter_kaiyaletz/features/profile/screen/notification_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utils/gap.dart';
+import '../../notification/screens/notification_setting_screen.dart';
 
 class SettingScreen extends ConsumerWidget {
   const SettingScreen({super.key});
@@ -58,7 +58,7 @@ class SettingScreen extends ConsumerWidget {
                     icon: AppAssets.icons.notification,
                     label: 'Notification',
                     onTap: () {
-                      AppNav.to(NotificationScreen());
+                      AppNav.to(NotificationSettingScreen());
                     },
                   ),
                   SettingsTile(

@@ -54,7 +54,7 @@ class SettingsGroup extends StatelessWidget {
 class SettingsTile extends StatelessWidget {
   const SettingsTile({
     super.key,
-    required this.icon,
+    this.icon,
     required this.label,
     this.onTap,
     this.trailing,
@@ -62,7 +62,7 @@ class SettingsTile extends StatelessWidget {
   });
 
   /// Path to the icon SVG asset (see [AppAssets.icons]).
-  final String icon;
+  final String? icon;
   final String label;
   final VoidCallback? onTap;
 
@@ -80,13 +80,15 @@ class SettingsTile extends StatelessWidget {
         height: 48,
         child: Row(
           children: [
-            AppSvg(
-              asset: icon,
-              width: 24,
-              height: 24,
-              color: color ?? AppColors.textDark,
-            ),
-            const SizedBox(width: 16),
+            if (icon != null) ...[
+              AppSvg(
+                asset: icon!,
+                width: 24,
+                height: 24,
+                color: color ?? AppColors.textDark,
+              ),
+              const SizedBox(width: 16),
+            ],
             Expanded(
               child: Text(
                 label,
