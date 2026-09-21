@@ -12,9 +12,14 @@ import '../../../core/utils/gap.dart';
 import '../controller/auth_controller.dart';
 
 class OtpScreen extends ConsumerStatefulWidget {
-  const OtpScreen({super.key, required this.email});
+  const OtpScreen({
+    super.key,
+    required this.email,
+    this.isFogoteVerify = false,
+  });
 
   final String email;
+  final bool? isFogoteVerify;
 
   @override
   ConsumerState<OtpScreen> createState() => _OtpScreenState();
@@ -32,9 +37,15 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   }
 
   Future<void> verify() {
-    return ref
-        .read(authCtrlProvider.notifier)
-        .verifyOtp(widget.email, otpController.text.trim());
+    if (widget.isFogoteVerify == true) {
+      return ref
+          .read(authCtrlProvider.notifier)
+          .verifyResetOtp(widget.email, otpController.text);
+    } else {
+      return ref
+          .read(authCtrlProvider.notifier)
+          .verifyOtp(widget.email, otpController.text.trim());
+    }
   }
 
   Future<void> resend() {

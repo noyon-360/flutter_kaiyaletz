@@ -53,7 +53,9 @@ class AuthEndpoints {
 
   // Not Tested this api
   String get refreshToken => '/auth/refresh-token';
-  // String get resetPassword => '/auth/reset-password';
+
+  String get verifyResetOtp => '/auth/verify-reset-otp';
+  String get resetPassword => '/auth/reset-password';
 }
 
 class UserEndpoints {

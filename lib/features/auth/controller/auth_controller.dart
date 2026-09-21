@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_kaiyaletz/core/services/auth_storage_service.dart';
 import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
 import 'package:flutter_kaiyaletz/features/auth/repo/auth_repo.dart';
+import 'package:flutter_kaiyaletz/features/auth/screens/create_new_pass_screen.dart';
 import 'package:flutter_kaiyaletz/features/profile/controller/profile_controller.dart';
 import 'package:flutter_kaiyaletz/features/profile/repos/user_repo.dart';
 import 'package:flutter_kaiyaletz/features/auth/screens/login_screen.dart';
@@ -27,6 +28,8 @@ class AuthState {
   final String verifyOtpErrMsg;
   final String profileErrMsg;
   final String forgotPassError;
+  final String verifyResetOtpError;
+  final String resetPassError;
   final String loginButtonText;
 
   AuthState({
@@ -38,6 +41,8 @@ class AuthState {
     this.verifyOtpErrMsg = '',
     this.profileErrMsg = '',
     this.forgotPassError = '',
+    this.verifyResetOtpError = '',
+    this.resetPassError = '',
     this.loginButtonText = "Login",
   });
 
@@ -50,6 +55,8 @@ class AuthState {
     String? verifyOtpErrMsg,
     String? profileErrMsg,
     String? forgotPassError,
+    String? verifyResetOtpError,
+    String? resetPassError,
     String? loginButtonText,
   }) {
     return AuthState(
@@ -61,6 +68,8 @@ class AuthState {
       verifyOtpErrMsg: verifyOtpErrMsg ?? this.verifyOtpErrMsg,
       profileErrMsg: profileErrMsg ?? this.profileErrMsg,
       forgotPassError: forgotPassError ?? this.forgotPassError,
+      verifyResetOtpError: verifyResetOtpError ?? this.verifyResetOtpError,
+      resetPassError: resetPassError ?? this.resetPassError,
       loginButtonText: loginButtonText ?? this.loginButtonText,
     );
   }
@@ -254,6 +263,7 @@ class AuthController extends Notifier<AuthState> {
     state = state.copyWith(rememberMe: value);
   }
 
+  /// [Fogot Pass] start
   Future<void> forgotPass({required String email}) async {
     final repo = ref.read(authRepoProvider);
 
@@ -267,6 +277,52 @@ class AuthController extends Notifier<AuthState> {
         AppSnackbar.success(s.message);
 
         await Future.delayed(const Duration(milliseconds: 500));
+
+        AppNav.to(OtpScreen(email: email, isFogoteVerify: true));
+      },
+    );
+  }
+
+  Future<void> verifyResetOtp(String email, String otp) async {
+    final repo = ref.read(authRepoProvider);
+
+    final result = await repo.verfiyResetOtp(email: email, otp: otp);
+
+    result.fold(
+      (f) {
+        state = state.copyWith(verifyResetOtpError: f.message);
+      },
+      (s) async {
+        AppNav.to(CreateNewPassScreen(email: email, otp: otp));
+      },
+    );
+  }
+
+  Future<void> resetPass(
+    String email,
+    String otp,
+    String password,
+    String confirmPassword,
+  ) async {
+    final repo = ref.read(authRepoProvider);
+
+    final result = await repo.resetPass(
+      email: email,
+      otp: otp,
+      password: password,
+      confirmPassword: confirmPassword,
+    );
+
+    result.fold(
+      (f) {
+        state = state.copyWith(resetPassError: f.message);
+      },
+      (s) async {
+        AppSnackbar.success(s.message);
+
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        AppNav.to(LoginScreen());
       },
     );
   }
