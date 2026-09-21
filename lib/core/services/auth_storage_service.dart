@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../constants/key_constants.dart';
-import '../models/session_status.dart';
+import '../common/models/session_status.dart';
 import '../utils/d_print.dart';
 
 /// One saved login, used for the multi-account switcher.

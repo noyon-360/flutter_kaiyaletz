@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/constants/api_constants.dart';
-import '../../../core/models/network_result.dart';
+import '../../../core/common/models/network_result.dart';
 import '../../../core/providers/core_provider.dart';
 
 final userRepoProvider = Provider<UserRepo>((ref) {

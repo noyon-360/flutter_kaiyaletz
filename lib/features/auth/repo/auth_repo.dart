@@ -2,7 +2,7 @@ import 'package:flutter_kaiyaletz/core/constants/api_constants.dart';
 import 'package:flutter_kaiyaletz/core/providers/core_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/api_client.dart';
-import '../../../core/models/network_result.dart';
+import '../../../core/common/models/network_result.dart';
 import '../model/login_response_model.dart';
 import '../model/signup_reponse_model.dart';
 

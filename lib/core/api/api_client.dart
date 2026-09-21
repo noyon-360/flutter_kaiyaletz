@@ -8,11 +8,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_kaiyaletz/core/utils/d_print.dart';
 
 import '../constants/api_constants.dart';
-import '../models/session_status.dart';
+import '../common/models/session_status.dart';
 import 'dio_error_handler.dart';
-import '../models/base_response.dart';
-import '../models/network_failure.dart';
-import '../models/network_success.dart';
+import '../common/models/base_response.dart';
+import '../common/models/network_failure.dart';
+import '../common/models/network_success.dart';
 import '../services/api_cache_service.dart';
 import '../services/auth_storage_service.dart';
 import '../services/connectivity_service.dart';

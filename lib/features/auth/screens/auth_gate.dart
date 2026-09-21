@@ -6,7 +6,7 @@ import '../../../core/api/api_client.dart';
 import '../../../core/common/widgets/app_loading_indicator.dart';
 import '../../../core/common/widgets/app_logo.dart';
 import '../../../core/constants/assets_const.dart';
-import '../../../core/models/session_status.dart';
+import '../../../core/common/models/session_status.dart';
 import '../../../core/providers/core_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/navigation.dart';
