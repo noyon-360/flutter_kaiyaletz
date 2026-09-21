@@ -16,8 +16,8 @@ import '../../utils/app_svg.dart';
 /// Delete Account, Contact us.
 ///
 /// Pass it to `AppScaffold(header: ...)`.
-class AppBackHeader extends StatelessWidget {
-  const AppBackHeader({
+class AppHeader extends StatelessWidget {
+  const AppHeader({
     super.key,
     required this.title,
     this.onBack,

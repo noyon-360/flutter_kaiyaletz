@@ -13,7 +13,7 @@ final authRepoProvider = Provider<AuthRepo>((ref) {
 });
 
 abstract class AuthRepo {
-  NetworkResult<UserData> login({
+  NetworkResult<UserModel> login({
     required String email,
     required String password,
   });
@@ -36,16 +36,16 @@ class AuthRepoImpl implements AuthRepo {
   const AuthRepoImpl({required this.apiClient});
 
   @override
-  NetworkResult<UserData> login({
+  NetworkResult<UserModel> login({
     required String email,
     required String password,
   }) {
     // ApiClient already parses the outer {success, message, data} envelope,
     // so this converter receives only the `data` object.
-    return apiClient.post<UserData>(
+    return apiClient.post<UserModel>(
       endpoint: ApiConstants.auth.login,
       data: {'email': email, 'password': password},
-      fromJsonT: (json) => UserData.fromJson(json),
+      fromJsonT: (json) => UserModel.fromJson(json),
     );
   }
 

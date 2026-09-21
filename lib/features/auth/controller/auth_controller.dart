@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_kaiyaletz/core/services/auth_storage_service.dart';
 import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
 import 'package:flutter_kaiyaletz/features/auth/repo/auth_repo.dart';
-import 'package:flutter_kaiyaletz/features/auth/repo/user_repo.dart';
+import 'package:flutter_kaiyaletz/features/profile/repos/user_repo.dart';
 import 'package:flutter_kaiyaletz/features/auth/screens/login_screen.dart';
 import 'package:flutter_kaiyaletz/features/auth/screens/profile_screen.dart';
 import 'package:flutter_kaiyaletz/features/nav/screen/bottom_nav_screen.dart';

@@ -7,6 +7,7 @@ import '../../../core/api/api_client.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/common/models/network_result.dart';
 import '../../../core/providers/core_provider.dart';
+import '../model/profile_model.dart';
 
 final userRepoProvider = Provider<UserRepo>((ref) {
   final apiClient = ref.watch(apiClientProvider);
@@ -15,6 +16,8 @@ final userRepoProvider = Provider<UserRepo>((ref) {
 });
 
 abstract class UserRepo {
+  NetworkStream<ProfileModel> getProfile({bool forceRefresh = false});
+
   NetworkResult<void> updateProfile({
     required String fullName,
     required String phoneNumber,
@@ -27,6 +30,16 @@ class UserRepoImpl implements UserRepo {
   final ApiClient apiClient;
 
   const UserRepoImpl({required this.apiClient});
+
+  @override
+  NetworkStream<ProfileModel> getProfile({bool forceRefresh = false}) {
+    return apiClient.getStream(
+      endpoint: ApiConstants.user.profile,
+      cacheDuration: const Duration(days: 30),
+      forceEmitRemote: forceRefresh,
+      fromJsonT: (json) => ProfileModel.fromJson(json),
+    );
+  }
 
   @override
   NetworkResult<void> updateProfile({
@@ -47,7 +60,7 @@ class UserRepoImpl implements UserRepo {
     });
 
     return apiClient.patch<void>(
-      endpoint: ApiConstants.user.updateProfile,
+      endpoint: ApiConstants.user.profile,
       formData: formData,
       fromJsonT: (json) => json,
     );

@@ -4,7 +4,7 @@ part 'login_response_model.g.dart';
 
 /// Authenticated user and tokens in the login response's `data` object.
 @JsonSerializable(checked: true, disallowUnrecognizedKeys: true)
-class UserData {
+class UserModel {
   @JsonKey(name: '_id', required: true, disallowNullValue: true)
   final String id;
 
@@ -48,7 +48,7 @@ class UserData {
   @JsonKey(required: true, disallowNullValue: true)
   final String refreshToken;
 
-  const UserData({
+  const UserModel({
     required this.id,
     this.publicId,
     required this.firstName,
@@ -68,10 +68,10 @@ class UserData {
   // Fullname
   String get fullName => "$firstName $lastName";
 
-  factory UserData.fromJson(Map<String, dynamic> json) =>
-      _$UserDataFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserDataToJson(this);
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }
 
 @JsonSerializable(checked: true, disallowUnrecognizedKeys: true)

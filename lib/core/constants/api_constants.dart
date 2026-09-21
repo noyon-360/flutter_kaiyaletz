@@ -60,5 +60,5 @@ class UserEndpoints {
 
   static const String _base = '/user/';
 
-  String get updateProfile => '${_base}profile';
+  String get profile => '${_base}profile';
 }

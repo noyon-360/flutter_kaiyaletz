@@ -6,8 +6,8 @@ part of 'login_response_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserData _$UserDataFromJson(Map<String, dynamic> json) =>
-    $checkedCreate('UserData', json, ($checkedConvert) {
+UserModel _$UserModelFromJson(Map<String, dynamic> json) =>
+    $checkedCreate('UserModel', json, ($checkedConvert) {
       $checkKeys(
         json,
         allowedKeys: const [
@@ -53,7 +53,7 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) =>
           'refreshToken',
         ],
       );
-      final val = UserData(
+      final val = UserModel(
         id: $checkedConvert('_id', (v) => v as String),
         publicId: $checkedConvert('public_id', (v) => v as String?),
         firstName: $checkedConvert('firstName', (v) => v as String),
@@ -78,7 +78,7 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) =>
       return val;
     }, fieldKeyMap: const {'id': '_id', 'publicId': 'public_id'});
 
-Map<String, dynamic> _$UserDataToJson(UserData instance) => <String, dynamic>{
+Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
   '_id': instance.id,
   'public_id': instance.publicId,
   'firstName': instance.firstName,

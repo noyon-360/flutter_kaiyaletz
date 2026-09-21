@@ -5,7 +5,7 @@ import 'package:flutter_kaiyaletz/features/home/screens/home_screen.dart';
 import 'package:flutter_kaiyaletz/features/nav/controller/bottom_nav_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../setting/screen/setting_screen.dart';
+import '../../profile/screen/setting_screen.dart';
 
 class BottomNavScreen extends StatelessWidget {
   const BottomNavScreen({super.key});
