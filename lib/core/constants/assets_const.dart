@@ -23,4 +23,9 @@ class Icons {
   final String general = '${_base}general.svg';
   final String notification = '${_base}notification.svg';
   final String email = '${_base}email.svg';
+
+  /// [Screen] General Setting
+  ///
+  final String password = '${_base}formkit_password.svg';
+  final String delete = '${_base}light_delete-outline.svg';
 }

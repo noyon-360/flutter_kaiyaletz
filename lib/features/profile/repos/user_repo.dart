@@ -9,7 +9,7 @@ import '../../../core/common/models/network_result.dart';
 import '../../../core/providers/core_provider.dart';
 import '../model/profile_model.dart';
 
-final userRepoProvider = Provider<UserRepo>((ref) {
+final userRepoProvider = Provider.autoDispose<UserRepo>((ref) {
   final apiClient = ref.watch(apiClientProvider);
 
   return UserRepoImpl(apiClient: apiClient);
@@ -23,6 +23,12 @@ abstract class UserRepo {
     required String phoneNumber,
     required String address,
     File? profileImage,
+  });
+
+  NetworkResult<void> changePassword({
+    required String currentPass,
+    required String newPass,
+    required String confirmPass,
   });
 }
 
@@ -63,6 +69,23 @@ class UserRepoImpl implements UserRepo {
       endpoint: ApiConstants.user.profile,
       formData: formData,
       fromJsonT: (json) => json,
+    );
+  }
+
+  @override
+  NetworkResult<void> changePassword({
+    required String currentPass,
+    required String newPass,
+    required String confirmPass,
+  }) async {
+    return apiClient.patch(
+      endpoint: ApiConstants.user.changePass,
+      data: {
+        "currentPassword": currentPass,
+        "newPassword": newPass,
+        "confirmPassword": confirmPass,
+      },
+      fromJsonT: (json) => {},
     );
   }
 }

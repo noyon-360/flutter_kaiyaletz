@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_kaiyaletz/core/services/auth_storage_service.dart';
 import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
 import 'package:flutter_kaiyaletz/features/auth/repo/auth_repo.dart';
+import 'package:flutter_kaiyaletz/features/profile/controller/profile_controller.dart';
 import 'package:flutter_kaiyaletz/features/profile/repos/user_repo.dart';
 import 'package:flutter_kaiyaletz/features/auth/screens/login_screen.dart';
 import 'package:flutter_kaiyaletz/features/auth/screens/profile_screen.dart';
@@ -200,6 +201,7 @@ class AuthController extends Notifier<AuthState> {
     required String phoneNumber,
     required String address,
     File? profileImage,
+    bool isEditing = false,
   }) async {
     final repo = ref.read(userRepoProvider);
 
@@ -232,7 +234,15 @@ class AuthController extends Notifier<AuthState> {
             );
 
         state = state.copyWith(isLoading: false, profileErrMsg: "");
-        AppNav.offAll(BottomNavScreen());
+
+        if (isEditing) {
+          await ref
+              .read(profileProvider.notifier)
+              .getUser(forceRefresh: true);
+          AppNav.back();
+        } else {
+          AppNav.offAll(BottomNavScreen());
+        }
       },
     );
   }

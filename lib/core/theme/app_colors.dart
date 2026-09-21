@@ -125,6 +125,15 @@ class AppColors {
   /// MiniStepProgress in job cards: Home, All Jobs.
   static const progressEmpty = Color(0xFFD9D9D9);
 
+  /// #000000 @ 25% opacity. Backdrop behind the web auth card and behind
+  /// modal dialogs/bottom sheets (AppDialogs.confirm's `barrierColor`).
+  /// Use [overlayLight] instead for drawers/side-panel scrims.
+  static const overlay = Color(0x40000000);
+
+  /// #000000 @ 15% opacity. Lighter scrim for drawers/side panels
+  /// (web Import Product, Product Details).
+  static const overlayLight = Color(0x26000000);
+
   // ===========================================================================
   // TEXT
   // ===========================================================================

@@ -37,7 +37,7 @@ class ApiConstants {
 
   static const AuthEndpoints auth = AuthEndpoints();
   static const UserEndpoints user = UserEndpoints();
-  // static const JobsEndpoints jobs = JobsEndpoints();
+  static const SupportEndpoints support = SupportEndpoints();
 }
 
 class AuthEndpoints {
@@ -61,4 +61,13 @@ class UserEndpoints {
   static const String _base = '/user/';
 
   String get profile => '${_base}profile';
+  String get changePass => '${_base}change-password';
+}
+
+class SupportEndpoints {
+  const SupportEndpoints();
+
+  static const String _base = '/support/';
+
+  String get contactUs => _base;
 }

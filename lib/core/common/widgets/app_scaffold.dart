@@ -3,6 +3,7 @@ import 'dart:ui' show ImageFilter, TileMode;
 import 'package:flutter/material.dart';
 
 import '../../theme/app_colors.dart';
+import 'app_loading_indicator.dart';
 
 /// Base screen layout used by every mobile screen.
 ///
@@ -27,6 +28,7 @@ class AppScaffold extends StatelessWidget {
     this.headerGap = 20,
     this.resizeToAvoidBottomInset = true,
     this.isUnfocus = true,
+    this.isLoading = false,
   });
 
   final Widget body;
@@ -45,47 +47,62 @@ class AppScaffold extends StatelessWidget {
   final double headerGap;
   final bool resizeToAvoidBottomInset;
   final bool? isUnfocus;
+  final bool? isLoading;
 
   @override
   Widget build(BuildContext context) {
+    final loading = isLoading ?? false;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       bottomNavigationBar: bottomBar,
       floatingActionButton: floatingActionButton,
-      body: GestureDetector(
-        onTap: () => isUnfocus == false ? {} : FocusScope.of(context).unfocus(),
-        child: Stack(
-          children: [
-            if (showDecoration)
-              const Positioned(
-                top: -233,
-                right: -148,
-                child: IgnorePointer(child: _BackgroundBlob()),
-              ),
-            SafeArea(
-              bottom: bottomBar == null,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Stack(
+        children: [
+          IgnorePointer(
+            ignoring: loading,
+            child: GestureDetector(
+              onTap: () =>
+                  isUnfocus == false ? {} : FocusScope.of(context).unfocus(),
+              child: Stack(
                 children: [
-                  if (header != null)
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        padding.left,
-                        0,
-                        padding.right,
-                        headerGap,
-                      ),
-                      child: header,
+                  if (showDecoration)
+                    const Positioned(
+                      top: -233,
+                      right: -148,
+                      child: IgnorePointer(child: _BackgroundBlob()),
                     ),
-                  Expanded(
-                    child: Padding(padding: padding, child: body),
+                  SafeArea(
+                    bottom: bottomBar == null,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (header != null)
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              padding.left,
+                              0,
+                              padding.right,
+                              headerGap,
+                            ),
+                            child: header,
+                          ),
+                        Expanded(
+                          child: Padding(padding: padding, child: body),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
+          ),
+          if (loading) ...[
+            Positioned.fill(child: ColoredBox(color: AppColors.overlay)),
+            const Center(child: AppLoadingIndicator()),
           ],
-        ),
+        ],
       ),
     );
   }

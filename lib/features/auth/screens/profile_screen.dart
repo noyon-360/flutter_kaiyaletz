@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../core/common/widgets/app_back_header.dart';
 import '../../../core/common/widgets/app_buttons.dart';
 import '../../../core/common/widgets/app_logo.dart';
 import '../../../core/common/widgets/app_scaffold.dart';
@@ -12,10 +13,19 @@ import '../../../core/constants/assets_const.dart' hide Icons;
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/gap.dart';
+import '../../profile/controller/profile_controller.dart';
 import '../controller/auth_controller.dart';
 
+/// Shared full-name/contact/address form, used both for first-time profile
+/// setup (after signup, when there's no stored name yet — see [AuthGate]
+/// and [AuthController.login]) and for editing an existing profile from
+/// Settings. [isEditing] switches the header/title/button copy and, when
+/// true, prefills the fields from [profileProvider] and pops back to
+/// Settings on save instead of replacing the stack with [BottomNavScreen].
 class ProfileScreen extends ConsumerStatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({super.key, this.isEditing = false});
+
+  final bool isEditing;
 
   @override
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
@@ -27,6 +37,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final addressController = TextEditingController();
 
   final ValueNotifier<File?> avatar = ValueNotifier(null);
+  String existingAvatarUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEditing) {
+      final user = ref.read(profileProvider).user;
+      fullNameController.text = user?.fullName.trim() ?? '';
+      contactController.text = user?.phoneNumber ?? '';
+      addressController.text = user?.address ?? '';
+      existingAvatarUrl = user?.profileImage.url ?? '';
+    }
+  }
 
   @override
   void dispose() {
@@ -98,30 +121,42 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           phoneNumber: contactController.text.trim(),
           address: addressController.text.trim(),
           profileImage: avatar.value,
+          isEditing: widget.isEditing,
         );
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      header: widget.isEditing ? const AppHeader(title: 'Edit Profile') : null,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
+              if (!widget.isEditing) ...[
+                AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
 
-              Gap.h(20),
+                Gap.h(20),
 
-              /// [Text] widget for the screen title.
-              Text('Profile Setup', style: AppTextStyles.h1),
+                /// [Text] widget for the screen title.
+                Text('Profile Setup', style: AppTextStyles.h1),
 
-              Gap.h(24),
+                Gap.h(24),
+              ],
 
               /// [Avatar] widget with edit/remove controls.
               ValueListenableBuilder<File?>(
                 valueListenable: avatar,
                 builder: (context, image, child) {
+                  final hasExisting =
+                      image == null && existingAvatarUrl.isNotEmpty;
+                  final ImageProvider? backgroundImage = image != null
+                      ? FileImage(image)
+                      : hasExisting
+                      ? NetworkImage(existingAvatarUrl)
+                      : null;
+
                   return Center(
                     child: Stack(
                       clipBehavior: Clip.none,
@@ -131,10 +166,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           child: CircleAvatar(
                             radius: 55,
                             backgroundColor: AppColors.surfaceCream,
-                            backgroundImage: image != null
-                                ? FileImage(image)
-                                : null,
-                            child: image == null
+                            backgroundImage: backgroundImage,
+                            child: backgroundImage == null
                                 ? Icon(
                                     Icons.person,
                                     size: 55,
@@ -147,7 +180,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           right: -4,
                           bottom: -4,
                           child: GestureDetector(
-                            onTap: image != null ? removeAvatar : pickAvatar,
+                            onTap: backgroundImage != null
+                                ? removeAvatar
+                                : pickAvatar,
                             child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
@@ -262,7 +297,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
 
               /// [AppPrimaryButton] widget for the save action.
-              AppPrimaryButton(label: 'Save Profile', onAsyncPressed: save),
+              AppPrimaryButton(
+                label: widget.isEditing ? 'Save' : 'Save Profile',
+                onAsyncPressed: save,
+              ),
 
               Gap.h(16),
             ],

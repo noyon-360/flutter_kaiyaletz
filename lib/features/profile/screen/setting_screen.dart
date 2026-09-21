@@ -5,7 +5,7 @@ import 'package:flutter_kaiyaletz/core/theme/app_colors.dart';
 import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
 import 'package:flutter_kaiyaletz/features/auth/controller/auth_controller.dart';
 import 'package:flutter_kaiyaletz/features/profile/controller/profile_controller.dart';
-import 'package:flutter_kaiyaletz/features/profile/screen/contact_us_screen.dart';
+import 'package:flutter_kaiyaletz/features/support/screens/contact_us_screen.dart';
 import 'package:flutter_kaiyaletz/features/profile/screen/edit_profile_screen.dart';
 import 'package:flutter_kaiyaletz/features/profile/screen/general_settings_screen.dart';
 import 'package:flutter_kaiyaletz/features/profile/screen/notification_screen.dart';
