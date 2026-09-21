@@ -87,7 +87,7 @@ class AuthRepoImpl implements AuthRepo {
   @override
   NetworkResult<void> forgotPassword({required String email}) {
     return apiClient.post<void>(
-      endpoint: '/auth/forgot-password',
+      endpoint: ApiConstants.auth.forgotPassword,
       data: {'email': email},
       fromJsonT: (_) {},
     );

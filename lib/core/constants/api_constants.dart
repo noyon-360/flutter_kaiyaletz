@@ -49,10 +49,11 @@ class AuthEndpoints {
   String get register => '${_base}register';
   String get resendOtp => '${_base}resend-otp';
   String get verifyEmail => '/auth/verify-email';
+  String get forgotPassword => '${_base}forgot-password';
 
+  // Not Tested this api
   String get refreshToken => '/auth/refresh-token';
-  String get forgotPassword => '/auth/forgot-password';
-  String get resetPassword => '/auth/reset-password';
+  // String get resetPassword => '/auth/reset-password';
 }
 
 class UserEndpoints {

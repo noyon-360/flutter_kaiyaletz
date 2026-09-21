@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kaiyaletz/features/auth/controller/auth_controller.dart';
+import 'package:flutter_kaiyaletz/features/auth/screens/forgate_pass_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common/widgets/app_buttons.dart';
@@ -127,7 +128,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               /// [RememberForgotRow] widget for the "Remember Me" checkbox and "Forgot Password?" link.
               RememberForgotRow(
                 onForgotTap: () {
-                  debugPrint('Forgot Password tapped');
+                  AppNav.to(ForgatePassScreen());
                 },
               ),
 

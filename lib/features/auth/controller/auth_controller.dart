@@ -26,6 +26,7 @@ class AuthState {
   final String resendOtpErrMsg;
   final String verifyOtpErrMsg;
   final String profileErrMsg;
+  final String forgotPassError;
   final String loginButtonText;
 
   AuthState({
@@ -36,6 +37,7 @@ class AuthState {
     this.resendOtpErrMsg = '',
     this.verifyOtpErrMsg = '',
     this.profileErrMsg = '',
+    this.forgotPassError = '',
     this.loginButtonText = "Login",
   });
 
@@ -47,6 +49,7 @@ class AuthState {
     String? resendOtpErrMsg,
     String? verifyOtpErrMsg,
     String? profileErrMsg,
+    String? forgotPassError,
     String? loginButtonText,
   }) {
     return AuthState(
@@ -57,6 +60,7 @@ class AuthState {
       resendOtpErrMsg: resendOtpErrMsg ?? this.resendOtpErrMsg,
       verifyOtpErrMsg: verifyOtpErrMsg ?? this.verifyOtpErrMsg,
       profileErrMsg: profileErrMsg ?? this.profileErrMsg,
+      forgotPassError: forgotPassError ?? this.forgotPassError,
       loginButtonText: loginButtonText ?? this.loginButtonText,
     );
   }
@@ -236,9 +240,7 @@ class AuthController extends Notifier<AuthState> {
         state = state.copyWith(isLoading: false, profileErrMsg: "");
 
         if (isEditing) {
-          await ref
-              .read(profileProvider.notifier)
-              .getUser(forceRefresh: true);
+          await ref.read(profileProvider.notifier).getUser(forceRefresh: true);
           AppNav.back();
         } else {
           AppNav.offAll(BottomNavScreen());
@@ -250,5 +252,22 @@ class AuthController extends Notifier<AuthState> {
   /// [State]
   Future<void> rememberMe(bool value) async {
     state = state.copyWith(rememberMe: value);
+  }
+
+  Future<void> forgotPass({required String email}) async {
+    final repo = ref.read(authRepoProvider);
+
+    final result = await repo.forgotPassword(email: email);
+
+    result.fold(
+      (f) {
+        state = state.copyWith(forgotPassError: f.message);
+      },
+      (s) async {
+        AppSnackbar.success(s.message);
+
+        await Future.delayed(const Duration(milliseconds: 500));
+      },
+    );
   }
 }
