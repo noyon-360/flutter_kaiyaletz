@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../core/common/widgets/app_back_header.dart';
+import '../../../core/common/widgets/app_header.dart';
 import '../../../core/common/widgets/app_buttons.dart';
 import '../../../core/common/widgets/app_logo.dart';
 import '../../../core/common/widgets/app_scaffold.dart';

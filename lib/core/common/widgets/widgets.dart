@@ -2,7 +2,7 @@
 /// `import 'package:<your_app>/core/widgets/widgets.dart';`
 library;
 
-export 'app_back_header.dart';
+export 'app_header.dart';
 export 'app_bottom_nav_bar.dart';
 export 'app_buttons.dart';
 export 'app_scaffold.dart';
