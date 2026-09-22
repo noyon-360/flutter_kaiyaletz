@@ -202,6 +202,7 @@ class _AnimatedActionSurfaceState extends State<_AnimatedActionSurface>
                 final markerSize = squareSize * widget.markerSizeFactor;
 
                 return SizedBox(
+                  width: widget.width.isFinite ? widget.width : null,
                   height: widget.height,
                   child: Center(
                     child: Opacity(

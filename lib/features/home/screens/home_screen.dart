@@ -18,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils/d_print.dart';
 import '../../../core/utils/date_formatter.dart';
 import '../../../core/utils/greeting.dart';
+import '../widgets/home_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -80,82 +81,104 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('Overview', style: AppTextStyles.h2),
-              const Gap(h: 12),
-              Consumer(
-                builder: (context, ref, child) {
-                  final dashboard = ref.watch(
-                    dashboardProvider.select((s) => s.dashboard),
-                  );
-
-                  return OverviewStats(
-                    activeJobs: dashboard?.activeJobs ?? 0,
-                    proposals: dashboard?.proposalSentJobs ?? 0,
-                    thisMonthRevenue: dashboard?.thisMonthRevenue ?? 0,
-                  );
-                },
-              ),
-
-              const Gap(h: 24),
-              Consumer(
-                builder: (context, ref, child) {
-                  return SectionHeader(
-                    title: 'Recent Jobs',
-                    onAction: () =>
-                        ref.watch(bottomNavCtrlProvider.notifier).setIndex(1),
-                  );
-                },
-              ),
-
-              const Gap(h: 8),
-              Consumer(
-                builder: (context, ref, child) {
-                  final isLoading = ref.watch(
-                    dashboardProvider.select((s) => s.isLoading),
-                  );
-                  final recentJobs = ref.watch(
-                    dashboardProvider.select((s) => s.dashboard?.recentJobs),
-                  );
-
-                  if (isLoading && recentJobs == null) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Center(child: AppLoadingIndicator()),
-                    );
-                  }
-
-                  final jobs = recentJobs ?? [];
-
-                  if (jobs.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Center(child: Text('No jobs yet')),
-                    );
-                  }
-
-                  return ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: jobs.length,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 12),
-                    itemBuilder: (context, index) =>
-                        _RecentJobTile(job: jobs[index]),
-                  );
-                },
-              ),
-            ],
-          ),
+      body: Consumer(
+        builder: (context, ref, _) => RefreshIndicator.adaptive(
+          onRefresh: () => ref.read(dashboardProvider.notifier).getDashboard(),
+          child: const _HomeBody(),
         ),
       ),
       floatingActionButton: AppFab(
         onSimplePressed: () => AppNav.to(CreateJobScreen()),
+      ),
+    );
+  }
+}
+
+class _HomeBody extends StatelessWidget {
+  const _HomeBody();
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            HomeHeroCard(
+              illustration: Image.asset(AppAssets.img.illustration),
+              onTap: () => AppNav.to(CreateJobScreen()),
+            ),
+
+            const Gap(h: 20),
+
+            Text('Overview', style: AppTextStyles.h2),
+            const Gap(h: 12),
+            Consumer(
+              builder: (context, ref, child) {
+                final dashboard = ref.watch(
+                  dashboardProvider.select((s) => s.dashboard),
+                );
+
+                return OverviewStats(
+                  activeJobs: dashboard?.activeJobs ?? 0,
+                  proposals: dashboard?.proposalSentJobs ?? 0,
+                  thisMonthRevenue: dashboard?.thisMonthRevenue ?? 0,
+                );
+              },
+            ),
+
+            const Gap(h: 24),
+            Consumer(
+              builder: (context, ref, child) {
+                return SectionHeader(
+                  title: 'Recent Jobs',
+                  onAction: () =>
+                      ref.watch(bottomNavCtrlProvider.notifier).setIndex(1),
+                );
+              },
+            ),
+
+            const Gap(h: 8),
+            Consumer(
+              builder: (context, ref, child) {
+                final isLoading = ref.watch(
+                  dashboardProvider.select((s) => s.isLoading),
+                );
+                final recentJobs = ref.watch(
+                  dashboardProvider.select((s) => s.dashboard?.recentJobs),
+                );
+
+                if (isLoading && recentJobs == null) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(child: AppLoadingIndicator()),
+                  );
+                }
+
+                final jobs = recentJobs ?? [];
+
+                if (jobs.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: Center(child: Text('No jobs yet')),
+                  );
+                }
+
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: jobs.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 12),
+                  itemBuilder: (context, index) =>
+                      _RecentJobTile(job: jobs[index]),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
