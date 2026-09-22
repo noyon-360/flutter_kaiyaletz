@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kaiyaletz/core/common/widgets/app_loading_indicator.dart';
 import 'package:flutter_kaiyaletz/core/common/widgets/widgets.dart';
 import 'package:flutter_kaiyaletz/core/constants/assets_const.dart' hide Icons;
 import 'package:flutter_kaiyaletz/core/theme/app_colors.dart';
 import 'package:flutter_kaiyaletz/core/theme/app_text_styles.dart';
 import 'package:flutter_kaiyaletz/core/utils/app_svg.dart';
+import 'package:flutter_kaiyaletz/core/utils/gap.dart';
 import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
+import 'package:flutter_kaiyaletz/features/job/controller/dashboard_controller.dart';
+import 'package:flutter_kaiyaletz/features/job/models/dashboard_response_model.dart';
+import 'package:flutter_kaiyaletz/features/job/models/job_create_response_model.dart';
 import 'package:flutter_kaiyaletz/features/job/screens/create_job_screen.dart';
+import 'package:flutter_kaiyaletz/features/nav/controller/bottom_nav_controller.dart';
 import 'package:flutter_kaiyaletz/features/profile/controller/profile_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utils/d_print.dart';
+import '../../../core/utils/date_formatter.dart';
 import '../../../core/utils/greeting.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -74,23 +81,103 @@ class HomeScreen extends StatelessWidget {
         },
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Consumer(
-            //   builder: (context, ref, _) {
-            //     final user = ref.watch(
-            //       profileProvider.select((state) => state.user),
-            //     );
-            //     return Row(children: [Text(user!.fullName)]);
-            //   },
-            // ),
-            Center(child: Text("Home Screen")),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('Overview', style: AppTextStyles.h2),
+              const Gap(h: 12),
+              Consumer(
+                builder: (context, ref, child) {
+                  final dashboard = ref.watch(
+                    dashboardProvider.select((s) => s.dashboard),
+                  );
+
+                  return OverviewStats(
+                    activeJobs: dashboard?.activeJobs ?? 0,
+                    proposals: dashboard?.proposalSentJobs ?? 0,
+                    thisMonthRevenue: dashboard?.thisMonthRevenue ?? 0,
+                  );
+                },
+              ),
+
+              const Gap(h: 24),
+              Consumer(
+                builder: (context, ref, child) {
+                  return SectionHeader(
+                    title: 'Recent Jobs',
+                    onAction: () =>
+                        ref.watch(bottomNavCtrlProvider.notifier).setIndex(1),
+                  );
+                },
+              ),
+
+              const Gap(h: 8),
+              Consumer(
+                builder: (context, ref, child) {
+                  final isLoading = ref.watch(
+                    dashboardProvider.select((s) => s.isLoading),
+                  );
+                  final recentJobs = ref.watch(
+                    dashboardProvider.select((s) => s.dashboard?.recentJobs),
+                  );
+
+                  if (isLoading && recentJobs == null) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Center(child: AppLoadingIndicator()),
+                    );
+                  }
+
+                  final jobs = recentJobs ?? [];
+
+                  if (jobs.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: Center(child: Text('No jobs yet')),
+                    );
+                  }
+
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: jobs.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 12),
+                    itemBuilder: (context, index) =>
+                        _RecentJobTile(job: jobs[index]),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: AppFab(
         onSimplePressed: () => AppNav.to(CreateJobScreen()),
       ),
+    );
+  }
+}
+
+class _RecentJobTile extends StatelessWidget {
+  const _RecentJobTile({required this.job});
+
+  final DashboardRecentJob job;
+
+  @override
+  Widget build(BuildContext context) {
+    return JobCard(
+      style: JobCardStyle.card,
+      customerName: job.customerName,
+      address: job.propertyAddress,
+      status: jobStatusFromApi(job.status),
+      currentStep: job.currentStep,
+      totalSteps: jobStepNames.length,
+      stepLabel: jobStepLabel(job.currentStep),
+      date: formatDate(job.date),
+      onTap: () {},
     );
   }
 }

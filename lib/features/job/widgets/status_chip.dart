@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/app_colors.dart';
-import '../../theme/app_text_styles.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 /// Job statuses shown in the design.
 enum JobStatus { newJob, inProgress, proposalSent, completed }
@@ -20,6 +20,28 @@ extension JobStatusX on JobStatus {
     JobStatus.proposalSent => AppColors.statusProposalSent,
     JobStatus.completed => AppColors.statusCompleted,
   };
+
+  /// The API's status string, e.g. "in_progress".
+  String get apiValue => switch (this) {
+    JobStatus.newJob => 'new',
+    JobStatus.inProgress => 'in_progress',
+    JobStatus.proposalSent => 'proposal_sent',
+    JobStatus.completed => 'completed',
+  };
+}
+
+/// Maps the API's status string (e.g. "in_progress") to [JobStatus].
+JobStatus jobStatusFromApi(String status) {
+  switch (status.toLowerCase().replaceAll('_', '')) {
+    case 'inprogress':
+      return JobStatus.inProgress;
+    case 'proposalsent':
+      return JobStatus.proposalSent;
+    case 'completed':
+      return JobStatus.completed;
+    default:
+      return JobStatus.newJob;
+  }
 }
 
 /// Colored status label.
@@ -35,12 +57,10 @@ class StatusChip extends StatelessWidget {
   /// For any other label/color (e.g. the "AI" badge on Room Capture).
   const StatusChip.custom({
     super.key,
-    required String label,
-    required Color color,
+    required String this._label,
+    required Color this._color,
     this.radius = 0,
-  }) : status = null,
-       _label = label,
-       _color = color;
+  }) : status = null;
 
   final JobStatus? status;
   final String? _label;

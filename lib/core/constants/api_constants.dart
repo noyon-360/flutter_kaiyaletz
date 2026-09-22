@@ -81,5 +81,6 @@ class JobEndpoints {
 
   static const String _base = '/jobs/';
 
-  String get createJob => _base;
+  String get job => _base;
+  String get dashboard => "$_base/dashboard";
 }

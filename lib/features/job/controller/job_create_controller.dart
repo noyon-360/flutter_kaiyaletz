@@ -4,6 +4,8 @@ import 'package:flutter_kaiyaletz/core/utils/validators.dart';
 import 'package:flutter_kaiyaletz/features/job/repos/job_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'job_controller.dart';
+
 final jobCreateProvider =
     NotifierProvider.autoDispose<JobCreateController, JobCreateState>(
       JobCreateController.new,
@@ -140,6 +142,8 @@ class JobCreateController extends Notifier<JobCreateState> {
       (s) async {
         state = state.copyWith(errorMsg: '');
         AppSnackbar.success(s.message);
+        ref.read(jobProvider.notifier).addJob(s.data);
+
         await Future.delayed(const Duration(seconds: 1));
         state = state.copyWith(isLoading: false);
         AppNav.back();

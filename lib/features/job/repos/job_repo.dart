@@ -2,6 +2,7 @@ import 'package:flutter_kaiyaletz/core/api/api_client.dart';
 import 'package:flutter_kaiyaletz/core/common/models/network_result.dart';
 import 'package:flutter_kaiyaletz/core/constants/api_constants.dart';
 import 'package:flutter_kaiyaletz/core/providers/core_provider.dart';
+import 'package:flutter_kaiyaletz/features/job/models/dashboard_response_model.dart';
 import 'package:flutter_kaiyaletz/features/job/models/job_create_response_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,6 +20,15 @@ abstract class JobRepo {
     required String emailAddress,
     required String notes,
   });
+
+  NetworkResult<List<JobModel>> getJobs({
+    String search = "",
+    String? status,
+    int page = 1,
+    int limit = 20,
+  });
+
+  NetworkResult<DashboardResponseModel> dashboard();
 }
 
 class JobRepoImpl implements JobRepo {
@@ -35,7 +45,7 @@ class JobRepoImpl implements JobRepo {
     required String notes,
   }) {
     return apiClient.post(
-      endpoint: ApiConstants.job.createJob,
+      endpoint: ApiConstants.job.job,
       data: {
         "date": date.toIso8601String(),
         "customerName": customerName,
@@ -45,6 +55,34 @@ class JobRepoImpl implements JobRepo {
         "notes": notes,
       },
       fromJsonT: (json) => JobModel.fromJson(json),
+    );
+  }
+
+  @override
+  NetworkResult<DashboardResponseModel> dashboard() {
+    return apiClient.get(
+      endpoint: ApiConstants.job.dashboard,
+      fromJsonT: (json) => DashboardResponseModel.fromJson(json),
+    );
+  }
+
+  @override
+  NetworkResult<List<JobModel>> getJobs({
+    String search = "",
+    String? status,
+    int page = 1,
+    int limit = 20,
+  }) {
+    return apiClient.get(
+      endpoint: ApiConstants.job.job,
+      queryParameters: {
+        if (search.isNotEmpty) "search": search,
+        if (status != null && status.isNotEmpty) "status": status,
+        "page": page,
+        "limit": limit,
+      },
+      fromJsonT: (json) =>
+          (json as List).map((item) => JobModel.fromJson(item)).toList(),
     );
   }
 }

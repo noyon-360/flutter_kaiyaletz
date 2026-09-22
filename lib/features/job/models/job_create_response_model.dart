@@ -2,7 +2,22 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'job_create_response_model.g.dart';
 
+/// Names of the job workflow steps, in order, matching [JobModel.currentStep].
+const List<String> jobStepNames = [
+  'Room Capture',
+  'Measurements',
+  'Catalog',
+  'AI Layout',
+  'Design',
+  'Estimate',
+  'Proposal',
+];
 
+/// e.g. "Step 4: AI Layout" for currentStep == 4.
+String jobStepLabel(int currentStep) {
+  final index = (currentStep - 1).clamp(0, jobStepNames.length - 1);
+  return 'Step $currentStep: ${jobStepNames[index]}';
+}
 
 @JsonSerializable(checked: true, disallowUnrecognizedKeys: true)
 class JobModel {
@@ -12,8 +27,8 @@ class JobModel {
   @JsonKey(required: true, disallowNullValue: true)
   final String jobRef;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final String ownerId;
+  /// Absent on the slim list endpoint, present on job detail/create responses.
+  final String? ownerId;
 
   /// Unassigned until a team member is set, so this legitimately accepts null.
   final String? assignedTo;
@@ -33,8 +48,8 @@ class JobModel {
   @JsonKey(required: true, disallowNullValue: true)
   final String emailAddress;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final String notes;
+  /// Absent on the slim list endpoint.
+  final String? notes;
 
   @JsonKey(required: true, disallowNullValue: true)
   final String status;
@@ -42,59 +57,59 @@ class JobModel {
   @JsonKey(required: true, disallowNullValue: true)
   final int currentStep;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final RoomCapture roomCapture;
+  /// Absent on the slim list endpoint.
+  final RoomCapture? roomCapture;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final Measurements measurements;
+  /// Absent on the slim list endpoint.
+  final Measurements? measurements;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final List<dynamic> selectedProducts;
+  /// Absent on the slim list endpoint.
+  final List<dynamic>? selectedProducts;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final AiLayout aiLayout;
+  /// Absent on the slim list endpoint.
+  final AiLayout? aiLayout;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final JobDesign design;
+  /// Absent on the slim list endpoint.
+  final JobDesign? design;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final Estimate estimate;
+  /// Absent on the slim list endpoint.
+  final Estimate? estimate;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final Proposal proposal;
+  /// Absent on the slim list endpoint.
+  final Proposal? proposal;
 
   @JsonKey(required: true, disallowNullValue: true)
   final DateTime createdAt;
 
-  @JsonKey(required: true, disallowNullValue: true)
-  final DateTime updatedAt;
+  /// Absent on the slim list endpoint.
+  final DateTime? updatedAt;
 
-  @JsonKey(name: '__v', required: true, disallowNullValue: true)
-  final int v;
+  @JsonKey(name: '__v')
+  final int? v;
 
   const JobModel({
     required this.id,
     required this.jobRef,
-    required this.ownerId,
+    this.ownerId,
     this.assignedTo,
     required this.date,
     required this.customerName,
     required this.propertyAddress,
     required this.phoneNumber,
     required this.emailAddress,
-    required this.notes,
+    this.notes,
     required this.status,
     required this.currentStep,
-    required this.roomCapture,
-    required this.measurements,
-    required this.selectedProducts,
-    required this.aiLayout,
-    required this.design,
-    required this.estimate,
-    required this.proposal,
+    this.roomCapture,
+    this.measurements,
+    this.selectedProducts,
+    this.aiLayout,
+    this.design,
+    this.estimate,
+    this.proposal,
     required this.createdAt,
-    required this.updatedAt,
-    required this.v,
+    this.updatedAt,
+    this.v,
   });
 
   factory JobModel.fromJson(Map<String, dynamic> json) =>

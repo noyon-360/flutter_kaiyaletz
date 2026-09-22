@@ -50,7 +50,10 @@ class AppFilterChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        color: isSelected ? AppColors.primary : AppColors.surfaceTag,
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : AppColors.surfaceTag,
+          borderRadius: BorderRadius.circular(999),
+        ),
         child: Text(
           label,
           style: AppTextStyles.bodySmall.copyWith(
