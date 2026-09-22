@@ -9,10 +9,15 @@ import '../../../core/constants/assets_const.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/gap.dart';
+import '../../../core/utils/validators.dart';
 import '../controller/auth_controller.dart';
 
 class CreateNewPassScreen extends ConsumerStatefulWidget {
-  const CreateNewPassScreen({super.key, required this.email, required this.otp});
+  const CreateNewPassScreen({
+    super.key,
+    required this.email,
+    required this.otp,
+  });
 
   final String email;
   final String otp;
@@ -37,26 +42,6 @@ class _CreateNewPassScreenState extends ConsumerState<CreateNewPassScreen> {
     confirmPasswordController.dispose();
     confirmPassFocusNode.dispose();
     super.dispose();
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter a new password';
-    }
-    if (value.trim().length < 6) {
-      return 'Password must be at least 6 characters';
-    }
-    return null;
-  }
-
-  String? validateConfirmPassword(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please confirm your password';
-    }
-    if (value.trim() != passwordController.text.trim()) {
-      return 'Passwords do not match';
-    }
-    return null;
   }
 
   Future<void> resetPassword() {
@@ -105,7 +90,10 @@ class _CreateNewPassScreenState extends ConsumerState<CreateNewPassScreen> {
                       textInputAction: TextInputAction.next,
                       isPassword: true,
                       enabled: !isLoading,
-                      validator: validatePassword,
+                      validator: (value) => Validators.password(
+                        value,
+                        requiredMessage: 'Please enter a new password',
+                      ),
                     );
                   },
                 ),
@@ -134,7 +122,10 @@ class _CreateNewPassScreenState extends ConsumerState<CreateNewPassScreen> {
                       textInputAction: TextInputAction.done,
                       isPassword: true,
                       enabled: !isLoading,
-                      validator: validateConfirmPassword,
+                      validator: (value) => Validators.confirmPassword(
+                        value,
+                        passwordController.text,
+                      ),
                     );
                   },
                 ),

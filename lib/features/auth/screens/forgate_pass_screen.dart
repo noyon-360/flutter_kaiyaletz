@@ -10,6 +10,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/gap.dart';
 import '../../../core/utils/navigation.dart';
+import '../../../core/utils/validators.dart';
 import '../controller/auth_controller.dart';
 
 class ForgatePassScreen extends ConsumerStatefulWidget {
@@ -28,18 +29,6 @@ class _ForgatePassScreenState extends ConsumerState<ForgatePassScreen> {
   void dispose() {
     emailController.dispose();
     super.dispose();
-  }
-
-  String? validateEmail(String? value) {
-    final email = value?.trim() ?? '';
-
-    if (email.isEmpty) {
-      return 'Please enter your email';
-    }
-    if (!RegExp(r'^[\w.+-]+@[\w-]+\.[\w.-]+$').hasMatch(email)) {
-      return 'Please enter a valid email';
-    }
-    return null;
   }
 
   Future<void> sendResetCode() {
@@ -96,7 +85,7 @@ class _ForgatePassScreenState extends ConsumerState<ForgatePassScreen> {
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
                       enabled: !isLoading,
-                      validator: validateEmail,
+                      validator: Validators.email,
                     );
                   },
                 ),

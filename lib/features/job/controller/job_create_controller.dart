@@ -1,5 +1,6 @@
 import 'package:flutter_kaiyaletz/core/utils/app_snackbar.dart';
 import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
+import 'package:flutter_kaiyaletz/core/utils/validators.dart';
 import 'package:flutter_kaiyaletz/features/job/repos/job_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -58,8 +59,6 @@ class JobCreateState {
 }
 
 class JobCreateController extends Notifier<JobCreateState> {
-  static final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-
   @override
   JobCreateState build() {
     return JobCreateState();
@@ -83,19 +82,15 @@ class JobCreateController extends Notifier<JobCreateState> {
   }
 
   String? validateRequired(String? value, String fieldName) {
-    if (value == null || value.trim().isEmpty) {
-      return '$fieldName is required';
-    }
-    return null;
+    return Validators.required(value, message: '$fieldName is required');
   }
 
   String? validateEmail(String? value) {
-    final requiredError = validateRequired(value, 'Email address');
-    if (requiredError != null) return requiredError;
-    if (!_emailRegex.hasMatch(value!.trim())) {
-      return 'Enter a valid email address';
-    }
-    return null;
+    return Validators.email(
+      value,
+      requiredMessage: 'Email address is required',
+      invalidMessage: 'Enter a valid email address',
+    );
   }
 
   void setCustomerName(String value) {

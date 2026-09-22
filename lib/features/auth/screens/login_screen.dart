@@ -12,6 +12,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/gap.dart';
 import '../../../core/utils/navigation.dart';
+import '../../../core/utils/validators.dart';
 import '../widgets/remember_forgot_widget.dart';
 import 'signup_screen.dart';
 
@@ -23,6 +24,8 @@ class LoginScreen extends ConsumerStatefulWidget {
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final formKey = GlobalKey<FormState>();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -54,148 +57,158 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return AppScaffold(
       body: Center(
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
 
-              Gap.h(20),
+                Gap.h(20),
 
-              /// [Text] widget for the welcome message.
-              Text('Welcome Back', style: AppTextStyles.h1),
-              Gap.h(8),
+                /// [Text] widget for the welcome message.
+                Text('Welcome Back', style: AppTextStyles.h1),
+                Gap.h(8),
 
-              /// [Text] widget for the welcome message.
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Text(
-                  'Please enter your email & password to access your account.',
-                  style: AppTextStyles.bodyLarge,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-
-              Gap.h(24),
-
-              /// [Text] widget for the email label.
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Email', style: AppTextStyles.inputLabel),
-              ),
-              Gap.h(8),
-
-              Consumer(
-                builder: (context, ref, child) {
-                  final isLoading = ref.watch(
-                    authCtrlProvider.select((s) => s.isLoading),
-                  );
-                  return AppTextField(
-                    hint: 'Enter your email ',
-                    controller: emailController,
-                    textInputAction: TextInputAction.next,
-                    enabled: !isLoading,
-                  );
-                },
-              ),
-
-              Gap.h(12),
-
-              /// [Text] widget for the password label.
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Password', style: AppTextStyles.inputLabel),
-              ),
-              Gap.h(8),
-
-              Consumer(
-                builder: (context, ref, child) {
-                  final isLoading = ref.watch(
-                    authCtrlProvider.select((s) => s.isLoading),
-                  );
-                  return AppTextField(
-                    hint: 'Enter your password',
-                    controller: passwordController,
-                    focusNode: passFocusNode,
-                    textInputAction: TextInputAction.done,
-                    isPassword: true,
-                    enabled: !isLoading,
-                  );
-                },
-              ),
-
-              Gap.h(12),
-
-              /// [RememberForgotRow] widget for the "Remember Me" checkbox and "Forgot Password?" link.
-              RememberForgotRow(
-                onForgotTap: () {
-                  AppNav.to(ForgatePassScreen());
-                },
-              ),
-
-              Gap.h(24),
-
-              /// [errMsg]
-              Consumer(
-                builder: (context, ref, child) {
-                  final errMsg = ref.watch(
-                    authCtrlProvider.select((s) => s.loginErrMsg),
-                  );
-
-                  // if (errMsg.isEmpty) {
-                  //   return const SizedBox.shrink();
-                  // }
-                  return Column(
-                    children: [
-                      Text(errMsg, style: TextStyle(color: AppColors.error)),
-                      Gap.h(8),
-                    ],
-                  );
-                },
-              ),
-
-              /// [AppPrimaryButton] widget for the login action.
-              /// [Botton Change to Verify] Login button can be Send OTP button if user is not verified
-              Consumer(
-                builder: (context, ref, _) {
-                  final loginButtonText = ref.watch(
-                    authCtrlProvider.select((b) => b.loginButtonText),
-                  );
-                  final verify = loginButtonText == "Verify Email";
-
-                  return AppPrimaryButton(
-                    label: loginButtonText,
-                    onAsyncPressed: () => login(verify),
-                  );
-                },
-              ),
-
-              Gap.h(16),
-
-              /// [Row] widget for the "Don't have an account? Sign Up" link.
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Don\'t have an account?',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textPrimary,
-                    ),
+                /// [Text] widget for the welcome message.
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    'Please enter your email & password to access your account.',
+                    style: AppTextStyles.bodyLarge,
+                    textAlign: TextAlign.center,
                   ),
-                  Gap.w(8),
-                  GestureDetector(
-                    onTap: () {
-                      AppNav.to(const SignupScreen());
-                    },
-                    child: Text(
-                      'Sign Up',
+                ),
+
+                Gap.h(24),
+
+                /// [Text] widget for the email label.
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Email', style: AppTextStyles.inputLabel),
+                ),
+                Gap.h(8),
+
+                Consumer(
+                  builder: (context, ref, child) {
+                    final isLoading = ref.watch(
+                      authCtrlProvider.select((s) => s.isLoading),
+                    );
+                    return AppTextField(
+                      hint: 'Enter your email ',
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      enabled: !isLoading,
+                      validator: Validators.email,
+                    );
+                  },
+                ),
+
+                Gap.h(12),
+
+                /// [Text] widget for the password label.
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('Password', style: AppTextStyles.inputLabel),
+                ),
+                Gap.h(8),
+
+                Consumer(
+                  builder: (context, ref, child) {
+                    final isLoading = ref.watch(
+                      authCtrlProvider.select((s) => s.isLoading),
+                    );
+                    return AppTextField(
+                      hint: 'Enter your password',
+                      controller: passwordController,
+                      focusNode: passFocusNode,
+                      textInputAction: TextInputAction.done,
+                      isPassword: true,
+                      enabled: !isLoading,
+                      validator: (value) => Validators.required(
+                        value,
+                        message: 'Please enter your password',
+                      ),
+                    );
+                  },
+                ),
+
+                Gap.h(12),
+
+                /// [RememberForgotRow] widget for the "Remember Me" checkbox and "Forgot Password?" link.
+                RememberForgotRow(
+                  onForgotTap: () {
+                    AppNav.to(ForgatePassScreen());
+                  },
+                ),
+
+                Gap.h(24),
+
+                /// [errMsg]
+                Consumer(
+                  builder: (context, ref, child) {
+                    final errMsg = ref.watch(
+                      authCtrlProvider.select((s) => s.loginErrMsg),
+                    );
+
+                    // if (errMsg.isEmpty) {
+                    //   return const SizedBox.shrink();
+                    // }
+                    return Column(
+                      children: [
+                        Text(errMsg, style: TextStyle(color: AppColors.error)),
+                        Gap.h(8),
+                      ],
+                    );
+                  },
+                ),
+
+                /// [AppPrimaryButton] widget for the login action.
+                /// [Botton Change to Verify] Login button can be Send OTP button if user is not verified
+                Consumer(
+                  builder: (context, ref, _) {
+                    final loginButtonText = ref.watch(
+                      authCtrlProvider.select((b) => b.loginButtonText),
+                    );
+                    final verify = loginButtonText == "Verify Email";
+
+                    return AppPrimaryButton(
+                      label: loginButtonText,
+                      onValidate: () => formKey.currentState!.validate(),
+                      onAsyncPressed: () => login(verify),
+                    );
+                  },
+                ),
+
+                Gap.h(16),
+
+                /// [Row] widget for the "Don't have an account? Sign Up" link.
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Don\'t have an account?',
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.primary,
+                        color: AppColors.textPrimary,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    Gap.w(8),
+                    GestureDetector(
+                      onTap: () {
+                        AppNav.to(const SignupScreen());
+                      },
+                      child: Text(
+                        'Sign Up',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

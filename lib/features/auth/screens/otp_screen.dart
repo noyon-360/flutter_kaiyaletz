@@ -116,7 +116,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
                     focusedPinTheme: focusedPinTheme,
                     submittedPinTheme: submittedPinTheme,
                     showCursor: true,
-                    onCompleted: (_) => verify(),
+                    // onCompleted: (_) => verify(),
                   );
                 },
               ),

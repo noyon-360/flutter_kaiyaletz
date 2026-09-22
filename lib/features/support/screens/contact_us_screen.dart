@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/gap.dart';
+import '../../../core/utils/validators.dart';
 import '../controller/support_controller.dart';
 
 class ContactUsScreen extends ConsumerStatefulWidget {
@@ -67,12 +68,10 @@ class _ContactUsScreenState extends ConsumerState<ContactUsScreen> {
                 controller: fullNameController,
                 textInputAction: TextInputAction.next,
                 onSubmitted: (_) => emailFocus.requestFocus(),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your full name';
-                  }
-                  return null;
-                },
+                validator: (value) => Validators.required(
+                  value,
+                  message: 'Please enter your full name',
+                ),
               ),
 
               Gap.h(16),
@@ -86,17 +85,7 @@ class _ContactUsScreenState extends ConsumerState<ContactUsScreen> {
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 onSubmitted: (_) => contactNumberFocus.requestFocus(),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  if (!RegExp(
-                    r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                  ).hasMatch(value.trim())) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
+                validator: Validators.email,
               ),
 
               Gap.h(16),
@@ -110,12 +99,10 @@ class _ContactUsScreenState extends ConsumerState<ContactUsScreen> {
                 keyboardType: TextInputType.phone,
                 textInputAction: TextInputAction.next,
                 onSubmitted: (_) => noteFocus.requestFocus(),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter your contact number';
-                  }
-                  return null;
-                },
+                validator: (value) => Validators.required(
+                  value,
+                  message: 'Please enter your contact number',
+                ),
               ),
 
               Gap.h(16),
@@ -128,12 +115,10 @@ class _ContactUsScreenState extends ConsumerState<ContactUsScreen> {
                 focusNode: noteFocus,
                 textInputAction: TextInputAction.done,
                 maxLines: 5,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please describe what you need';
-                  }
-                  return null;
-                },
+                validator: (value) => Validators.required(
+                  value,
+                  message: 'Please describe what you need',
+                ),
               ),
 
               Padding(

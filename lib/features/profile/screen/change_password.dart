@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/common/widgets/widgets.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/gap.dart';
+import '../../../core/utils/validators.dart';
 
 class ChangePassword extends ConsumerStatefulWidget {
   const ChangePassword({super.key});
@@ -63,12 +64,10 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                 isPassword: true,
                 textInputAction: TextInputAction.next,
                 onSubmitted: (_) => newPasswordFocus.requestFocus(),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your current password';
-                  }
-                  return null;
-                },
+                validator: (value) => Validators.required(
+                  value,
+                  message: 'Please enter your current password',
+                ),
               ),
 
               Gap.h(16),
@@ -82,15 +81,10 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                 isPassword: true,
                 textInputAction: TextInputAction.next,
                 onSubmitted: (_) => confirmPasswordFocus.requestFocus(),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a new password';
-                  }
-                  if (value.length < 6) {
-                    return 'Password must be at least 8 characters';
-                  }
-                  return null;
-                },
+                validator: (value) => Validators.password(
+                  value,
+                  requiredMessage: 'Please enter a new password',
+                ),
               ),
 
               Gap.h(16),
@@ -103,15 +97,11 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                 focusNode: confirmPasswordFocus,
                 isPassword: true,
                 textInputAction: TextInputAction.done,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please confirm your new password';
-                  }
-                  if (value != newPasswordController.text) {
-                    return 'Passwords do not match';
-                  }
-                  return null;
-                },
+                validator: (value) => Validators.confirmPassword(
+                  value,
+                  newPasswordController.text,
+                  requiredMessage: 'Please confirm your new password',
+                ),
               ),
 
               Padding(
