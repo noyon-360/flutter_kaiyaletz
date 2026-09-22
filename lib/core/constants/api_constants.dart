@@ -48,14 +48,12 @@ class AuthEndpoints {
   String get login => '${_base}login';
   String get register => '${_base}register';
   String get resendOtp => '${_base}resend-otp';
-  String get verifyEmail => '/auth/verify-email';
+  String get verifyEmail => '${_base}verify-email';
   String get forgotPassword => '${_base}forgot-password';
+  String get verifyResetOtp => '${_base}verify-reset-otp';
+  String get resetPassword => '${_base}reset-password';
 
-  // Not Tested this api
-  String get refreshToken => '/auth/refresh-token';
-
-  String get verifyResetOtp => '/auth/verify-reset-otp';
-  String get resetPassword => '/auth/reset-password';
+  String get refreshToken => '${_base}refresh-token';
 }
 
 class UserEndpoints {
