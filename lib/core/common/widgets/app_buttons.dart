@@ -201,59 +201,62 @@ class _AnimatedActionSurfaceState extends State<_AnimatedActionSurface>
                     .clamp(0.0, 1.0);
                 final markerSize = squareSize * widget.markerSizeFactor;
 
-                return Center(
-                  child: Opacity(
-                    opacity: dim,
-                    child: SizedBox(
-                      width: width,
-                      height: widget.height,
-                      child: Material(
-                        color: idleFill ?? Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(radius),
-                          side: widget.borderColor == null
-                              ? BorderSide.none
-                              : BorderSide(color: widget.borderColor!),
-                        ),
-                        child: InkWell(
-                          onTap: (_isLoading.value || disabled)
-                              ? null
-                              : _handleTap,
-                          customBorder: RoundedRectangleBorder(
+                return SizedBox(
+                  height: widget.height,
+                  child: Center(
+                    child: Opacity(
+                      opacity: dim,
+                      child: SizedBox(
+                        width: width,
+                        height: widget.height,
+                        child: Material(
+                          color: idleFill ?? Colors.transparent,
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(radius),
+                            side: widget.borderColor == null
+                                ? BorderSide.none
+                                : BorderSide(color: widget.borderColor!),
                           ),
-                          splashColor: widget.splashColor,
-                          highlightColor: widget.highlightColor,
-                          child: Center(
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                if (markerOpacity > 0)
-                                  Opacity(
-                                    opacity: markerOpacity,
-                                    child: Transform.rotate(
-                                      angle:
-                                          _rotationController.value *
-                                          2 *
-                                          math.pi,
-                                      child: Container(
-                                        width: markerSize,
-                                        height: markerSize,
-                                        decoration: BoxDecoration(
-                                          color: widget.markerColor,
-                                          borderRadius: BorderRadius.circular(
-                                            markerSize * 0.28,
+                          child: InkWell(
+                            onTap: (_isLoading.value || disabled)
+                                ? null
+                                : _handleTap,
+                            customBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(radius),
+                            ),
+                            splashColor: widget.splashColor,
+                            highlightColor: widget.highlightColor,
+                            child: Center(
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  if (markerOpacity > 0)
+                                    Opacity(
+                                      opacity: markerOpacity,
+                                      child: Transform.rotate(
+                                        angle:
+                                            _rotationController.value *
+                                            2 *
+                                            math.pi,
+                                        child: Container(
+                                          width: markerSize,
+                                          height: markerSize,
+                                          decoration: BoxDecoration(
+                                            color: widget.markerColor,
+                                            borderRadius: BorderRadius.circular(
+                                              markerSize * 0.28,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                if (contentOpacity > 0)
-                                  Opacity(
-                                    opacity: contentOpacity,
-                                    child: widget.content,
-                                  ),
-                              ],
+                                  if (contentOpacity > 0)
+                                    Opacity(
+                                      opacity: contentOpacity,
+                                      child: widget.content,
+                                    ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

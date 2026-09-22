@@ -13,6 +13,10 @@ import '../../theme/app_text_styles.dart';
 /// Create Job, Job Details, Measurements (3 small fields in a row → use
 /// [width]), Continue to Room Captured, Estimate ("Installation Charge",
 /// "Delivery Charge"), Edit Profile, Change Password, Contact us.
+///
+/// The validation error renders as a plain flush-left [Text] below the
+/// field (via a [FormField] wrapper) instead of [InputDecoration.errorText],
+/// which Flutter always indents to match the input's content padding.
 class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
@@ -106,46 +110,78 @@ class _AppTextFieldState extends State<AppTextField> {
           )
         : widget.suffixIcon;
 
-    final field = TextFormField(
-      controller: widget.controller,
-      focusNode: widget.focusNode,
-      obscureText: _obscure,
-      obscuringCharacter: '*',
-      keyboardType: widget.isPassword
-          ? TextInputType.visiblePassword
-          : (widget.keyboardType ??
-                (multiline ? TextInputType.multiline : TextInputType.text)),
-      textInputAction: widget.textInputAction,
-      maxLines: widget.isPassword ? 1 : widget.maxLines,
-      minLines: widget.minLines,
+    final field = FormField<String>(
+      initialValue: widget.controller?.text ?? '',
       validator: widget.validator,
-      onChanged: widget.onChanged,
-      onFieldSubmitted: widget.onSubmitted,
-      onTap: widget.onTap,
-      enabled: widget.enabled,
-      readOnly: widget.readOnly,
-      inputFormatters: widget.inputFormatters,
-      autofillHints: widget.autofillHints,
-      cursorColor: AppColors.primary,
-      style: AppTextStyles.placeholder.copyWith(color: AppColors.textPrimary),
-      decoration: InputDecoration(
-        isDense: true,
-        hintText: widget.hint,
-        hintStyle: AppTextStyles.placeholder,
-        contentPadding: widget.contentPadding ?? const EdgeInsets.all(16),
-        prefixIcon: widget.prefixIcon,
-        suffixIcon: suffix,
-        suffixIconConstraints: const BoxConstraints(
-          minWidth: 24,
-          minHeight: 24,
-        ),
-        enabledBorder: _border(AppColors.border),
-        disabledBorder: _border(AppColors.border),
-        focusedBorder: _border(AppColors.borderFocus),
-        errorBorder: _border(AppColors.danger),
-        focusedErrorBorder: _border(AppColors.danger),
-        errorStyle: AppTextStyles.bodySmall.copyWith(color: AppColors.danger),
-      ),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      builder: (state) {
+        final hasError = state.hasError;
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: widget.controller,
+              focusNode: widget.focusNode,
+              obscureText: _obscure,
+              obscuringCharacter: '*',
+              keyboardType: widget.isPassword
+                  ? TextInputType.visiblePassword
+                  : (widget.keyboardType ??
+                        (multiline
+                            ? TextInputType.multiline
+                            : TextInputType.text)),
+              textInputAction: widget.textInputAction,
+              maxLines: widget.isPassword ? 1 : widget.maxLines,
+              minLines: widget.minLines,
+              onChanged: (value) {
+                state.didChange(value);
+                widget.onChanged?.call(value);
+              },
+              onSubmitted: widget.onSubmitted,
+              onTap: widget.onTap,
+              enabled: widget.enabled,
+              readOnly: widget.readOnly,
+              inputFormatters: widget.inputFormatters,
+              autofillHints: widget.autofillHints,
+              cursorColor: AppColors.primary,
+              style: AppTextStyles.placeholder.copyWith(
+                color: AppColors.textPrimary,
+              ),
+              decoration: InputDecoration(
+                isDense: true,
+                hintText: widget.hint,
+                hintStyle: AppTextStyles.placeholder,
+                contentPadding:
+                    widget.contentPadding ?? const EdgeInsets.all(16),
+                prefixIcon: widget.prefixIcon,
+                suffixIcon: suffix,
+                suffixIconConstraints: const BoxConstraints(
+                  minWidth: 24,
+                  minHeight: 24,
+                ),
+                enabledBorder: _border(
+                  hasError ? AppColors.danger : AppColors.border,
+                ),
+                disabledBorder: _border(AppColors.border),
+                focusedBorder: _border(
+                  hasError ? AppColors.danger : AppColors.borderFocus,
+                ),
+              ),
+            ),
+            if (hasError) ...[
+              const SizedBox(height: 6),
+              Text(
+                state.errorText!,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.danger,
+                ),
+              ),
+            ],
+          ],
+        );
+      },
     );
 
     final content = Column(

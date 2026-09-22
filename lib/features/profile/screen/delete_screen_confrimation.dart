@@ -8,16 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 
-const _reasons = [
-  "I don't use the app anymore",
-  "I'm concerned about my privacy",
-  "I'm taking a break",
-  "I'm creating a different account",
-  "The app doesn't meet my needs",
-  "I experienced technical issues",
-  'Other reason',
-];
-
 class DeleteScreenConfrimation extends ConsumerStatefulWidget {
   const DeleteScreenConfrimation({super.key});
 
@@ -56,7 +46,7 @@ class _DeleteScreenConfrimationState
     final selected = ref.watch(
       profileProvider.select((s) => s.deleteAccountReasonIndex),
     );
-    final isOtherReason = selected == _reasons.length - 1;
+    final isOtherReason = selected == deleteAccountReasons.length - 1;
     final isLoading = ref.watch(
       profileProvider.select((s) => s.isLoadingDeleteAccoung),
     );
@@ -90,7 +80,7 @@ class _DeleteScreenConfrimationState
               ),
             ),
             ReasonOptionList(
-              reasons: _reasons,
+              reasons: deleteAccountReasons,
               selectedIndex: selected,
               onChanged: (i) => ref
                   .read(profileProvider.notifier)

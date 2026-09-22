@@ -196,14 +196,30 @@ class AuthController extends Notifier<AuthState> {
       (f) {
         state = state.copyWith(isLoading: false, verifyOtpErrMsg: f.message);
       },
-      (s) {
+      (s) async {
         state = state.copyWith(
           isLoading: false,
           verifyOtpErrMsg: "",
           loginButtonText: "Login",
         );
+
+        final data = s.data;
+
+        final account = StoredAccount(
+          userId: data.id,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+          role: data.role,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          profileImage: data.profileImage.url,
+          email: data.email,
+        );
+
+        await ref.read(authStorageServiceProvider).storeAuthData(account);
+
         AppSnackbar.success(s.message);
-        AppNav.offAll(LoginScreen());
+        AppNav.offAll(ProfileScreen());
       },
     );
   }

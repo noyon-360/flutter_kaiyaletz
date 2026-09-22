@@ -47,6 +47,36 @@ class AppTheme {
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         ),
       ),
+
+      // Themes Flutter's built-in showDatePicker to match the app instead
+      // of building a custom calendar widget — used by AppDateField.
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: AppColors.surface,
+        surfaceTintColor: Colors.transparent,
+        headerBackgroundColor: AppColors.primary,
+        headerForegroundColor: AppColors.onPrimary,
+        headerHeadlineStyle: AppTextStyles.h2.copyWith(
+          color: AppColors.onPrimary,
+        ),
+        weekdayStyle: AppTextStyles.bodySmall,
+        dayStyle: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.textPrimary,
+        ),
+        todayForegroundColor: WidgetStateProperty.all(AppColors.textLabel),
+        todayBorder: const BorderSide(color: AppColors.primary),
+        dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return AppColors.onPrimary;
+          if (states.contains(WidgetState.disabled)) {
+            return AppColors.textPlaceholder;
+          }
+          return AppColors.textPrimary;
+        }),
+        dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return AppColors.primary;
+          return null;
+        }),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
     );
   }
 }

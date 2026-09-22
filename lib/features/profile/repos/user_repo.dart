@@ -30,6 +30,8 @@ abstract class UserRepo {
     required String newPass,
     required String confirmPass,
   });
+
+  NetworkResult<void> delete({required String reason});
 }
 
 class UserRepoImpl implements UserRepo {
@@ -86,6 +88,15 @@ class UserRepoImpl implements UserRepo {
         "confirmPassword": confirmPass,
       },
       fromJsonT: (json) => {},
+    );
+  }
+
+  @override
+  NetworkResult<void> delete({required String reason}) {
+    return apiClient.delete(
+      endpoint: ApiConstants.user.delete,
+      data: {"reason": reason},
+      fromJsonT: (json) => json,
     );
   }
 }

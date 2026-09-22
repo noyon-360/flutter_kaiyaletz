@@ -25,7 +25,10 @@ abstract class AuthRepo {
   });
   NetworkResult<void> resendOtp({required String email});
 
-  NetworkResult<void> verifyOtp({required String email, required String otp});
+  NetworkResult<UserModel> verifyOtp({
+    required String email,
+    required String otp,
+  });
 
   NetworkResult<void> forgotPassword({required String email});
 
@@ -88,11 +91,14 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  NetworkResult<void> verifyOtp({required String email, required String otp}) {
-    return apiClient.post<void>(
+  NetworkResult<UserModel> verifyOtp({
+    required String email,
+    required String otp,
+  }) {
+    return apiClient.post<UserModel>(
       endpoint: ApiConstants.auth.verifyEmail,
       data: {'email': email, 'otp': otp},
-      fromJsonT: (json) => json,
+      fromJsonT: (json) => UserModel.fromJson(json),
     );
   }
 

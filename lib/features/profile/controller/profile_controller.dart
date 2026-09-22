@@ -10,6 +10,16 @@ final profileProvider = NotifierProvider.autoDispose<ProfileCtrl, ProfileState>(
   ProfileCtrl.new,
 );
 
+const deleteAccountReasons = [
+  "I don't use the app anymore",
+  "I'm concerned about my privacy",
+  "I'm taking a break",
+  "I'm creating a different account",
+  "The app doesn't meet my needs",
+  "I experienced technical issues",
+  'Other reason',
+];
+
 class ProfileState {
   final ProfileModel? user;
   final int deleteAccountReasonIndex;
@@ -101,11 +111,27 @@ class ProfileCtrl extends Notifier<ProfileState> {
   }
 
   Future<void> deleteAccount() async {
+    final repo = ref.read(userRepoProvider);
+
     state = state.copyWith(isLoadingDeleteAccoung: true);
 
-    await Future.delayed(const Duration(seconds: 10));
+    final isOtherReason =
+        state.deleteAccountReasonIndex == deleteAccountReasons.length - 1;
+    final reason = isOtherReason
+        ? state.deleteAccountOtherReason
+        : deleteAccountReasons[state.deleteAccountReasonIndex];
 
-    await ref.read(authCtrlProvider.notifier).logout();
+    final result = await repo.delete(reason: reason);
+
+    result.fold(
+      (f) {
+        state = state.copyWith(isLoadingDeleteAccoung: false);
+        AppSnackbar.error(f.message);
+      },
+      (s) async {
+        await ref.read(authCtrlProvider.notifier).logout();
+      },
+    );
   }
 
   /// [Delete Account] End

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kaiyaletz/core/common/widgets/widgets.dart';
+import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
+import 'package:flutter_kaiyaletz/features/job/screens/create_job_screen.dart';
 
-import '../../../core/common/widgets/app_scaffold.dart';
 import '../../../core/utils/d_print.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -23,10 +24,12 @@ class HomeScreen extends StatelessWidget {
             //     return Row(children: [Text(user!.fullName)]);
             //   },
             // ),
-
             Center(child: Text("Home Screen")),
           ],
         ),
+      ),
+      floatingActionButton: AppFab(
+        onSimplePressed: () => AppNav.to(CreateJobScreen()),
       ),
     );
   }
