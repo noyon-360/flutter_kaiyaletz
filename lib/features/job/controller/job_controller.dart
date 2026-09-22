@@ -67,25 +67,23 @@ class JobController extends Notifier<JobState> {
 
     state = state.copyWith(isLoading: true, page: 1);
 
-    final result = await repo.getJobs(
-      search: state.search,
-      status: state.status,
-      page: 1,
-    );
-
-    result.fold(
-      (f) {
-        state = state.copyWith(isLoading: false);
-      },
-      (s) {
-        state = state.copyWith(
-          job: s.data,
-          isLoading: false,
-          page: s.pagination?.page ?? 1,
-          totalPages: s.pagination?.pages,
-        );
-      },
-    );
+    repo.getJobs(search: state.search, status: state.status, page: 1).listen((
+      either,
+    ) {
+      either.fold(
+        (f) {
+          state = state.copyWith(isLoading: false);
+        },
+        (s) {
+          state = state.copyWith(
+            job: s.data,
+            isLoading: false,
+            page: s.pagination?.page ?? 1,
+            totalPages: s.pagination?.pages,
+          );
+        },
+      );
+    });
   }
 
   /// Fetches the next page and appends it, for infinite scroll.
@@ -99,25 +97,23 @@ class JobController extends Notifier<JobState> {
 
     state = state.copyWith(isLoadingMore: true);
 
-    final result = await repo.getJobs(
-      search: state.search,
-      status: state.status,
-      page: nextPage,
-    );
-
-    result.fold(
-      (f) {
-        state = state.copyWith(isLoadingMore: false);
-      },
-      (s) {
-        state = state.copyWith(
-          job: [...?state.job, ...s.data],
-          isLoadingMore: false,
-          page: s.pagination?.page ?? nextPage,
-          totalPages: s.pagination?.pages,
-        );
-      },
-    );
+    repo
+        .getJobs(search: state.search, status: state.status, page: nextPage)
+        .listen((either) {
+          either.fold(
+            (f) {
+              state = state.copyWith(isLoadingMore: false);
+            },
+            (s) {
+              state = state.copyWith(
+                job: [...?state.job, ...s.data],
+                isLoadingMore: false,
+                page: s.pagination?.page ?? nextPage,
+                totalPages: s.pagination?.pages,
+              );
+            },
+          );
+        });
   }
 
   /// Debounces user input before re-querying page 1.

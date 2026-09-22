@@ -21,7 +21,7 @@ abstract class JobRepo {
     required String notes,
   });
 
-  NetworkResult<List<JobModel>> getJobs({
+  NetworkStream<List<JobModel>> getJobs({
     String search = "",
     String? status,
     int page = 1,
@@ -67,13 +67,13 @@ class JobRepoImpl implements JobRepo {
   }
 
   @override
-  NetworkResult<List<JobModel>> getJobs({
+  NetworkStream<List<JobModel>> getJobs({
     String search = "",
     String? status,
     int page = 1,
     int limit = 20,
   }) {
-    return apiClient.get(
+    return apiClient.getStream(
       endpoint: ApiConstants.job.job,
       queryParameters: {
         if (search.isNotEmpty) "search": search,
