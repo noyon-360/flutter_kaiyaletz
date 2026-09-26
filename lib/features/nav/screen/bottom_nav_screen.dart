@@ -5,6 +5,7 @@ import 'package:flutter_kaiyaletz/features/home/screens/home_screen.dart';
 import 'package:flutter_kaiyaletz/features/nav/controller/bottom_nav_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../catalog/screens/catalog_screen.dart';
 import '../../job/screens/jobs_screen.dart';
 import '../../profile/screen/setting_screen.dart';
 
@@ -14,7 +15,7 @@ class BottomNavScreen extends StatelessWidget {
   static const _tabs = [
     HomeScreen(),
     JobsScreen(),
-    Center(child: Text("Catalog Screen")),
+    CatalogScreen(),
     SettingScreen(),
   ];
 

@@ -18,9 +18,9 @@ class AppInitializer {
     final container = ProviderContainer();
     await container.read(apiCacheServiceProvider).initialize();
     await container.read(requestQueueServiceProvider).initialize();
-    container.read(requestQueueServiceProvider).attachApiClient(
-      container.read(apiClientProvider),
-    );
+    container
+        .read(requestQueueServiceProvider)
+        .attachApiClient(container.read(apiClientProvider));
 
     return container;
   }

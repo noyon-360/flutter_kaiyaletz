@@ -14,7 +14,7 @@ export 'filter_chips.dart';
 export '../../../features/job/widgets/job_card.dart';
 export '../../../features/job/widgets/job_list_view.dart';
 export '../../../features/job/widgets/overview_stats.dart';
-export 'product_card.dart';
+export '../../../features/catalog/widgets/product_card.dart';
 export 'section_header.dart';
 export 'settings_widgets.dart';
 export '../../../features/job/widgets/status_chip.dart';

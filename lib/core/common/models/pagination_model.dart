@@ -11,7 +11,7 @@ class PaginationModel {
       total: json['total'],
       limit: json['limit'],
       page: json['page'],
-      pages: json['pages'],
+      pages: json['pages'] ?? json['totalPages'],
     );
   }
 

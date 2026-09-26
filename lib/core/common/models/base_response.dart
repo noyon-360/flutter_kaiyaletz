@@ -34,9 +34,13 @@ class BaseResponse<T> {
                 .map((e) => ErrorSource.fromJson(e))
                 .toList()
           : null,
+      // Some endpoints (e.g. products) send paging under `meta` instead.
       pagination: json['pagination'] != null
           ? PaginationModel.fromJson(json['pagination'])
-          : null,
+          : (json['meta'] is Map<String, dynamic> &&
+                    json['meta']['page'] != null
+                ? PaginationModel.fromJson(json['meta'])
+                : null),
       meta: json['meta'],
     );
   }

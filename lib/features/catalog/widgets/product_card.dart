@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/app_colors.dart';
-import '../../theme/app_text_styles.dart';
-import 'filter_chips.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_text_styles.dart';
+import '../../../core/common/widgets/filter_chips.dart';
 
 /// Catalog product tile.
 ///

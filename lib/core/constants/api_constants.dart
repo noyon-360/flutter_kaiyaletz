@@ -39,6 +39,7 @@ class ApiConstants {
   static const UserEndpoints user = UserEndpoints();
   static const SupportEndpoints support = SupportEndpoints();
   static const JobEndpoints job = JobEndpoints();
+  static const CatalogEndpoint catalog = CatalogEndpoint();
 }
 
 class AuthEndpoints {
@@ -83,4 +84,12 @@ class JobEndpoints {
 
   String get job => _base;
   String get dashboard => "$_base/dashboard";
+}
+
+class CatalogEndpoint {
+  const CatalogEndpoint();
+
+  static const String _base = '/products/';
+
+  String get catalogs => _base;
 }

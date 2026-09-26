@@ -16,17 +16,16 @@ import 'profile_screen.dart';
 
 /// Resolves the signed-in status and stored first name once, holding the
 /// result for at least [_floorDuration] so the splash doesn't flash by.
-final sessionStatusProvider = FutureProvider.autoDispose<(SessionStatus, String)>((
-  ref,
-) async {
-  final authStorage = ref.watch(authStorageServiceProvider);
-  final results = await Future.wait([
-    authStorage.currentSessionStatus(),
-    authStorage.getFirstName(),
-    Future.delayed(_floorDuration),
-  ]);
-  return (results[0] as SessionStatus, (results[1] as String?) ?? '');
-});
+final sessionStatusProvider =
+    FutureProvider.autoDispose<(SessionStatus, String)>((ref) async {
+      final authStorage = ref.watch(authStorageServiceProvider);
+      final results = await Future.wait([
+        authStorage.currentSessionStatus(),
+        authStorage.getFirstName(),
+        Future.delayed(_floorDuration),
+      ]);
+      return (results[0] as SessionStatus, (results[1] as String?) ?? '');
+    });
 
 const _floorDuration = Duration(milliseconds: 600);
 
