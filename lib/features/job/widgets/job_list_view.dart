@@ -24,10 +24,7 @@ class JobListView extends ConsumerWidget {
     final job = ref.watch(jobProvider.select((s) => s.job));
 
     if (isLoading == true && job == null) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        child: Center(child: CircularProgressIndicator()),
-      );
+      return Center(child: CircularProgressIndicator());
     }
 
     final jobs = job ?? [];
@@ -80,10 +77,7 @@ class JobListView extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   if (index >= jobs.length) {
                     if (!isLoadingMore) return const SizedBox.shrink();
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
+                    return Center(child: CircularProgressIndicator());
                   }
                   return _JobListTile(job: jobs[index]);
                 },
@@ -93,13 +87,14 @@ class JobListView extends ConsumerWidget {
   }
 }
 
-class _JobListTile extends StatelessWidget {
+class _JobListTile extends ConsumerWidget {
   const _JobListTile({required this.job});
 
   final JobModel job;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final jobCtrl = ref.read(jobProvider.notifier);
     return JobCard(
       style: .card,
       customerName: job.customerName,
@@ -107,9 +102,11 @@ class _JobListTile extends StatelessWidget {
       status: jobStatusFromApi(job.status),
       currentStep: job.currentStep,
       totalSteps: jobStepNames.length,
-      stepLabel: jobStepLabel(job.currentStep),
+      stepLabel: jobCtrl.jobStepLabel(job.currentStep),
       date: formatDate(job.date),
-      onTap: () {},
+      onTap: () {
+        jobCtrl.getJobById(job.id);
+      },
     );
   }
 }

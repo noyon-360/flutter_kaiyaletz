@@ -2,9 +2,10 @@ import 'package:flutter_kaiyaletz/core/api/api_client.dart';
 import 'package:flutter_kaiyaletz/core/common/models/network_result.dart';
 import 'package:flutter_kaiyaletz/core/constants/api_constants.dart';
 import 'package:flutter_kaiyaletz/core/providers/core_provider.dart';
-import 'package:flutter_kaiyaletz/features/job/models/dashboard_response_model.dart';
 import 'package:flutter_kaiyaletz/features/job/models/job_create_response_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../models/single_job_reponse_model.dart';
 
 final jobRepo = Provider<JobRepo>((ref) {
   final apiClient = ref.watch(apiClientProvider);
@@ -27,8 +28,7 @@ abstract class JobRepo {
     int page = 1,
     int limit = 20,
   });
-
-  NetworkResult<DashboardResponseModel> dashboard();
+  NetworkResult<SingleJobResponseModel> getSingleJob({required String jobId});
 }
 
 class JobRepoImpl implements JobRepo {
@@ -59,14 +59,6 @@ class JobRepoImpl implements JobRepo {
   }
 
   @override
-  NetworkResult<DashboardResponseModel> dashboard() {
-    return apiClient.get(
-      endpoint: ApiConstants.job.dashboard,
-      fromJsonT: (json) => DashboardResponseModel.fromJson(json),
-    );
-  }
-
-  @override
   NetworkStream<List<JobModel>> getJobs({
     String search = "",
     String? status,
@@ -83,6 +75,14 @@ class JobRepoImpl implements JobRepo {
       },
       fromJsonT: (json) =>
           (json as List).map((item) => JobModel.fromJson(item)).toList(),
+    );
+  }
+
+  @override
+  NetworkResult<SingleJobResponseModel> getSingleJob({String jobId = ""}) {
+    return apiClient.get<SingleJobResponseModel>(
+      endpoint: ApiConstants.job.jobById(jobId),
+      fromJsonT: (json) => SingleJobResponseModel.fromJson(json),
     );
   }
 }

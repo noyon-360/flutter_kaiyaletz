@@ -29,6 +29,7 @@ class AppScaffold extends StatelessWidget {
     this.resizeToAvoidBottomInset = true,
     this.isUnfocus = true,
     this.isLoading = false,
+    this.showLoadingOverlay = true,
   });
 
   final Widget body;
@@ -48,6 +49,7 @@ class AppScaffold extends StatelessWidget {
   final bool resizeToAvoidBottomInset;
   final bool? isUnfocus;
   final bool? isLoading;
+  final bool showLoadingOverlay;
 
   @override
   Widget build(BuildContext context) {
@@ -98,10 +100,9 @@ class AppScaffold extends StatelessWidget {
               ),
             ),
           ),
-          if (loading) ...[
+          if (loading && showLoadingOverlay)
             Positioned.fill(child: ColoredBox(color: AppColors.overlay)),
-            const Center(child: AppLoadingIndicator()),
-          ],
+          if (loading) const Center(child: AppLoadingIndicator()),
         ],
       ),
     );

@@ -1,6 +1,7 @@
-import 'package:flutter_kaiyaletz/features/job/models/dashboard_response_model.dart';
-import 'package:flutter_kaiyaletz/features/job/repos/job_repo.dart';
+import 'package:flutter_kaiyaletz/features/home/models/dashboard_response_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../repo/dashboard_repo.dart';
 
 final dashboardProvider =
     NotifierProvider.autoDispose<DashboardController, DashboardState>(
@@ -32,7 +33,7 @@ class DashboardController extends Notifier<DashboardState> {
   }
 
   Future<void> getDashboard() async {
-    final repo = ref.read(jobRepo);
+    final repo = ref.read(dashboardRepo);
 
     state = state.copyWith(isLoading: true);
 

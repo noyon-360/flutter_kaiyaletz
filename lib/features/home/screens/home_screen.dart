@@ -7,9 +7,8 @@ import 'package:flutter_kaiyaletz/core/theme/app_text_styles.dart';
 import 'package:flutter_kaiyaletz/core/utils/app_svg.dart';
 import 'package:flutter_kaiyaletz/core/utils/gap.dart';
 import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
-import 'package:flutter_kaiyaletz/features/job/controller/dashboard_controller.dart';
-import 'package:flutter_kaiyaletz/features/job/models/dashboard_response_model.dart';
-import 'package:flutter_kaiyaletz/features/job/models/job_create_response_model.dart';
+import 'package:flutter_kaiyaletz/features/home/controller/dashboard_controller.dart';
+import 'package:flutter_kaiyaletz/features/home/models/dashboard_response_model.dart';
 import 'package:flutter_kaiyaletz/features/job/screens/create_job_screen.dart';
 import 'package:flutter_kaiyaletz/features/nav/controller/bottom_nav_controller.dart';
 import 'package:flutter_kaiyaletz/features/profile/controller/profile_controller.dart';
@@ -18,6 +17,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils/d_print.dart';
 import '../../../core/utils/date_formatter.dart';
 import '../../../core/utils/greeting.dart';
+import '../../job/controller/job_controller.dart';
 import '../widgets/home_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
     DPrint.log("Home Screen");
 
     return AppScaffold(
-      padding: EdgeInsets.symmetric(horizontal: 0),
+      // isLoading: ,
       header: Consumer(
         builder: (context, ref, _) {
           final profile = ref.watch(profileProvider.select((s) => s.user));
@@ -86,9 +86,6 @@ class HomeScreen extends StatelessWidget {
           onRefresh: () => ref.read(dashboardProvider.notifier).getDashboard(),
           child: const _HomeBody(),
         ),
-      ),
-      floatingActionButton: AppFab(
-        onSimplePressed: () => AppNav.to(CreateJobScreen()),
       ),
     );
   }
@@ -184,13 +181,15 @@ class _HomeBody extends StatelessWidget {
   }
 }
 
-class _RecentJobTile extends StatelessWidget {
+class _RecentJobTile extends ConsumerWidget {
   const _RecentJobTile({required this.job});
 
   final DashboardRecentJob job;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final jobCtrl = ref.read(jobProvider.notifier);
+
     return JobCard(
       style: .card,
       customerName: job.customerName,
@@ -198,9 +197,11 @@ class _RecentJobTile extends StatelessWidget {
       status: jobStatusFromApi(job.status),
       currentStep: job.currentStep,
       totalSteps: jobStepNames.length,
-      stepLabel: jobStepLabel(job.currentStep),
+      stepLabel: jobCtrl.jobStepLabel(job.currentStep),
       date: formatDate(job.date),
-      onTap: () {},
+      onTap: () {
+        jobCtrl.getJobById(job.id);
+      },
     );
   }
 }

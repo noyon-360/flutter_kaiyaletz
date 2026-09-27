@@ -34,7 +34,6 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
     );
 
     return AppScaffold(
-      padding: EdgeInsets.all(0),
       body: Column(
         crossAxisAlignment: .stretch,
         children: [

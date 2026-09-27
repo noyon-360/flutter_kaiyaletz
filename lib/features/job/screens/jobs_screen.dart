@@ -3,7 +3,9 @@ import 'package:flutter_kaiyaletz/core/common/widgets/widgets.dart';
 import 'package:flutter_kaiyaletz/core/utils/gap.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/utils/navigation.dart';
 import '../controller/job_controller.dart';
+import 'create_job_screen.dart';
 
 const _statusFilters = <String, JobStatus?>{
   'All': null,
@@ -37,7 +39,8 @@ class _JobsScreenState extends ConsumerState<JobsScreen> {
     );
 
     return AppScaffold(
-      padding: EdgeInsets.symmetric(horizontal: 0),
+      isLoading: ref.watch(jobProvider.select((s) => s.isJobLoading)),
+      showLoadingOverlay: false,
       body: Column(
         crossAxisAlignment: .stretch,
         children: [
@@ -59,6 +62,9 @@ class _JobsScreenState extends ConsumerState<JobsScreen> {
           const Gap(h: 12),
           const Expanded(child: JobListView(paginate: true)),
         ],
+      ),
+      floatingActionButton: AppFab(
+        onSimplePressed: () => AppNav.to(CreateJobScreen()),
       ),
     );
   }

@@ -24,6 +24,7 @@ class BottomNavScreen extends StatelessWidget {
     DPrint.log("Bottom Nav Screen");
 
     return AppScaffold(
+      padding: .zero,
       body: Consumer(
         builder: (context, ref, _) {
           final currentIndex = ref.watch(bottomNavCtrlProvider).currentIndex;

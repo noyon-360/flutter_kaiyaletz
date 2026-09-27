@@ -1,8 +1,24 @@
 import 'dart:async';
 
+import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
 import 'package:flutter_kaiyaletz/features/job/models/job_create_response_model.dart';
 import 'package:flutter_kaiyaletz/features/job/repos/job_repo.dart';
+import 'package:flutter_kaiyaletz/features/job/screens/job_pogress.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../models/single_job_reponse_model.dart';
+
+/// Names of the job workflow steps, in order, matching [JobModel.currentStep].
+const List<String> jobStepNames = [
+  "Job Details", // Step 1
+  "Room Capture", // Step 2
+  "Measurements", // Step 3
+  "Select Product", // Step 4
+  "AI Layout", // Step 5
+  "Design", // Step 6
+  "Estimate", // Step 7
+  "Proposal", // Step 8
+];
 
 final jobProvider = NotifierProvider.autoDispose<JobController, JobState>(
   JobController.new,
@@ -10,8 +26,14 @@ final jobProvider = NotifierProvider.autoDispose<JobController, JobState>(
 
 class JobState {
   final List<JobModel>? job;
+  final SingleJobResponseModel? singleJob;
+
   final bool? isLoading;
+  final bool? isJobLoading;
   final bool isLoadingMore;
+
+  final String jobStepNames;
+
   final String search;
   final String? status;
   final int page;
@@ -19,8 +41,14 @@ class JobState {
 
   JobState({
     this.job,
+    this.singleJob,
+
     this.isLoading = false,
+    this.isJobLoading = false,
     this.isLoadingMore = false,
+
+    this.jobStepNames = '',
+
     this.search = '',
     this.status,
     this.page = 1,
@@ -31,18 +59,27 @@ class JobState {
 
   JobState copyWith({
     List<JobModel>? job,
+    SingleJobResponseModel? singleJob,
+
     bool? isLoading,
+    bool? isJobLoading,
     bool? isLoadingMore,
+    bool clearStatus = false,
+
+    String? jobStepNames,
+
     String? search,
     String? status,
-    bool clearStatus = false,
     int? page,
     int? totalPages,
   }) {
     return JobState(
       job: job ?? this.job,
+      singleJob: singleJob ?? this.singleJob,
       isLoading: isLoading ?? this.isLoading,
+      isJobLoading: isJobLoading ?? this.isJobLoading,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      jobStepNames: jobStepNames ?? this.jobStepNames,
       search: search ?? this.search,
       status: clearStatus ? null : (status ?? this.status),
       page: page ?? this.page,
@@ -131,5 +168,37 @@ class JobController extends Notifier<JobState> {
 
   void addJob(JobModel job) {
     state = state.copyWith(job: [job, ...?state.job]);
+  }
+
+  /// e.g. "Step 4: AI Layout" for currentStep == 4.
+  String jobStepLabel(int currentStep) {
+    final index = (currentStep - 1).clamp(0, jobStepNames.length - 1);
+    return 'Step $currentStep: ${jobStepNames[index]}';
+  }
+
+  Future<void> jobStepTitle(int currentStep) async {
+    final index = (currentStep - 1).clamp(0, jobStepNames.length - 1);
+    state = state.copyWith(jobStepNames: jobStepNames[index]);
+  }
+
+  Future<void> getJobById(String jobId) async {
+    final repo = ref.read(jobRepo);
+
+    state = state.copyWith(isJobLoading: true);
+
+    final result = await repo.getSingleJob(jobId: jobId);
+
+    result.fold(
+      (f) {
+        state = state.copyWith(isJobLoading: false);
+      },
+      (s) async {
+        state = state.copyWith(singleJob: s.data, isJobLoading: false);
+
+        await jobStepTitle(s.data.currentStep);
+
+        AppNav.to(JobPogress());
+      },
+    );
   }
 }

@@ -83,7 +83,9 @@ class JobEndpoints {
   static const String _base = '/jobs/';
 
   String get job => _base;
-  String get dashboard => "$_base/dashboard";
+  String get dashboard => "${_base}dashboard";
+
+  String jobById(String id) => '$_base$id';
 }
 
 class CatalogEndpoint {

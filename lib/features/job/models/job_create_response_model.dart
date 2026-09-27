@@ -2,22 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'job_create_response_model.g.dart';
 
-/// Names of the job workflow steps, in order, matching [JobModel.currentStep].
-const List<String> jobStepNames = [
-  'Room Capture',
-  'Measurements',
-  'Catalog',
-  'AI Layout',
-  'Design',
-  'Estimate',
-  'Proposal',
-];
 
-/// e.g. "Step 4: AI Layout" for currentStep == 4.
-String jobStepLabel(int currentStep) {
-  final index = (currentStep - 1).clamp(0, jobStepNames.length - 1);
-  return 'Step $currentStep: ${jobStepNames[index]}';
-}
 
 @JsonSerializable(checked: true, disallowUnrecognizedKeys: true)
 class JobModel {
