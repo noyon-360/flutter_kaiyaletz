@@ -1,4 +1,4 @@
-package com.snapn.design.flutter_kaiyaletz
+package com.snapn.design
 
 import io.flutter.embedding.android.FlutterActivity
 

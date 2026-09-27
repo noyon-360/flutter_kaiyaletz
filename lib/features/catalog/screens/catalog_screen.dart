@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kaiyaletz/core/common/widgets/widgets.dart';
 import 'package:flutter_kaiyaletz/core/utils/gap.dart';
+import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
+import 'package:flutter_kaiyaletz/features/catalog/screens/catalog_details_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../controller/catalog_cotroller.dart';
@@ -139,7 +141,9 @@ class _ProductTile extends StatelessWidget {
       image: item.imageUrl == null
           ? null
           : Image.network(item.imageUrl!, fit: .cover),
-      onTap: () {},
+      onTap: () {
+        AppNav.to(CatalogDetailsScreen(item: item));
+      },
     );
   }
 }
