@@ -5,3 +5,7 @@
 # Job Screen
 
 - Job screen refresh problem, two loading are showing
+
+# Login Screen
+
+- Remember me - logic
