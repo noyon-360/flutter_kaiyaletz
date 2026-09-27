@@ -96,6 +96,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     );
                     return AppTextField(
                       hint: 'Enter your email ',
+                      autovalidateMode: .disabled,
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
@@ -121,6 +122,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     );
                     return AppTextField(
                       hint: 'Enter your password',
+                      autovalidateMode: .disabled,
                       controller: passwordController,
                       focusNode: passFocusNode,
                       textInputAction: TextInputAction.done,

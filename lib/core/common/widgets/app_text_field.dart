@@ -41,6 +41,7 @@ class AppTextField extends StatefulWidget {
     this.autofillHints,
     this.width,
     this.contentPadding,
+    this.autovalidateMode = AutovalidateMode.onUserInteraction,
   });
 
   final String? label;
@@ -76,6 +77,8 @@ class AppTextField extends StatefulWidget {
 
   /// Measurements' small fields use EdgeInsets.all(10) in the design.
   final EdgeInsetsGeometry? contentPadding;
+
+  final AutovalidateMode? autovalidateMode;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -113,7 +116,8 @@ class _AppTextFieldState extends State<AppTextField> {
     final field = FormField<String>(
       initialValue: widget.controller?.text ?? '',
       validator: widget.validator,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode:
+          widget.autovalidateMode ?? AutovalidateMode.onUserInteraction,
       builder: (state) {
         final hasError = state.hasError;
 

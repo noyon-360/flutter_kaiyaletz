@@ -81,6 +81,7 @@ class _ForgatePassScreenState extends ConsumerState<ForgatePassScreen> {
                     );
                     return AppTextField(
                       hint: 'Enter your email',
+                      autovalidateMode: .disabled,
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
@@ -113,7 +114,7 @@ class _ForgatePassScreenState extends ConsumerState<ForgatePassScreen> {
 
                 /// [AppPrimaryButton] widget for sending the reset code.
                 AppPrimaryButton(
-                  label: 'Sign In',
+                  label: 'Continue',
                   onValidate: () => formKey.currentState!.validate(),
                   onAsyncPressed: sendResetCode,
                 ),

@@ -4,7 +4,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../constants/key_constants.dart';
 import '../common/models/session_status.dart';
-import '../utils/d_print.dart';
 
 /// One saved login, used for the multi-account switcher.
 class StoredAccount {
@@ -67,7 +66,6 @@ class AuthStorageService {
     : _secureStorage = storage ?? const FlutterSecureStorage();
 
   Future<void> storeAuthData(StoredAccount account) async {
-    DPrint.log('storeAuthData: storing ${account.toJson()}');
     await Future.wait([
       _secureStorage.write(
         key: KeyConst.accessToken,
@@ -118,7 +116,6 @@ class AuthStorageService {
       key: KeyConst.accountsList,
       value: jsonEncode(accounts.map((a) => a.toJson()).toList()),
     );
-    DPrint.log('saveAccountToList: saved ${account.toJson()}');
   }
 
   Future<List<StoredAccount>> getAccountsList() async {
@@ -127,9 +124,6 @@ class AuthStorageService {
     try {
       final list = jsonDecode(jsonString) as List;
       final accounts = list.map((j) => StoredAccount.fromJson(j)).toList();
-      DPrint.log(
-        'getAccountsList: loaded ${accounts.map((a) => a.toJson()).toList()}',
-      );
       return accounts;
     } catch (_) {
       return [];
@@ -139,7 +133,6 @@ class AuthStorageService {
   Future<void> switchAccount(String userId) async {
     final accounts = await getAccountsList();
     final account = accounts.firstWhere((a) => a.userId == userId);
-    DPrint.log('switchAccount: switching to ${account.toJson()}');
     await Future.wait([
       _secureStorage.write(
         key: KeyConst.accessToken,
@@ -170,9 +163,6 @@ class AuthStorageService {
     await _secureStorage.write(
       key: KeyConst.accountsList,
       value: jsonEncode(updated.map((a) => a.toJson()).toList()),
-    );
-    DPrint.log(
-      'removeAccount: removed userId=$userId, remaining ${updated.map((a) => a.toJson()).toList()}',
     );
     return await getUserId() == userId;
   }
@@ -234,9 +224,6 @@ class AuthStorageService {
       _secureStorage.delete(key: KeyConst.userId),
       _secureStorage.delete(key: KeyConst.role),
     ]);
-    DPrint.log(
-      'clearAuthData: cleared accessToken, refreshToken, userId, role',
-    );
   }
 
   Future<bool> hasStoredAccounts() async =>

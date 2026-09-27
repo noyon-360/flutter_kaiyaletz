@@ -95,6 +95,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     );
                     return AppTextField(
                       hint: 'Enter your email',
+                      autovalidateMode: .disabled,
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
@@ -120,6 +121,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     );
                     return AppTextField(
                       hint: 'Enter your password',
+                      autovalidateMode: .disabled,
                       controller: passwordController,
                       focusNode: passFocusNode,
                       textInputAction: TextInputAction.next,
@@ -137,7 +139,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 /// [Text] widget for the confirm password label.
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: .centerLeft,
                   child: Text(
                     'Confirm Password',
                     style: AppTextStyles.inputLabel,
@@ -152,9 +154,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     );
                     return AppTextField(
                       hint: 'Enter your confirm password',
+                      autovalidateMode: .disabled,
                       controller: confirmPasswordController,
                       focusNode: confirmPassFocusNode,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: .done,
                       isPassword: true,
                       enabled: !isLoading,
                       validator: (value) => Validators.confirmPassword(
