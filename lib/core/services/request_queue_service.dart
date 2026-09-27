@@ -50,8 +50,7 @@ class RequestQueueService {
   final ConnectivityService _connectivityService;
   ApiClient? _apiClient;
 
-  RequestQueueService({required ConnectivityService connectivityService})
-    : _connectivityService = connectivityService;
+  RequestQueueService({required this._connectivityService});
 
   void attachApiClient(ApiClient apiClient) {
     _apiClient = apiClient;
