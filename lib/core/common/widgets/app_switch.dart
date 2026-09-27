@@ -32,7 +32,7 @@ class AppSwitch extends StatelessWidget {
     return Opacity(
       opacity: enabled ? 1.0 : 0.5,
       child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+        behavior: .opaque,
         onTap: enabled ? () => onChanged(!value) : null,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
@@ -45,13 +45,13 @@ class AppSwitch extends StatelessWidget {
             borderRadius: BorderRadius.circular(_trackHeight / 2),
           ),
           child: Align(
-            alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+            alignment: value ? .centerRight : .centerLeft,
             child: Container(
               width: _thumbSize,
               height: _thumbSize,
               decoration: const BoxDecoration(
                 color: AppColors.onPrimary,
-                shape: BoxShape.circle,
+                shape: .circle,
               ),
             ),
           ),

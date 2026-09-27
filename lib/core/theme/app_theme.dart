@@ -21,7 +21,7 @@ class AppTheme {
 
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
-        brightness: Brightness.light,
+        brightness: .light,
         primary: AppColors.primary,
         onPrimary: AppColors.onPrimary,
         surface: AppColors.surface,

@@ -1,4 +1,4 @@
-import 'dart:ui' show ImageFilter, TileMode;
+import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 
@@ -76,7 +76,7 @@ class AppScaffold extends StatelessWidget {
                   SafeArea(
                     bottom: bottomBar == null,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      crossAxisAlignment: .stretch,
                       children: [
                         if (header != null)
                           Padding(
@@ -139,7 +139,7 @@ class _BlurOval extends StatelessWidget {
       imageFilter: ImageFilter.blur(
         sigmaX: sigma,
         sigmaY: sigma,
-        tileMode: TileMode.decal,
+        tileMode: .decal,
       ),
       child: Container(
         width: 406,

@@ -56,7 +56,7 @@ class _DeleteScreenConfrimationState
       isLoading: isLoading,
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: .stretch,
           children: [
             Text(
               'Are you sure to delete your account?',

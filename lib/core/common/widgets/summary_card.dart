@@ -59,7 +59,7 @@ class SummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           for (var i = 0; i < rows.length; i++) ...[
             if (i > 0) const SizedBox(height: 8),

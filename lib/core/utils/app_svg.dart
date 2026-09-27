@@ -27,9 +27,9 @@ class AppSvg extends StatelessWidget {
       width: width,
       height: height,
       colorFilter: color != null
-          ? ColorFilter.mode(color!, BlendMode.srcIn)
+          ? ColorFilter.mode(color!, .srcIn)
           : null,
-      fit: BoxFit.contain,
+      fit: .contain,
     );
   }
 }

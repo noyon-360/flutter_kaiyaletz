@@ -34,7 +34,7 @@ class AppSearchField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       onSubmitted: onSubmitted,
-      textInputAction: TextInputAction.search,
+      textInputAction: .search,
       cursorColor: AppColors.primary,
       style: AppTextStyles.bodySmall.copyWith(color: AppColors.textPrimary),
       decoration: InputDecoration(

@@ -23,7 +23,7 @@ class RememberForgotRow extends StatelessWidget {
         RememberMeCheckbox(),
         const Spacer(),
         GestureDetector(
-          behavior: HitTestBehavior.opaque,
+          behavior: .opaque,
           onTap: onForgotTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
@@ -46,13 +46,13 @@ class RememberMeCheckbox extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+      behavior: .opaque,
       onTap: () {
         final current = ref.read(authCtrlProvider.select((s) => s.rememberMe));
         ref.read(authCtrlProvider.notifier).rememberMe(!current);
       },
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           Consumer(
             builder: (context, ref, child) {

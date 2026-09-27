@@ -33,7 +33,7 @@ class ReasonOptionTile extends StatelessWidget {
               width: 24,
               height: 24,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                shape: .circle,
                 border: Border.all(
                   color: isSelected ? AppColors.primary : AppColors.brown300,
                   width: 1.5,
@@ -45,7 +45,7 @@ class ReasonOptionTile extends StatelessWidget {
                         width: 10,
                         height: 10,
                         decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
+                          shape: .circle,
                           color: AppColors.primary,
                         ),
                       ),
@@ -89,7 +89,7 @@ class ReasonOptionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: .stretch,
       children: [
         for (var i = 0; i < reasons.length; i++)
           ReasonOptionTile(

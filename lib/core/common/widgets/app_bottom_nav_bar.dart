@@ -136,10 +136,10 @@ class _NavButton extends StatelessWidget {
     final color = isActive ? AppColors.primary : AppColors.textMuted;
 
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+      behavior: .opaque,
       onTap: onTap,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: .center,
         children: [
           Icon(
             isActive ? (item.activeIcon ?? item.icon) : item.icon,
@@ -151,7 +151,7 @@ class _NavButton extends StatelessWidget {
             item.label,
             style: AppTextStyles.navLabel.copyWith(color: color),
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            overflow: .ellipsis,
           ),
         ],
       ),

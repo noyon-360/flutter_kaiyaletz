@@ -32,7 +32,7 @@ class JobCard extends StatelessWidget {
     required this.date,
     this.totalSteps = 7,
     this.onTap,
-    this.style = JobCardStyle.card,
+    this.style = .card,
   });
 
   final String customerName;
@@ -56,28 +56,28 @@ class JobCard extends StatelessWidget {
     final content = Padding(
       padding: const EdgeInsets.all(12),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: .min,
+        crossAxisAlignment: .stretch,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: .start,
             children: [
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: .start,
                   children: [
                     Text(
                       customerName,
                       style: AppTextStyles.listTitle,
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       address,
                       style: AppTextStyles.bodyMedium,
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                     ),
                   ],
                 ),
@@ -99,7 +99,7 @@ class JobCard extends StatelessWidget {
                   stepLabel,
                   style: AppTextStyles.caption,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                 ),
               ),
               const SizedBox(width: 8),
@@ -110,7 +110,7 @@ class JobCard extends StatelessWidget {
       ),
     );
 
-    if (style == JobCardStyle.row) {
+    if (style == .row) {
       return InkWell(onTap: onTap, child: content);
     }
 
@@ -120,7 +120,7 @@ class JobCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         side: const BorderSide(color: AppColors.border),
       ),
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       child: InkWell(onTap: onTap, child: content),
     );
   }
@@ -132,7 +132,7 @@ class JobCard extends StatelessWidget {
 /// dividers 1px #ECDDD0.
 /// Used on: Home ("Recent Jobs").
 ///
-/// Children should be `JobCard(style: JobCardStyle.row, ...)`.
+/// Children should be `JobCard(style: .row, ...)`.
 class JobListCard extends StatelessWidget {
   const JobListCard({super.key, required this.children});
 
@@ -146,9 +146,9 @@ class JobListCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         side: const BorderSide(color: AppColors.borderCard),
       ),
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           for (var i = 0; i < children.length; i++) ...[
             if (i > 0)

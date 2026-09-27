@@ -236,10 +236,10 @@ class AuthStorageService {
   Future<SessionStatus> currentSessionStatus() async {
     final hasAccess = await hasAccessToken();
     final hasRefresh = await hasRefreshToken();
-    if (!hasAccess && !hasRefresh) return SessionStatus.guest;
+    if (!hasAccess && !hasRefresh) return .guest;
     if (hasAccess || hasRefresh) {
-      return SessionStatus.authenticated; // trust it until proven otherwise
+      return .authenticated; // trust it until proven otherwise
     }
-    return SessionStatus.expired;
+    return .expired;
   }
 }

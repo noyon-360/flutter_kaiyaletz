@@ -15,7 +15,7 @@ class AppLogo extends StatelessWidget {
     required this.images,
     this.borderRadius = 0,
     this.backgroundColor,
-    this.fit = BoxFit.contain,
+    this.fit = .contain,
   });
 
   @override

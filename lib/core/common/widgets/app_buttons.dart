@@ -229,7 +229,7 @@ class _AnimatedActionSurfaceState extends State<_AnimatedActionSurface>
                             highlightColor: widget.highlightColor,
                             child: Center(
                               child: Stack(
-                                alignment: Alignment.center,
+                                alignment: .center,
                                 children: [
                                   if (markerOpacity > 0)
                                     Opacity(
@@ -329,7 +329,7 @@ class AppPrimaryButton extends StatelessWidget {
       content: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             if (icon != null) ...[icon!, const SizedBox(width: 10)],
             Flexible(
@@ -337,7 +337,7 @@ class AppPrimaryButton extends StatelessWidget {
                 label,
                 style: AppTextStyles.button,
                 maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                overflow: .ellipsis,
               ),
             ),
           ],
@@ -389,7 +389,7 @@ class AppOutlineButton extends StatelessWidget {
       content: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             if (icon != null) ...[icon!, const SizedBox(width: 8)],
             Flexible(
@@ -397,7 +397,7 @@ class AppOutlineButton extends StatelessWidget {
                 label,
                 style: AppTextStyles.button.copyWith(color: color),
                 maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                overflow: .ellipsis,
               ),
             ),
           ],

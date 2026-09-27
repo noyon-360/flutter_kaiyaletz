@@ -81,9 +81,9 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
       body: Center(
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: .center,
             children: [
-              AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
+              AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
 
               Gap.h(20),
 
@@ -95,7 +95,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               Text(
                 'Enter the 6-digit code sent to your email',
                 style: AppTextStyles.bodyLarge,
-                textAlign: TextAlign.center,
+                textAlign: .center,
               ),
 
               Gap.h(24),
@@ -125,7 +125,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
               /// [Row] widget for the "Didn't received code? Resend" link.
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: .center,
                 children: [
                   Text(
                     "Didn't received code?",

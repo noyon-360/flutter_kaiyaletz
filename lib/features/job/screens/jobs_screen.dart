@@ -7,10 +7,10 @@ import '../controller/job_controller.dart';
 
 const _statusFilters = <String, JobStatus?>{
   'All': null,
-  'New': JobStatus.newJob,
-  'In Progress': JobStatus.inProgress,
-  'Proposal Sent': JobStatus.proposalSent,
-  'Completed': JobStatus.completed,
+  'New': .newJob,
+  'In Progress': .inProgress,
+  'Proposal Sent': .proposalSent,
+  'Completed': .completed,
 };
 
 class JobsScreen extends ConsumerStatefulWidget {
@@ -39,7 +39,7 @@ class _JobsScreenState extends ConsumerState<JobsScreen> {
     return AppScaffold(
       padding: EdgeInsets.symmetric(horizontal: 0),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: .stretch,
         children: [
           AppSearchField(
             hint: 'Search jobs, customers...',

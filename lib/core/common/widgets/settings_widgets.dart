@@ -22,11 +22,11 @@ class SettingsGroup extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         side: const BorderSide(color: AppColors.borderLight),
       ),
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             for (var i = 0; i < children.length; i++) ...[
               if (i > 0)
@@ -96,7 +96,7 @@ class SettingsTile extends StatelessWidget {
                   color: color ?? AppColors.textTile,
                 ),
                 maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                overflow: .ellipsis,
               ),
             ),
             trailing ??
@@ -142,7 +142,7 @@ class SettingsProfileCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         side: const BorderSide(color: AppColors.borderLight),
       ),
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Padding(
@@ -163,17 +163,17 @@ class SettingsProfileCard extends StatelessWidget {
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: .min,
+                  crossAxisAlignment: .start,
                   children: [
                     Text(
                       name,
                       style: AppTextStyles.listTitle.copyWith(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: .w500,
                         color: AppColors.textProfileName,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                     ),
                     const SizedBox(height: 6),
                     Text(
@@ -182,7 +182,7 @@ class SettingsProfileCard extends StatelessWidget {
                         color: AppColors.iconMuted,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: .ellipsis,
                     ),
                   ],
                 ),

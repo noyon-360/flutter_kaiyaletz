@@ -33,23 +33,23 @@ String dioErrorToUserMessage(DioException error) {
   }
 
   switch (error.type) {
-    case DioExceptionType.connectionTimeout:
+    case .connectionTimeout:
       return 'Connection timed out. Please try again.';
-    case DioExceptionType.sendTimeout:
+    case .sendTimeout:
       return 'Request timed out. Please check your network.';
-    case DioExceptionType.receiveTimeout:
+    case .receiveTimeout:
       return 'Server took too long to respond.';
-    case DioExceptionType.badCertificate:
+    case .badCertificate:
       return 'Invalid server certificate.';
-    case DioExceptionType.badResponse:
+    case .badResponse:
       return 'Server error occurred.';
-    case DioExceptionType.cancel:
+    case .cancel:
       return 'Request was cancelled.';
-    case DioExceptionType.connectionError:
+    case .connectionError:
       return 'No internet connection.';
-    case DioExceptionType.unknown:
+    case .unknown:
       return 'Something went wrong. Please try again.';
-    case DioExceptionType.transformTimeout:
+    case .transformTimeout:
       return 'Response processing timed out. Please try again.';
   }
 }

@@ -28,8 +28,8 @@ class AppDialogs {
           child: SizedBox(
             width: MediaQuery.sizeOf(dialogContext).width - 48,
             child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: .min,
+              crossAxisAlignment: .start,
               children: [
                 Text(title, style: AppTextStyles.h2),
                 const SizedBox(height: 12),

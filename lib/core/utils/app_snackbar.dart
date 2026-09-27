@@ -35,22 +35,22 @@ class AppSnackbar {
 
   /// Shows a success snackbar.
   static void success(String message, {Duration? duration}) {
-    _show(message, type: SnackType.success, duration: duration);
+    _show(message, type: .success, duration: duration);
   }
 
   /// Shows an error snackbar.
   static void error(String message, {Duration? duration}) {
-    _show(message, type: SnackType.error, duration: duration);
+    _show(message, type: .error, duration: duration);
   }
 
   /// Shows a warning snackbar.
   static void warning(String message, {Duration? duration}) {
-    _show(message, type: SnackType.warning, duration: duration);
+    _show(message, type: .warning, duration: duration);
   }
 
   /// Shows an info snackbar.
   static void info(String message, {Duration? duration}) {
-    _show(message, type: SnackType.info, duration: duration);
+    _show(message, type: .info, duration: duration);
   }
 
   /// Hides the currently visible snackbar, if any.
@@ -97,25 +97,25 @@ class _SnackStyle {
 
   static _SnackStyle of(SnackType type) {
     switch (type) {
-      case SnackType.success:
+      case .success:
         return const _SnackStyle(
           background: AppColors.success,
           foreground: AppColors.onPrimary,
           icon: Icons.check_circle_rounded,
         );
-      case SnackType.error:
+      case .error:
         return const _SnackStyle(
           background: AppColors.danger,
           foreground: AppColors.onPrimary,
           icon: Icons.error_rounded,
         );
-      case SnackType.warning:
+      case .warning:
         return const _SnackStyle(
           background: AppColors.statusInProgress,
           foreground: AppColors.onPrimary,
           icon: Icons.warning_rounded,
         );
-      case SnackType.info:
+      case .info:
         return const _SnackStyle(
           background: AppColors.textNavy,
           foreground: AppColors.onPrimary,
@@ -149,7 +149,7 @@ class _SnackContent extends StatelessWidget {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: .start,
           children: [
             Icon(style.icon, color: style.foreground, size: 20),
             const SizedBox(width: 10),

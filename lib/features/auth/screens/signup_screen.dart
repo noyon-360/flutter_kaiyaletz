@@ -59,9 +59,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           child: Form(
             key: formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: .center,
               children: [
-                AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
+                AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
 
                 Gap.h(20),
 
@@ -75,7 +75,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   child: Text(
                     'Please enter your information and create your account.',
                     style: AppTextStyles.bodyLarge,
-                    textAlign: TextAlign.center,
+                    textAlign: .center,
                   ),
                 ),
 
@@ -83,7 +83,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 /// [Text] widget for the email label.
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: .centerLeft,
                   child: Text('Email', style: AppTextStyles.inputLabel),
                 ),
                 Gap.h(8),
@@ -97,8 +97,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       hint: 'Enter your email',
                       autovalidateMode: .disabled,
                       controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
+                      keyboardType: .emailAddress,
+                      textInputAction: .next,
                       enabled: !isLoading,
                       validator: Validators.email,
                     );
@@ -109,7 +109,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 /// [Text] widget for the password label.
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: .centerLeft,
                   child: Text('Password', style: AppTextStyles.inputLabel),
                 ),
                 Gap.h(8),
@@ -124,7 +124,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       autovalidateMode: .disabled,
                       controller: passwordController,
                       focusNode: passFocusNode,
-                      textInputAction: TextInputAction.next,
+                      textInputAction: .next,
                       isPassword: true,
                       enabled: !isLoading,
                       validator: (value) => Validators.password(
@@ -200,7 +200,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
                 /// [Row] widget for the "Already have an account? Sign Up" link.
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: .center,
                   children: [
                     Text(
                       'Already have an account?',

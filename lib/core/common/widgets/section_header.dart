@@ -31,17 +31,17 @@ class SectionHeader extends StatelessWidget {
             title,
             style: AppTextStyles.h2.copyWith(color: AppColors.textNavy),
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            overflow: .ellipsis,
           ),
         ),
         if (onAction != null)
           GestureDetector(
-            behavior: HitTestBehavior.opaque,
+            behavior: .opaque,
             onTap: onAction,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: .min,
                 children: [
                   Text(actionLabel, style: AppTextStyles.link),
                   const SizedBox(width: 4),

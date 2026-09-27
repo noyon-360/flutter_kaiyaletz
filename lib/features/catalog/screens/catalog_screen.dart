@@ -34,7 +34,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
     return AppScaffold(
       padding: EdgeInsets.all(0),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: .stretch,
         children: [
           AppSearchField(
             hint: 'Search products or SKU...',
@@ -138,7 +138,7 @@ class _ProductTile extends StatelessWidget {
       category: item.category.label,
       image: item.imageUrl == null
           ? null
-          : Image.network(item.imageUrl!, fit: BoxFit.cover),
+          : Image.network(item.imageUrl!, fit: .cover),
       onTap: () {},
     );
   }

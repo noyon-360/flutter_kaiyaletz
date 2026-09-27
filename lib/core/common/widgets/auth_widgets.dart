@@ -31,8 +31,8 @@ class AuthHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: .min,
+      crossAxisAlignment: .stretch,
       children: [
         if (logo != null) ...[
           Center(child: SizedBox(width: 150, height: 99, child: logo)),
@@ -74,7 +74,7 @@ class AuthFooterLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: [
         Flexible(
           child: Text(
@@ -86,7 +86,7 @@ class AuthFooterLink extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         GestureDetector(
-          behavior: HitTestBehavior.opaque,
+          behavior: .opaque,
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),

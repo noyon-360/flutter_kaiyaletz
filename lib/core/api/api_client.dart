@@ -160,7 +160,7 @@ class ApiClient {
         // Neither token — this was never a session. Don't wipe anything,
         // don't force a redirect. Let the caller decide what a guest
         // sees when a protected feature 401s.
-        _sessionController.add(SessionStatus.guest);
+        _sessionController.add(.guest);
         onAuthRequired?.call();
         return false;
       }
@@ -189,7 +189,7 @@ class ApiClient {
         await _authStorageService.storeRefreshToken(
           refreshToken: newRefreshToken,
         );
-        _sessionController.add(SessionStatus.authenticated);
+        _sessionController.add(.authenticated);
         return true;
       }
 
@@ -206,7 +206,7 @@ class ApiClient {
   Future<void> _handleSessionExpired() async {
     await _authStorageService.clearAuthData();
     await _cacheService.clearAllCache();
-    _sessionController.add(SessionStatus.expired);
+    _sessionController.add(.expired);
     onSessionExpired?.call();
   }
 
@@ -290,14 +290,14 @@ class ApiClient {
     }
 
     switch (error.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
+      case .connectionTimeout:
+      case .sendTimeout:
+      case .receiveTimeout:
         return TimeoutFailure(
           message: dioErrorToUserMessage(error),
           statusCode: error.response?.statusCode ?? 408,
         );
-      case DioExceptionType.connectionError:
+      case .connectionError:
         return const ConnectionFailure(message: 'No internet connection');
       default:
         if (error.response?.statusCode == 401) {

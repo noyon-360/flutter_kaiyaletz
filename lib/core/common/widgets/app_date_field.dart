@@ -50,8 +50,8 @@ class AppDateField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: .min,
+      crossAxisAlignment: .stretch,
       children: [
         if (label != null) ...[
           Text(label!, style: AppTextStyles.inputLabel),

@@ -80,13 +80,13 @@ class _SplashScreen extends StatelessWidget {
       backgroundColor: AppColors.backgroundWarm,
       body: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             AppLogo(
               images: AppAssets.img.logo,
               h: 110,
               borderRadius: 24,
-              fit: BoxFit.cover,
+              fit: .cover,
             ),
             const SizedBox(height: 32),
             const AppLoadingIndicator(size: 28),

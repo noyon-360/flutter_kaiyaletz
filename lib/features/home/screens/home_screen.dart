@@ -49,8 +49,8 @@ class HomeScreen extends StatelessWidget {
             ),
 
             middle: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: .min,
+              crossAxisAlignment: .start,
               children: [
                 Text(greeting, style: AppTextStyles.overline),
                 Text(
@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                     color: AppColors.textWarmDark,
                   ),
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                 ),
               ],
             ),
@@ -104,7 +104,7 @@ class _HomeBody extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: .stretch,
           children: [
             HomeHeroCard(
               illustration: Image.asset(AppAssets.img.illustration),
@@ -192,7 +192,7 @@ class _RecentJobTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return JobCard(
-      style: JobCardStyle.card,
+      style: .card,
       customerName: job.customerName,
       address: job.propertyAddress,
       status: jobStatusFromApi(job.status),

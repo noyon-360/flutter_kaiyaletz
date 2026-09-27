@@ -59,14 +59,14 @@ class _ContactUsScreenState extends ConsumerState<ContactUsScreen> {
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: .stretch,
             children: [
               Text('Full Name', style: AppTextStyles.inputLabel),
               Gap.h(8),
               AppTextField(
                 hint: 'Enter your full name',
                 controller: fullNameController,
-                textInputAction: TextInputAction.next,
+                textInputAction: .next,
                 onSubmitted: (_) => emailFocus.requestFocus(),
                 validator: (value) => Validators.required(
                   value,
@@ -82,8 +82,8 @@ class _ContactUsScreenState extends ConsumerState<ContactUsScreen> {
                 hint: 'Enter your email',
                 controller: emailController,
                 focusNode: emailFocus,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
+                keyboardType: .emailAddress,
+                textInputAction: .next,
                 onSubmitted: (_) => contactNumberFocus.requestFocus(),
                 validator: Validators.email,
               ),
@@ -96,8 +96,8 @@ class _ContactUsScreenState extends ConsumerState<ContactUsScreen> {
                 hint: 'Enter your contact number',
                 controller: contactNumberController,
                 focusNode: contactNumberFocus,
-                keyboardType: TextInputType.phone,
-                textInputAction: TextInputAction.next,
+                keyboardType: .phone,
+                textInputAction: .next,
                 onSubmitted: (_) => noteFocus.requestFocus(),
                 validator: (value) => Validators.required(
                   value,
@@ -113,7 +113,7 @@ class _ContactUsScreenState extends ConsumerState<ContactUsScreen> {
                 hint: 'Describe what you need',
                 controller: noteController,
                 focusNode: noteFocus,
-                textInputAction: TextInputAction.done,
+                textInputAction: .done,
                 maxLines: 5,
                 validator: (value) => Validators.required(
                   value,
@@ -133,7 +133,7 @@ class _ContactUsScreenState extends ConsumerState<ContactUsScreen> {
 
                     return Text(
                       error,
-                      textAlign: TextAlign.center,
+                      textAlign: .center,
                       style: TextStyle(color: AppColors.error),
                     );
                   },

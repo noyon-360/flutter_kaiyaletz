@@ -16,7 +16,7 @@ class AppTextStyles {
   static const TextStyle display = TextStyle(
     fontFamily: AppFonts.heading,
     fontSize: 30,
-    fontWeight: FontWeight.w400,
+    fontWeight: .w400,
     height: 36 / 30,
     letterSpacing: -0.8,
     color: AppColors.textWarmDark,
@@ -25,7 +25,7 @@ class AppTextStyles {
   static const TextStyle h1 = TextStyle(
     fontFamily: AppFonts.heading,
     fontSize: 24,
-    fontWeight: FontWeight.w600,
+    fontWeight: .w600,
     height: 1.2,
     color: AppColors.textPrimary,
   );
@@ -33,7 +33,7 @@ class AppTextStyles {
   static const TextStyle h2 = TextStyle(
     fontFamily: AppFonts.heading,
     fontSize: 20,
-    fontWeight: FontWeight.w600,
+    fontWeight: .w600,
     height: 1.2,
     color: AppColors.textDark,
   );
@@ -42,7 +42,7 @@ class AppTextStyles {
   static const TextStyle priceLarge = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 24,
-    fontWeight: FontWeight.w600,
+    fontWeight: .w600,
     height: 1.2,
     color: AppColors.primary,
   );
@@ -50,7 +50,7 @@ class AppTextStyles {
   static const TextStyle statValue = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 20,
-    fontWeight: FontWeight.w600,
+    fontWeight: .w600,
     height: 1.2,
     color: AppColors.textPrimary,
   );
@@ -58,7 +58,7 @@ class AppTextStyles {
   static const TextStyle listTitle = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 18,
-    fontWeight: FontWeight.w600,
+    fontWeight: .w600,
     height: 1.2,
     color: AppColors.textNavy,
   );
@@ -66,7 +66,7 @@ class AppTextStyles {
   static const TextStyle button = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontWeight: .w500,
     height: 1.2,
     color: AppColors.onPrimary,
   );
@@ -74,7 +74,7 @@ class AppTextStyles {
   static const TextStyle inputLabel = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontWeight: .w500,
     height: 1.2,
     color: AppColors.textPrimary,
   );
@@ -82,7 +82,7 @@ class AppTextStyles {
   static const TextStyle placeholder = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 16,
-    fontWeight: FontWeight.w400,
+    fontWeight: .w400,
     height: 1.2,
     color: AppColors.textPlaceholder,
   );
@@ -90,7 +90,7 @@ class AppTextStyles {
   static const TextStyle bodyLarge = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 16,
-    fontWeight: FontWeight.w400,
+    fontWeight: .w400,
     height: 1.2,
     color: AppColors.textSecondary,
   );
@@ -98,7 +98,7 @@ class AppTextStyles {
   static const TextStyle productName = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 14,
-    fontWeight: FontWeight.w600,
+    fontWeight: .w600,
     height: 1.2,
     color: AppColors.textNavy,
   );
@@ -106,7 +106,7 @@ class AppTextStyles {
   static const TextStyle productPrice = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 14,
-    fontWeight: FontWeight.w600,
+    fontWeight: .w600,
     height: 1.2,
     color: AppColors.primary,
   );
@@ -114,7 +114,7 @@ class AppTextStyles {
   static const TextStyle overline = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 14,
-    fontWeight: FontWeight.w500,
+    fontWeight: .w500,
     height: 20 / 14,
     letterSpacing: 0.3,
     color: AppColors.textWarmMuted,
@@ -123,7 +123,7 @@ class AppTextStyles {
   static const TextStyle bodyMedium = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 14,
-    fontWeight: FontWeight.w400,
+    fontWeight: .w400,
     height: 1.2,
     color: AppColors.textMeta,
   );
@@ -131,7 +131,7 @@ class AppTextStyles {
   static const TextStyle bodySmall = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontWeight: .w400,
     height: 1.2,
     color: AppColors.textMeta,
   );
@@ -139,7 +139,7 @@ class AppTextStyles {
   static const TextStyle link = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontWeight: .w400,
     height: 1.2,
     color: AppColors.primary,
   );
@@ -147,7 +147,7 @@ class AppTextStyles {
   static const TextStyle paragraph = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontWeight: .w400,
     height: 1.5,
     color: AppColors.textMeta,
   );
@@ -155,7 +155,7 @@ class AppTextStyles {
   static const TextStyle caption = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 10,
-    fontWeight: FontWeight.w400,
+    fontWeight: .w400,
     height: 1.2,
     color: AppColors.textMeta,
   );
@@ -163,7 +163,7 @@ class AppTextStyles {
   static const TextStyle navLabel = TextStyle(
     fontFamily: AppFonts.body,
     fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontWeight: .w400,
     height: 1.2,
     color: AppColors.textMuted,
   );

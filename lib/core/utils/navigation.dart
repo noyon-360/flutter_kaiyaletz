@@ -16,7 +16,7 @@ const backDuration = Duration(milliseconds: 220); // ~25% faster
 /// Usage:
 /// ```dart
 /// AppNav.to(const LoginScreen());
-/// AppNav.off(const LoginScreen(), transition: NavTransition.leftToRight);
+/// AppNav.off(const LoginScreen(), transition: .leftToRight);
 /// AppNav.offAll(const LoginScreen());
 /// AppNav.back();
 /// ```
@@ -35,7 +35,7 @@ class AppNav {
   /// that case, since Cupertino's timing is fixed internally.
   static Future<T?> to<T>(
     Widget page, {
-    NavTransition transition = NavTransition.rightToLeft,
+    NavTransition transition = .rightToLeft,
     Duration duration = forwardDuration,
     bool cupertino = true,
   }) {
@@ -47,7 +47,7 @@ class AppNav {
   /// Replace the current screen with [page]. Equivalent to `Get.off`.
   static Future<T?> off<T>(
     Widget page, {
-    NavTransition transition = NavTransition.rightToLeft,
+    NavTransition transition = .rightToLeft,
     Duration duration = forwardDuration,
     bool cupertino = true,
   }) {
@@ -59,7 +59,7 @@ class AppNav {
   /// Replace the entire stack with [page]. Equivalent to `Get.offAll`.
   static Future<T?> offAll<T>(
     Widget page, {
-    NavTransition transition = NavTransition.rightToLeft,
+    NavTransition transition = .rightToLeft,
     Duration duration = forwardDuration,
     bool cupertino = true,
   }) {
@@ -80,7 +80,7 @@ class AppNav {
     Duration duration,
     bool cupertino,
   ) {
-    if (cupertino && transition == NavTransition.rightToLeft) {
+    if (cupertino && transition == .rightToLeft) {
       return CupertinoPageRoute<T>(builder: (_) => page);
     }
     return _route(page, transition, duration);
@@ -91,7 +91,7 @@ class AppNav {
     NavTransition transition,
     Duration duration,
   ) {
-    if (transition == NavTransition.none) {
+    if (transition == .none) {
       return MaterialPageRoute<T>(builder: (_) => page);
     }
 
@@ -107,9 +107,9 @@ class AppNav {
         );
 
         switch (transition) {
-          case NavTransition.fade:
+          case .fade:
             return FadeTransition(opacity: curved, child: child);
-          case NavTransition.rightToLeft:
+          case .rightToLeft:
             return SlideTransition(
               position: Tween(
                 begin: const Offset(1, 0),
@@ -117,7 +117,7 @@ class AppNav {
               ).animate(curved),
               child: child,
             );
-          case NavTransition.leftToRight:
+          case .leftToRight:
             return SlideTransition(
               position: Tween(
                 begin: const Offset(-1, 0),
@@ -125,7 +125,7 @@ class AppNav {
               ).animate(curved),
               child: child,
             );
-          case NavTransition.downToUp:
+          case .downToUp:
             return SlideTransition(
               position: Tween(
                 begin: const Offset(0, 1),
@@ -133,7 +133,7 @@ class AppNav {
               ).animate(curved),
               child: child,
             );
-          case NavTransition.upToDown:
+          case .upToDown:
             return SlideTransition(
               position: Tween(
                 begin: const Offset(0, -1),
@@ -141,7 +141,7 @@ class AppNav {
               ).animate(curved),
               child: child,
             );
-          case NavTransition.none:
+          case .none:
             return child;
         }
       },

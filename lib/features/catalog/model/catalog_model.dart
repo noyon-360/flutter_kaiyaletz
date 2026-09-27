@@ -7,19 +7,19 @@ enum ProductCategory { base, wall, tall, island }
 extension ProductCategoryX on ProductCategory {
   /// Exact string the backend expects/returns (case-sensitive).
   String get value => switch (this) {
-    ProductCategory.base => 'Base',
-    ProductCategory.wall => 'Wall',
-    ProductCategory.tall => 'Tall',
-    ProductCategory.island => 'Island',
+    .base => 'Base',
+    .wall => 'Wall',
+    .tall => 'Tall',
+    .island => 'Island',
   };
 
   String get label => value;
 
   static ProductCategory fromValue(String value) => switch (value) {
-    'Base' => ProductCategory.base,
-    'Wall' => ProductCategory.wall,
-    'Tall' => ProductCategory.tall,
-    'Island' => ProductCategory.island,
+    'Base' => .base,
+    'Wall' => .wall,
+    'Tall' => .tall,
+    'Island' => .island,
     _ => throw ArgumentError('Unknown product category: $value'),
   };
 }

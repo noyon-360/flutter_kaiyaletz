@@ -47,7 +47,7 @@ class ProductCard extends StatelessWidget {
   /// e.g. "Base"
   final String category;
 
-  /// e.g. `Image.network(url, fit: BoxFit.cover)`. Shows a placeholder if null.
+  /// e.g. `Image.network(url, fit: .cover)`. Shows a placeholder if null.
   final Widget? image;
   final VoidCallback? onTap;
 
@@ -65,12 +65,12 @@ class ProductCard extends StatelessWidget {
           color: isSelected ? AppColors.borderFocus : AppColors.border,
         ),
       ),
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: .antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: .min,
+          crossAxisAlignment: .stretch,
           children: [
             SizedBox(
               height: imageHeight,
@@ -79,28 +79,28 @@ class ProductCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: .min,
+                crossAxisAlignment: .start,
                 children: [
                   Text(
                     sku,
                     style: AppTextStyles.caption,
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: .ellipsis,
                   ),
                   const SizedBox(height: 2),
                   Text(
                     name,
                     style: AppTextStyles.productName,
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: .ellipsis,
                   ),
                   const SizedBox(height: 2),
                   Text(
                     dimensions,
                     style: AppTextStyles.bodySmall,
                     maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: .ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Row(
@@ -110,7 +110,7 @@ class ProductCard extends StatelessWidget {
                           price,
                           style: AppTextStyles.productPrice,
                           maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          overflow: .ellipsis,
                         ),
                       ),
                       const SizedBox(width: 4),

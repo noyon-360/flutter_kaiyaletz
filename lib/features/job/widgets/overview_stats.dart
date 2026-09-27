@@ -81,8 +81,8 @@ class _StatTile extends StatelessWidget {
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: .start,
+        mainAxisSize: .min,
         children: [
           Row(
             children: [
@@ -93,7 +93,7 @@ class _StatTile extends StatelessWidget {
                   label,
                   style: AppTextStyles.caption,
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: .ellipsis,
                 ),
               ),
             ],

@@ -69,7 +69,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       ),
       builder: (context) => SafeArea(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: .min,
           children: [
             ListTile(
               leading: const Icon(
@@ -132,10 +132,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       body: Center(
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: .center,
             children: [
               if (!widget.isEditing) ...[
-                AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
+                AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
 
                 Gap.h(20),
 
@@ -159,7 +159,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
                   return Center(
                     child: Stack(
-                      clipBehavior: Clip.none,
+                      clipBehavior: .none,
                       children: [
                         GestureDetector(
                           onTap: pickAvatar,
@@ -187,7 +187,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: AppColors.surface,
-                                shape: BoxShape.circle,
+                                shape: .circle,
                                 border: Border.all(color: AppColors.border),
                               ),
                               child: Icon(
@@ -210,7 +210,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
               /// [Text] widget for the full name label.
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: .centerLeft,
                 child: Text('Full Name', style: AppTextStyles.inputLabel),
               ),
               Gap.h(8),
@@ -223,7 +223,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   return AppTextField(
                     hint: 'Enter your full name',
                     controller: fullNameController,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: .next,
                     enabled: !isLoading,
                   );
                 },
@@ -233,7 +233,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
               /// [Text] widget for the contact number label.
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: .centerLeft,
                 child: Text('Contact Number', style: AppTextStyles.inputLabel),
               ),
               Gap.h(8),
@@ -246,8 +246,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   return AppTextField(
                     hint: 'Enter your contact number',
                     controller: contactController,
-                    keyboardType: TextInputType.phone,
-                    textInputAction: TextInputAction.next,
+                    keyboardType: .phone,
+                    textInputAction: .next,
                     enabled: !isLoading,
                   );
                 },
@@ -257,7 +257,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
               /// [Text] widget for the address label.
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: .centerLeft,
                 child: Text('Address', style: AppTextStyles.inputLabel),
               ),
               Gap.h(8),
@@ -270,7 +270,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   return AppTextField(
                     hint: 'Enter your address',
                     controller: addressController,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: .done,
                     enabled: !isLoading,
                   );
                 },

@@ -46,8 +46,8 @@ class AppHeader extends StatelessWidget {
   /// AppHeader.custom(
   ///   leading: const CircleAvatar(radius: 20, backgroundImage: ...),
   ///   middle: Column(
-  ///     crossAxisAlignment: CrossAxisAlignment.start,
-  ///     mainAxisSize: MainAxisSize.min,
+  ///     crossAxisAlignment: .start,
+  ///     mainAxisSize: .min,
   ///     children: [
   ///       Text('Good evening', style: AppTextStyles.overline),
   ///       Text('Roberts Adam', style: AppTextStyles.h2),
@@ -126,7 +126,7 @@ class AppHeader extends StatelessWidget {
             title!,
             style: AppTextStyles.h2,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            overflow: .ellipsis,
           ),
         ),
         ?trailing,

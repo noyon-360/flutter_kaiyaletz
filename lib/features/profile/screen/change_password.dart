@@ -54,7 +54,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
         child: Form(
           key: _formKey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: .stretch,
             children: [
               Text('Current Password', style: AppTextStyles.inputLabel),
               Gap.h(8),
@@ -62,7 +62,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                 hint: 'Enter current password',
                 controller: currentPasswordController,
                 isPassword: true,
-                textInputAction: TextInputAction.next,
+                textInputAction: .next,
                 onSubmitted: (_) => newPasswordFocus.requestFocus(),
                 validator: (value) => Validators.required(
                   value,
@@ -79,7 +79,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                 controller: newPasswordController,
                 focusNode: newPasswordFocus,
                 isPassword: true,
-                textInputAction: TextInputAction.next,
+                textInputAction: .next,
                 onSubmitted: (_) => confirmPasswordFocus.requestFocus(),
                 validator: (value) => Validators.password(
                   value,
@@ -96,7 +96,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                 controller: confirmPasswordController,
                 focusNode: confirmPasswordFocus,
                 isPassword: true,
-                textInputAction: TextInputAction.done,
+                textInputAction: .done,
                 validator: (value) => Validators.confirmPassword(
                   value,
                   newPasswordController.text,
@@ -113,7 +113,7 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
                         ref.watch(
                           profileProvider.select((t) => t.changePassErrorMsg),
                         ),
-                        textAlign: TextAlign.center,
+                        textAlign: .center,
                         style: TextStyle(color: AppColors.error),
                       ),
                     );

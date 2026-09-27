@@ -122,8 +122,8 @@ class _AppTextFieldState extends State<AppTextField> {
         final hasError = state.hasError;
 
         return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: .min,
+          crossAxisAlignment: .start,
           children: [
             TextField(
               controller: widget.controller,
@@ -131,11 +131,11 @@ class _AppTextFieldState extends State<AppTextField> {
               obscureText: _obscure,
               obscuringCharacter: '*',
               keyboardType: widget.isPassword
-                  ? TextInputType.visiblePassword
+                  ? .visiblePassword
                   : (widget.keyboardType ??
                         (multiline
-                            ? TextInputType.multiline
-                            : TextInputType.text)),
+                            ? .multiline
+                            : .text)),
               textInputAction: widget.textInputAction,
               maxLines: widget.isPassword ? 1 : widget.maxLines,
               minLines: widget.minLines,
@@ -189,8 +189,8 @@ class _AppTextFieldState extends State<AppTextField> {
     );
 
     final content = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: .min,
+      crossAxisAlignment: .stretch,
       children: [
         if (widget.label != null) ...[
           Text(widget.label!, style: AppTextStyles.inputLabel),

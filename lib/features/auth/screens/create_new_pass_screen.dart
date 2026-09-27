@@ -61,9 +61,9 @@ class _CreateNewPassScreenState extends ConsumerState<CreateNewPassScreen> {
           child: Form(
             key: formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: .center,
               children: [
-                AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
+                AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
 
                 Gap.h(20),
 
@@ -74,7 +74,7 @@ class _CreateNewPassScreenState extends ConsumerState<CreateNewPassScreen> {
 
                 /// [Text] widget for the new password label.
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: .centerLeft,
                   child: Text('New Password', style: AppTextStyles.inputLabel),
                 ),
                 Gap.h(8),
@@ -87,7 +87,7 @@ class _CreateNewPassScreenState extends ConsumerState<CreateNewPassScreen> {
                     return AppTextField(
                       hint: 'Enter your new password',
                       controller: passwordController,
-                      textInputAction: TextInputAction.next,
+                      textInputAction: .next,
                       isPassword: true,
                       enabled: !isLoading,
                       validator: (value) => Validators.password(
@@ -102,7 +102,7 @@ class _CreateNewPassScreenState extends ConsumerState<CreateNewPassScreen> {
 
                 /// [Text] widget for the confirm password label.
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: .centerLeft,
                   child: Text(
                     'Confirm Password',
                     style: AppTextStyles.inputLabel,
@@ -119,7 +119,7 @@ class _CreateNewPassScreenState extends ConsumerState<CreateNewPassScreen> {
                       hint: 'Confirm your new password',
                       controller: confirmPasswordController,
                       focusNode: confirmPassFocusNode,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: .done,
                       isPassword: true,
                       enabled: !isLoading,
                       validator: (value) => Validators.confirmPassword(

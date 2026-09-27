@@ -60,9 +60,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Form(
             key: formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: .center,
               children: [
-                AppLogo(images: AppAssets.img.logo, h: 90, fit: BoxFit.cover),
+                AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
 
                 Gap.h(20),
 
@@ -76,7 +76,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: Text(
                     'Please enter your email & password to access your account.',
                     style: AppTextStyles.bodyLarge,
-                    textAlign: TextAlign.center,
+                    textAlign: .center,
                   ),
                 ),
 
@@ -84,7 +84,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 /// [Text] widget for the email label.
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: .centerLeft,
                   child: Text('Email', style: AppTextStyles.inputLabel),
                 ),
                 Gap.h(8),
@@ -98,8 +98,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       hint: 'Enter your email ',
                       autovalidateMode: .disabled,
                       controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
+                      keyboardType: .emailAddress,
+                      textInputAction: .next,
                       enabled: !isLoading,
                       validator: Validators.email,
                     );
@@ -110,7 +110,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 /// [Text] widget for the password label.
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: .centerLeft,
                   child: Text('Password', style: AppTextStyles.inputLabel),
                 ),
                 Gap.h(8),
@@ -125,7 +125,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       autovalidateMode: .disabled,
                       controller: passwordController,
                       focusNode: passFocusNode,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: .done,
                       isPassword: true,
                       enabled: !isLoading,
                       validator: (value) => Validators.required(
@@ -187,7 +187,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 /// [Row] widget for the "Don't have an account? Sign Up" link.
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: .center,
                   children: [
                     Text(
                       'Don\'t have an account?',

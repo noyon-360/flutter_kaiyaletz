@@ -59,7 +59,7 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
                   jobCreateProvider.select((s) => s.dateError),
                 );
                 return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: .start,
                   children: [
                     AppDateField(
                       label: 'Date',
@@ -97,7 +97,7 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
             AppTextField(
               label: 'Phone Number',
               hint: '+(555) 000-0000',
-              keyboardType: TextInputType.phone,
+              keyboardType: .phone,
               onChanged: notifier.setPhoneNumber,
               validator: (value) =>
                   notifier.validateRequired(value, 'Phone number'),
@@ -106,7 +106,7 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
             AppTextField(
               label: 'Email Address',
               hint: 'Customer@gmail.com',
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: .emailAddress,
               onChanged: notifier.setEmailAddress,
               validator: notifier.validateEmail,
             ),

@@ -67,7 +67,7 @@ class MiniStepProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: .min,
       children: List.generate(totalSteps * 2 - 1, (i) {
         if (i.isOdd) return const SizedBox(width: 2);
         final index = i ~/ 2;

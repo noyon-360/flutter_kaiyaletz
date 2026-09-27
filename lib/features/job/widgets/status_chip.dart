@@ -8,25 +8,25 @@ enum JobStatus { newJob, inProgress, proposalSent, completed }
 
 extension JobStatusX on JobStatus {
   String get label => switch (this) {
-    JobStatus.newJob => 'New',
-    JobStatus.inProgress => 'In Progress',
-    JobStatus.proposalSent => 'Proposal Sent',
-    JobStatus.completed => 'Completed',
+    .newJob => 'New',
+    .inProgress => 'In Progress',
+    .proposalSent => 'Proposal Sent',
+    .completed => 'Completed',
   };
 
   Color get color => switch (this) {
-    JobStatus.newJob => AppColors.statusNew,
-    JobStatus.inProgress => AppColors.statusInProgress,
-    JobStatus.proposalSent => AppColors.statusProposalSent,
-    JobStatus.completed => AppColors.statusCompleted,
+    .newJob => AppColors.statusNew,
+    .inProgress => AppColors.statusInProgress,
+    .proposalSent => AppColors.statusProposalSent,
+    .completed => AppColors.statusCompleted,
   };
 
   /// The API's status string, e.g. "in_progress".
   String get apiValue => switch (this) {
-    JobStatus.newJob => 'new',
-    JobStatus.inProgress => 'in_progress',
-    JobStatus.proposalSent => 'proposal_sent',
-    JobStatus.completed => 'completed',
+    .newJob => 'new',
+    .inProgress => 'in_progress',
+    .proposalSent => 'proposal_sent',
+    .completed => 'completed',
   };
 }
 
@@ -34,13 +34,13 @@ extension JobStatusX on JobStatus {
 JobStatus jobStatusFromApi(String status) {
   switch (status.toLowerCase().replaceAll('_', '')) {
     case 'inprogress':
-      return JobStatus.inProgress;
+      return .inProgress;
     case 'proposalsent':
-      return JobStatus.proposalSent;
+      return .proposalSent;
     case 'completed':
-      return JobStatus.completed;
+      return .completed;
     default:
-      return JobStatus.newJob;
+      return .newJob;
   }
 }
 

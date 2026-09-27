@@ -101,7 +101,7 @@ class _JobListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return JobCard(
-      style: JobCardStyle.card,
+      style: .card,
       customerName: job.customerName,
       address: job.propertyAddress,
       status: jobStatusFromApi(job.status),
