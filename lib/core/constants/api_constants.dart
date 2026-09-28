@@ -86,6 +86,15 @@ class JobEndpoints {
   String get dashboard => "${_base}dashboard";
 
   String jobById(String id) => '$_base$id';
+
+  String get addProductToJob => "${_base}add-product";
+
+  String saveRoomCapture(String id) => "$_base$id/room-capture";
+  String saveMeasurements(String id) => "$_base$id/measurements";
+  String saveSelectedProducts(String id) => "$_base$id/products";
+  String generateAILayout(String id) => "$_base$id/ai-layout";
+  String saveEstimate(String id) => "$_base$id/estimate";
+  String generateProposal(String id) => "$_base$id/proposal";
 }
 
 class CatalogEndpoint {
