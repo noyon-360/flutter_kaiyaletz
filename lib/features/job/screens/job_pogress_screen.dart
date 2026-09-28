@@ -24,7 +24,11 @@ class JobPogressScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            StepProgressBar(currentStep: currentStep),
+            StepProgressBar(
+              currentStep: currentStep,
+              onStepTap: (step) =>
+                  ref.read(jobProvider.notifier).goToStep(step),
+            ),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
               child: KeyedSubtree(

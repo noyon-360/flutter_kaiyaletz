@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_kaiyaletz/core/utils/date_formatter.dart';
 import 'package:flutter_kaiyaletz/core/utils/gap.dart';
 import 'package:flutter_kaiyaletz/features/catalog/controller/catalog_cotroller.dart';
 import 'package:flutter_kaiyaletz/features/job/controller/job_controller.dart';
@@ -35,19 +36,35 @@ class JobDetailsStep extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final jobDetails = ref.watch(jobProvider.select((s) => s.singleJob));
 
+    final String date = formatDate(jobDetails?.date ?? DateTime.now());
+
     return Column(
       children: [
         Gap(h: 16),
-        InfoRow(label: 'Date', value: jobDetails?.date.toIso8601String() ?? ""),
-        InfoRow(label: 'Customer Name', value: jobDetails?.customerName ?? ""),
+        InfoRow(label: 'Date', value: date),
+        InfoRow(
+          label: 'Customer Name',
+          value: jobDetails?.customerName ?? "No Name",
+        ),
         InfoRow(
           label: 'Property Address',
-          value: jobDetails?.propertyAddress ?? "",
+          value: jobDetails?.propertyAddress ?? "No Address",
         ),
-        InfoRow(label: 'Phone Number', value: jobDetails?.phoneNumber ?? ""),
-        InfoRow(label: 'Email Address', value: jobDetails?.emailAddress ?? ""),
+        InfoRow(
+          label: 'Phone Number',
+          value: jobDetails?.phoneNumber ?? "No Phone",
+        ),
+        InfoRow(
+          label: 'Email Address',
+          value: jobDetails?.emailAddress ?? "No Email",
+        ),
         Gap(h: 12),
-        DashedNotesBox(label: 'Projects Notes', text: jobDetails?.notes ?? ""),
+        DashedNotesBox(
+          label: 'Projects Notes',
+          text:
+              jobDetails?.notes ??
+              "Renovation — existing layout to be retained if possible",
+        ),
       ],
     );
   }

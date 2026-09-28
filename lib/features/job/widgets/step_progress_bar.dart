@@ -18,6 +18,7 @@ class StepProgressBar extends StatelessWidget {
     this.totalSteps = 8,
     this.height = 12,
     this.gap = 4,
+    this.onStepTap,
   }) : assert(totalSteps > 0);
 
   /// Number of completed steps (0 = none, [totalSteps] = all).
@@ -26,21 +27,29 @@ class StepProgressBar extends StatelessWidget {
   final double height;
   final double gap;
 
+  final ValueChanged<int>? onStepTap;
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: List.generate(totalSteps * 2 - 1, (i) {
         if (i.isOdd) return SizedBox(width: gap);
         final index = i ~/ 2;
+        final step = index + 1;
+        final canTap = onStepTap != null && step <= currentStep;
         return Expanded(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            height: height,
-            decoration: BoxDecoration(
-              color: index < currentStep
-                  ? AppColors.primary
-                  : AppColors.progressEmpty,
-              borderRadius: BorderRadius.circular(99),
+          child: GestureDetector(
+            behavior: .opaque,
+            onTap: canTap ? () => onStepTap!(step) : null,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              height: height,
+              decoration: BoxDecoration(
+                color: index < currentStep
+                    ? AppColors.primary
+                    : AppColors.progressEmpty,
+                borderRadius: BorderRadius.circular(99),
+              ),
             ),
           ),
         );
