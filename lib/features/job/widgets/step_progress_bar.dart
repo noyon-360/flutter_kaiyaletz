@@ -15,7 +15,7 @@ class StepProgressBar extends StatelessWidget {
   const StepProgressBar({
     super.key,
     required this.currentStep,
-    this.totalSteps = 7,
+    this.totalSteps = 8,
     this.height = 12,
     this.gap = 4,
   }) : assert(totalSteps > 0);

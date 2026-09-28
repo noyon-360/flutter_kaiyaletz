@@ -294,4 +294,12 @@ class AppColors {
 
   /// #696969. Chevron arrows on SettingsTile and profile email.
   static const iconMuted = Color(0xFF696969);
+
+  /// #F6F6F6. Unselected product row fill (Select Product screen,
+  /// ProductSelectTile).
+  static const surfaceOption = Color(0xFFF6F6F6);
+
+  /// #F0DCC4. Selected product row fill (Select Product screen,
+  /// ProductSelectTile).
+  static const surfaceOptionSelected = Color(0xFFF0DCC4);
 }

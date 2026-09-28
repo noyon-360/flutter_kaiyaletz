@@ -1,8 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../catalog/model/catalog_model.dart';
 import 'job_create_response_model.dart';
 
 part 'single_job_reponse_model.g.dart';
+
+/// Accepts null / [] / a list of catalog objects. Anything that isn't an
+/// object (e.g. a bare id string) is skipped instead of throwing.
+List<CatalogModel> _productsFromJson(Object? json) => [
+  for (final item in (json as List? ?? const []))
+    if (item is Map<String, dynamic>) CatalogModel.fromJson(item),
+];
 
 /// Shape of the `data` object for `GET /jobs/:id`.
 @JsonSerializable(checked: true, disallowUnrecognizedKeys: true)
@@ -44,7 +52,9 @@ class SingleJobResponseModel {
 
   final Measurements? measurements;
 
-  final List<dynamic>? selectedProducts;
+  @JsonKey(fromJson: _productsFromJson)
+  @JsonKey(fromJson: _productsFromJson)
+  final List<CatalogModel>? selectedProducts;
 
   final AiLayout? aiLayout;
 

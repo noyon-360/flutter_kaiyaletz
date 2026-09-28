@@ -1,9 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter_kaiyaletz/core/utils/d_print.dart';
 import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
 import 'package:flutter_kaiyaletz/features/job/models/job_create_response_model.dart';
 import 'package:flutter_kaiyaletz/features/job/repos/job_repo.dart';
-import 'package:flutter_kaiyaletz/features/job/screens/job_pogress.dart';
+import 'package:flutter_kaiyaletz/features/job/screens/job_pogress_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/single_job_reponse_model.dart';
@@ -32,7 +33,10 @@ class JobState {
   final bool? isJobLoading;
   final bool isLoadingMore;
 
-  final String jobStepNames;
+  final String jobStepTitle;
+  final int? currentStep;
+
+  final Map<String, int> selectedQty;
 
   final String search;
   final String? status;
@@ -47,7 +51,9 @@ class JobState {
     this.isJobLoading = false,
     this.isLoadingMore = false,
 
-    this.jobStepNames = '',
+    this.jobStepTitle = '',
+    this.currentStep,
+    this.selectedQty = const {},
 
     this.search = '',
     this.status,
@@ -66,7 +72,10 @@ class JobState {
     bool? isLoadingMore,
     bool clearStatus = false,
 
-    String? jobStepNames,
+    String? jobStepTitle,
+    int? currentStep,
+
+    Map<String, int>? selectedQty,
 
     String? search,
     String? status,
@@ -79,7 +88,9 @@ class JobState {
       isLoading: isLoading ?? this.isLoading,
       isJobLoading: isJobLoading ?? this.isJobLoading,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-      jobStepNames: jobStepNames ?? this.jobStepNames,
+      jobStepTitle: jobStepTitle ?? this.jobStepTitle,
+      currentStep: currentStep ?? this.currentStep,
+      selectedQty: selectedQty ?? this.selectedQty,
       search: search ?? this.search,
       status: clearStatus ? null : (status ?? this.status),
       page: page ?? this.page,
@@ -176,11 +187,6 @@ class JobController extends Notifier<JobState> {
     return 'Step $currentStep: ${jobStepNames[index]}';
   }
 
-  Future<void> jobStepTitle(int currentStep) async {
-    final index = (currentStep - 1).clamp(0, jobStepNames.length - 1);
-    state = state.copyWith(jobStepNames: jobStepNames[index]);
-  }
-
   Future<void> getJobById(String jobId) async {
     final repo = ref.read(jobRepo);
 
@@ -192,13 +198,45 @@ class JobController extends Notifier<JobState> {
       (f) {
         state = state.copyWith(isJobLoading: false);
       },
-      (s) async {
-        state = state.copyWith(singleJob: s.data, isJobLoading: false);
+      (s) {
+        final step = s.data.currentStep.clamp(1, jobStepNames.length);
 
-        await jobStepTitle(s.data.currentStep);
+        state = state.copyWith(
+          singleJob: s.data,
+          currentStep: step,
+          jobStepTitle: jobStepNames[step - 1],
+          isJobLoading: false,
+        );
 
-        AppNav.to(JobPogress());
+        AppNav.to(JobPogressScreen());
       },
     );
+  }
+
+  void goToStep(int currentStep) {
+    final s = currentStep.clamp(1, jobStepNames.length);
+
+    DPrint.info("Step : $s");
+
+    state = state.copyWith(currentStep: s, jobStepTitle: jobStepNames[s - 1]);
+  }
+
+  void nextStep() => goToStep((state.currentStep ?? 1) + 1);
+  void previousStep() => goToStep((state.currentStep ?? 1) - 1);
+
+  void toggleProduct(String id) {
+    final next = Map<String, int>.from(state.selectedQty);
+    if (next.containsKey(id)) {
+      next.remove(id);
+    } else {
+      next[id] = 1;
+    }
+    state = state.copyWith(selectedQty: next);
+  }
+
+  void setQuantity(String id, int qty) {
+    if (!state.selectedQty.containsKey(id)) return;
+    if (qty < 1) return;
+    state = state.copyWith(selectedQty: {...state.selectedQty, id: qty});
   }
 }

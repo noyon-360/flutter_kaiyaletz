@@ -84,7 +84,7 @@ SingleJobResponseModel _$SingleJobResponseModelFromJson(
     ),
     selectedProducts: $checkedConvert(
       'selectedProducts',
-      (v) => v as List<dynamic>?,
+      (v) => _productsFromJson(v),
     ),
     aiLayout: $checkedConvert(
       'aiLayout',

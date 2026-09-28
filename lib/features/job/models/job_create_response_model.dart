@@ -2,8 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'job_create_response_model.g.dart';
 
-
-
 @JsonSerializable(checked: true, disallowUnrecognizedKeys: true)
 class JobModel {
   @JsonKey(name: '_id', required: true, disallowNullValue: true)
