@@ -50,80 +50,93 @@ class _ChangePasswordState extends ConsumerState<ChangePassword> {
   Widget build(BuildContext context) {
     return AppScaffold(
       header: const AppHeader(title: 'Change Password'),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: .stretch,
-            children: [
-              Text('Current Password', style: AppTextStyles.inputLabel),
-              Gap.h(8),
-              AppTextField(
-                hint: 'Enter current password',
-                controller: currentPasswordController,
-                isPassword: true,
-                textInputAction: .next,
-                onSubmitted: (_) => newPasswordFocus.requestFocus(),
-                validator: (value) => Validators.required(
-                  value,
-                  message: 'Please enter your current password',
-                ),
+      body: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+                maxWidth: 420,
               ),
-
-              Gap.h(16),
-
-              Text('New Password', style: AppTextStyles.inputLabel),
-              Gap.h(8),
-              AppTextField(
-                hint: 'Enter new password',
-                controller: newPasswordController,
-                focusNode: newPasswordFocus,
-                isPassword: true,
-                textInputAction: .next,
-                onSubmitted: (_) => confirmPasswordFocus.requestFocus(),
-                validator: (value) => Validators.password(
-                  value,
-                  requiredMessage: 'Please enter a new password',
-                ),
-              ),
-
-              Gap.h(16),
-
-              Text('Confirm Password', style: AppTextStyles.inputLabel),
-              Gap.h(8),
-              AppTextField(
-                hint: 'Re-enter new password',
-                controller: confirmPasswordController,
-                focusNode: confirmPasswordFocus,
-                isPassword: true,
-                textInputAction: .done,
-                validator: (value) => Validators.confirmPassword(
-                  value,
-                  newPasswordController.text,
-                  requiredMessage: 'Please confirm your new password',
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: Consumer(
-                  builder: (context, ref, _) {
-                    return Center(
-                      child: Text(
-                        ref.watch(
-                          profileProvider.select((t) => t.changePassErrorMsg),
-                        ),
-                        textAlign: .center,
-                        style: TextStyle(color: AppColors.error),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: .stretch,
+                  children: [
+                    Text('Current Password', style: AppTextStyles.inputLabel),
+                    Gap.h(8),
+                    AppTextField(
+                      hint: 'Enter current password',
+                      controller: currentPasswordController,
+                      isPassword: true,
+                      textInputAction: .next,
+                      onSubmitted: (_) => newPasswordFocus.requestFocus(),
+                      validator: (value) => Validators.required(
+                        value,
+                        message: 'Please enter your current password',
                       ),
-                    );
-                  },
+                    ),
+
+                    Gap.h(16),
+
+                    Text('New Password', style: AppTextStyles.inputLabel),
+                    Gap.h(8),
+                    AppTextField(
+                      hint: 'Enter new password',
+                      controller: newPasswordController,
+                      focusNode: newPasswordFocus,
+                      isPassword: true,
+                      textInputAction: .next,
+                      onSubmitted: (_) => confirmPasswordFocus.requestFocus(),
+                      validator: (value) => Validators.password(
+                        value,
+                        requiredMessage: 'Please enter a new password',
+                      ),
+                    ),
+
+                    Gap.h(16),
+
+                    Text('Confirm Password', style: AppTextStyles.inputLabel),
+                    Gap.h(8),
+                    AppTextField(
+                      hint: 'Re-enter new password',
+                      controller: confirmPasswordController,
+                      focusNode: confirmPasswordFocus,
+                      isPassword: true,
+                      textInputAction: .done,
+                      validator: (value) => Validators.confirmPassword(
+                        value,
+                        newPasswordController.text,
+                        requiredMessage: 'Please confirm your new password',
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          return Center(
+                            child: Text(
+                              ref.watch(
+                                profileProvider.select(
+                                  (t) => t.changePassErrorMsg,
+                                ),
+                              ),
+                              textAlign: .center,
+                              style: TextStyle(color: AppColors.error),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    // Gap.h(24),
+                    AppPrimaryButton(label: 'Save', onAsyncPressed: save),
+                  ],
                 ),
               ),
-
-              // Gap.h(24),
-              AppPrimaryButton(label: 'Save', onAsyncPressed: save),
-            ],
+            ),
           ),
         ),
       ),

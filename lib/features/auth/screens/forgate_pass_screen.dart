@@ -40,112 +40,124 @@ class _ForgatePassScreenState extends ConsumerState<ForgatePassScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: .center,
-              children: [
-                AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
-
-                Gap.h(20),
-
-                /// [Text] widget for the screen title.
-                Text('Forgot Password', style: AppTextStyles.h1),
-                Gap.h(8),
-
-                /// [Text] widget for the helper message.
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Text(
-                    "Enter your email and we'll send you a code to reset your password",
-                    style: AppTextStyles.bodyLarge,
-                    textAlign: .center,
-                  ),
-                ),
-
-                Gap.h(24),
-
-                /// [Text] widget for the email label.
-                Align(
-                  alignment: .centerLeft,
-                  child: Text('Email', style: AppTextStyles.inputLabel),
-                ),
-                Gap.h(8),
-
-                Consumer(
-                  builder: (context, ref, child) {
-                    final isLoading = ref.watch(
-                      authCtrlProvider.select((s) => s.isLoading),
-                    );
-                    return AppTextField(
-                      hint: 'Enter your email',
-                      autovalidateMode: .disabled,
-                      controller: emailController,
-                      keyboardType: .emailAddress,
-                      textInputAction: .done,
-                      enabled: !isLoading,
-                      validator: Validators.email,
-                    );
-                  },
-                ),
-
-                Gap.h(24),
-
-                /// [errMsg]
-                Consumer(
-                  builder: (context, ref, child) {
-                    final errMsg = ref.watch(
-                      authCtrlProvider.select((s) => s.forgotPassError),
-                    );
-
-                    if (errMsg.isEmpty) {
-                      return const SizedBox.shrink();
-                    }
-                    return Column(
-                      children: [
-                        Text(errMsg, style: TextStyle(color: AppColors.error)),
-                        Gap.h(8),
-                      ],
-                    );
-                  },
-                ),
-
-                /// [AppPrimaryButton] widget for sending the reset code.
-                AppPrimaryButton(
-                  label: 'Continue',
-                  onValidate: () => formKey.currentState!.validate(),
-                  onAsyncPressed: sendResetCode,
-                ),
-
-                Gap.h(16),
-
-                /// [Row] widget for the "Remember Password? Sign In" link.
-                Row(
+      body: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+                maxWidth: 420,
+              ),
+              child: Form(
+                key: formKey,
+                child: Column(
                   mainAxisAlignment: .center,
                   children: [
-                    Text(
-                      'Remember Password?',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.textPrimary,
+                    AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
+
+                    Gap.h(20),
+
+                    /// [Text] widget for the screen title.
+                    Text('Forgot Password', style: AppTextStyles.h1),
+                    Gap.h(8),
+
+                    /// [Text] widget for the helper message.
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Text(
+                        "Enter your email and we'll send you a code to reset your password",
+                        style: AppTextStyles.bodyLarge,
+                        textAlign: .center,
                       ),
                     ),
-                    Gap.w(8),
-                    GestureDetector(
-                      onTap: () {
-                        AppNav.back();
+
+                    Gap.h(24),
+
+                    /// [Text] widget for the email label.
+                    Align(
+                      alignment: .centerLeft,
+                      child: Text('Email', style: AppTextStyles.inputLabel),
+                    ),
+                    Gap.h(8),
+
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final isLoading = ref.watch(
+                          authCtrlProvider.select((s) => s.isLoading),
+                        );
+                        return AppTextField(
+                          hint: 'Enter your email',
+                          autovalidateMode: .disabled,
+                          controller: emailController,
+                          keyboardType: .emailAddress,
+                          textInputAction: .done,
+                          enabled: !isLoading,
+                          validator: Validators.email,
+                        );
                       },
-                      child: Text(
-                        'Sign In',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: AppColors.primary,
+                    ),
+
+                    Gap.h(24),
+
+                    /// [errMsg]
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final errMsg = ref.watch(
+                          authCtrlProvider.select((s) => s.forgotPassError),
+                        );
+
+                        if (errMsg.isEmpty) {
+                          return const SizedBox.shrink();
+                        }
+                        return Column(
+                          children: [
+                            Text(
+                              errMsg,
+                              style: TextStyle(color: AppColors.error),
+                            ),
+                            Gap.h(8),
+                          ],
+                        );
+                      },
+                    ),
+
+                    /// [AppPrimaryButton] widget for sending the reset code.
+                    AppPrimaryButton(
+                      label: 'Continue',
+                      onValidate: () => formKey.currentState!.validate(),
+                      onAsyncPressed: sendResetCode,
+                    ),
+
+                    Gap.h(16),
+
+                    /// [Row] widget for the "Remember Password? Sign In" link.
+                    Row(
+                      mainAxisAlignment: .center,
+                      children: [
+                        Text(
+                          'Remember Password?',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                      ),
+                        Gap.w(8),
+                        GestureDetector(
+                          onTap: () {
+                            AppNav.back();
+                          },
+                          child: Text(
+                            'Sign In',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

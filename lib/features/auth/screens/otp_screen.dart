@@ -78,95 +78,107 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
 
     return AppScaffold(
       backgroundColor: AppColors.surface,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: .center,
-            children: [
-              AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
-
-              Gap.h(20),
-
-              /// [Text] widget for the screen title.
-              Text('OTP', style: AppTextStyles.h1),
-              Gap.h(8),
-
-              /// [Text] widget for the helper message.
-              Text(
-                'Enter the 6-digit code sent to your email',
-                style: AppTextStyles.bodyLarge,
-                textAlign: .center,
+      body: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+                maxWidth: 420,
               ),
-
-              Gap.h(24),
-
-              /// [Pinput] widget for the OTP input.
-              Consumer(
-                builder: (context, ref, child) {
-                  final isLoading = ref.watch(
-                    authCtrlProvider.select((s) => s.isLoading),
-                  );
-                  return Pinput(
-                    length: 6,
-                    controller: otpController,
-                    focusNode: focusNode,
-                    enabled: !isLoading,
-                    autofocus: true,
-                    defaultPinTheme: defaultPinTheme,
-                    focusedPinTheme: focusedPinTheme,
-                    submittedPinTheme: submittedPinTheme,
-                    showCursor: true,
-                    // onCompleted: (_) => verify(),
-                  );
-                },
-              ),
-
-              Gap.h(12),
-
-              /// [Row] widget for the "Didn't received code? Resend" link.
-              Row(
+              child: Column(
                 mainAxisAlignment: .center,
                 children: [
+                  AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
+
+                  Gap.h(20),
+
+                  /// [Text] widget for the screen title.
+                  Text('OTP', style: AppTextStyles.h1),
+                  Gap.h(8),
+
+                  /// [Text] widget for the helper message.
                   Text(
-                    "Didn't received code?",
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textMuted,
-                    ),
+                    'Enter the 6-digit code sent to your email',
+                    style: AppTextStyles.bodyLarge,
+                    textAlign: .center,
                   ),
-                  Gap.w(8),
-                  GestureDetector(
-                    onTap: resend,
-                    child: Text(
-                      'Resend',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.primary,
+
+                  Gap.h(24),
+
+                  /// [Pinput] widget for the OTP input.
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final isLoading = ref.watch(
+                        authCtrlProvider.select((s) => s.isLoading),
+                      );
+                      return Pinput(
+                        length: 6,
+                        controller: otpController,
+                        focusNode: focusNode,
+                        enabled: !isLoading,
+                        autofocus: true,
+                        defaultPinTheme: defaultPinTheme,
+                        focusedPinTheme: focusedPinTheme,
+                        submittedPinTheme: submittedPinTheme,
+                        showCursor: true,
+                        // onCompleted: (_) => verify(),
+                      );
+                    },
+                  ),
+
+                  Gap.h(12),
+
+                  /// [Row] widget for the "Didn't received code? Resend" link.
+                  Row(
+                    mainAxisAlignment: .center,
+                    children: [
+                      Text(
+                        "Didn't received code?",
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.textMuted,
+                        ),
                       ),
-                    ),
+                      Gap.w(8),
+                      GestureDetector(
+                        onTap: resend,
+                        child: Text(
+                          'Resend',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+
+                  Gap.h(24),
+
+                  /// [errMsg]
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final errMsg = ref.watch(
+                        authCtrlProvider.select((s) => s.verifyOtpErrMsg),
+                      );
+
+                      return Column(
+                        children: [
+                          Text(
+                            errMsg,
+                            style: TextStyle(color: AppColors.error),
+                          ),
+                          Gap.h(8),
+                        ],
+                      );
+                    },
+                  ),
+
+                  /// [AppPrimaryButton] widget for the verify action.
+                  AppPrimaryButton(label: 'Verify', onAsyncPressed: verify),
                 ],
               ),
-
-              Gap.h(24),
-
-              /// [errMsg]
-              Consumer(
-                builder: (context, ref, child) {
-                  final errMsg = ref.watch(
-                    authCtrlProvider.select((s) => s.verifyOtpErrMsg),
-                  );
-
-                  return Column(
-                    children: [
-                      Text(errMsg, style: TextStyle(color: AppColors.error)),
-                      Gap.h(8),
-                    ],
-                  );
-                },
-              ),
-
-              /// [AppPrimaryButton] widget for the verify action.
-              AppPrimaryButton(label: 'Verify', onAsyncPressed: verify),
-            ],
+            ),
           ),
         ),
       ),

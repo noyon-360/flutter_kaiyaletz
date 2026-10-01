@@ -56,108 +56,123 @@ class _CreateNewPassScreenState extends ConsumerState<CreateNewPassScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: .center,
-              children: [
-                AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
+      body: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+                maxWidth: 420,
+              ),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: .center,
+                  children: [
+                    AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
 
-                Gap.h(20),
+                    Gap.h(20),
 
-                /// [Text] widget for the screen title.
-                Text('Create New Password', style: AppTextStyles.h1),
+                    /// [Text] widget for the screen title.
+                    Text('Create New Password', style: AppTextStyles.h1),
 
-                Gap.h(24),
+                    Gap.h(24),
 
-                /// [Text] widget for the new password label.
-                Align(
-                  alignment: .centerLeft,
-                  child: Text('New Password', style: AppTextStyles.inputLabel),
-                ),
-                Gap.h(8),
-
-                Consumer(
-                  builder: (context, ref, child) {
-                    final isLoading = ref.watch(
-                      authCtrlProvider.select((s) => s.isLoading),
-                    );
-                    return AppTextField(
-                      hint: 'Enter your new password',
-                      controller: passwordController,
-                      textInputAction: .next,
-                      isPassword: true,
-                      enabled: !isLoading,
-                      validator: (value) => Validators.password(
-                        value,
-                        requiredMessage: 'Please enter a new password',
+                    /// [Text] widget for the new password label.
+                    Align(
+                      alignment: .centerLeft,
+                      child: Text(
+                        'New Password',
+                        style: AppTextStyles.inputLabel,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                    Gap.h(8),
 
-                Gap.h(12),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final isLoading = ref.watch(
+                          authCtrlProvider.select((s) => s.isLoading),
+                        );
+                        return AppTextField(
+                          hint: 'Enter your new password',
+                          controller: passwordController,
+                          textInputAction: .next,
+                          isPassword: true,
+                          enabled: !isLoading,
+                          validator: (value) => Validators.password(
+                            value,
+                            requiredMessage: 'Please enter a new password',
+                          ),
+                        );
+                      },
+                    ),
 
-                /// [Text] widget for the confirm password label.
-                Align(
-                  alignment: .centerLeft,
-                  child: Text(
-                    'Confirm Password',
-                    style: AppTextStyles.inputLabel,
-                  ),
-                ),
-                Gap.h(8),
+                    Gap.h(12),
 
-                Consumer(
-                  builder: (context, ref, child) {
-                    final isLoading = ref.watch(
-                      authCtrlProvider.select((s) => s.isLoading),
-                    );
-                    return AppTextField(
-                      hint: 'Confirm your new password',
-                      controller: confirmPasswordController,
-                      focusNode: confirmPassFocusNode,
-                      textInputAction: .done,
-                      isPassword: true,
-                      enabled: !isLoading,
-                      validator: (value) => Validators.confirmPassword(
-                        value,
-                        passwordController.text,
+                    /// [Text] widget for the confirm password label.
+                    Align(
+                      alignment: .centerLeft,
+                      child: Text(
+                        'Confirm Password',
+                        style: AppTextStyles.inputLabel,
                       ),
-                    );
-                  },
+                    ),
+                    Gap.h(8),
+
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final isLoading = ref.watch(
+                          authCtrlProvider.select((s) => s.isLoading),
+                        );
+                        return AppTextField(
+                          hint: 'Confirm your new password',
+                          controller: confirmPasswordController,
+                          focusNode: confirmPassFocusNode,
+                          textInputAction: .done,
+                          isPassword: true,
+                          enabled: !isLoading,
+                          validator: (value) => Validators.confirmPassword(
+                            value,
+                            passwordController.text,
+                          ),
+                        );
+                      },
+                    ),
+
+                    Gap.h(24),
+
+                    /// [errMsg]
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final errMsg = ref.watch(
+                          authCtrlProvider.select((s) => s.resetPassError),
+                        );
+
+                        if (errMsg.isEmpty) {
+                          return const SizedBox.shrink();
+                        }
+                        return Column(
+                          children: [
+                            Text(
+                              errMsg,
+                              style: TextStyle(color: AppColors.error),
+                            ),
+                            Gap.h(8),
+                          ],
+                        );
+                      },
+                    ),
+
+                    /// [AppPrimaryButton] widget for the reset password action.
+                    AppPrimaryButton(
+                      label: 'Sign In',
+                      onValidate: () => formKey.currentState!.validate(),
+                      onAsyncPressed: resetPassword,
+                    ),
+                  ],
                 ),
-
-                Gap.h(24),
-
-                /// [errMsg]
-                Consumer(
-                  builder: (context, ref, child) {
-                    final errMsg = ref.watch(
-                      authCtrlProvider.select((s) => s.resetPassError),
-                    );
-
-                    if (errMsg.isEmpty) {
-                      return const SizedBox.shrink();
-                    }
-                    return Column(
-                      children: [
-                        Text(errMsg, style: TextStyle(color: AppColors.error)),
-                        Gap.h(8),
-                      ],
-                    );
-                  },
-                ),
-
-                /// [AppPrimaryButton] widget for the reset password action.
-                AppPrimaryButton(
-                  label: 'Sign In',
-                  onValidate: () => formKey.currentState!.validate(),
-                  onAsyncPressed: resetPassword,
-                ),
-              ],
+              ),
             ),
           ),
         ),

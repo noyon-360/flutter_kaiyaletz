@@ -129,181 +129,196 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     return AppScaffold(
       header: widget.isEditing ? const AppHeader(title: 'Edit Profile') : null,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: .center,
-            children: [
-              if (!widget.isEditing) ...[
-                AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
+      body: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+                maxWidth: 420,
+              ),
+              child: Column(
+                mainAxisAlignment: .center,
+                children: [
+                  if (!widget.isEditing) ...[
+                    AppLogo(images: AppAssets.img.logo, h: 90, fit: .cover),
 
-                Gap.h(20),
+                    Gap.h(20),
 
-                /// [Text] widget for the screen title.
-                Text('Profile Setup', style: AppTextStyles.h1),
+                    /// [Text] widget for the screen title.
+                    Text('Profile Setup', style: AppTextStyles.h1),
 
-                Gap.h(24),
-              ],
+                    Gap.h(24),
+                  ],
 
-              /// [Avatar] widget with edit/remove controls.
-              ValueListenableBuilder<File?>(
-                valueListenable: avatar,
-                builder: (context, image, child) {
-                  final hasExisting =
-                      image == null && existingAvatarUrl.isNotEmpty;
-                  final ImageProvider? backgroundImage = image != null
-                      ? FileImage(image)
-                      : hasExisting
-                      ? NetworkImage(existingAvatarUrl)
-                      : null;
+                  /// [Avatar] widget with edit/remove controls.
+                  ValueListenableBuilder<File?>(
+                    valueListenable: avatar,
+                    builder: (context, image, child) {
+                      final hasExisting =
+                          image == null && existingAvatarUrl.isNotEmpty;
+                      final ImageProvider? backgroundImage = image != null
+                          ? FileImage(image)
+                          : hasExisting
+                          ? NetworkImage(existingAvatarUrl)
+                          : null;
 
-                  return Center(
-                    child: Stack(
-                      clipBehavior: .none,
-                      children: [
-                        GestureDetector(
-                          onTap: pickAvatar,
-                          child: CircleAvatar(
-                            radius: 55,
-                            backgroundColor: AppColors.surfaceCream,
-                            backgroundImage: backgroundImage,
-                            child: backgroundImage == null
-                                ? Icon(
-                                    Icons.person,
-                                    size: 55,
-                                    color: AppColors.textMuted,
-                                  )
-                                : null,
-                          ),
-                        ),
-                        Positioned(
-                          right: -4,
-                          bottom: -4,
-                          child: GestureDetector(
-                            onTap: backgroundImage != null
-                                ? removeAvatar
-                                : pickAvatar,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: AppColors.surface,
-                                shape: .circle,
-                                border: Border.all(color: AppColors.border),
-                              ),
-                              child: Icon(
-                                image != null
-                                    ? Icons.delete_outline
-                                    : Icons.camera_alt_outlined,
-                                size: 18,
-                                color: AppColors.primary,
+                      return Center(
+                        child: Stack(
+                          clipBehavior: .none,
+                          children: [
+                            GestureDetector(
+                              onTap: pickAvatar,
+                              child: CircleAvatar(
+                                radius: 55,
+                                backgroundColor: AppColors.surfaceCream,
+                                backgroundImage: backgroundImage,
+                                child: backgroundImage == null
+                                    ? Icon(
+                                        Icons.person,
+                                        size: 55,
+                                        color: AppColors.textMuted,
+                                      )
+                                    : null,
                               ),
                             ),
-                          ),
+                            Positioned(
+                              right: -4,
+                              bottom: -4,
+                              child: GestureDetector(
+                                onTap: backgroundImage != null
+                                    ? removeAvatar
+                                    : pickAvatar,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.surface,
+                                    shape: .circle,
+                                    border: Border.all(color: AppColors.border),
+                                  ),
+                                  child: Icon(
+                                    image != null
+                                        ? Icons.delete_outline
+                                        : Icons.camera_alt_outlined,
+                                    size: 18,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      );
+                    },
+                  ),
+
+                  Gap.h(24),
+
+                  /// [Text] widget for the full name label.
+                  Align(
+                    alignment: .centerLeft,
+                    child: Text('Full Name', style: AppTextStyles.inputLabel),
+                  ),
+                  Gap.h(8),
+
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final isLoading = ref.watch(
+                        authCtrlProvider.select((s) => s.isLoading),
+                      );
+                      return AppTextField(
+                        hint: 'Enter your full name',
+                        controller: fullNameController,
+                        textInputAction: .next,
+                        enabled: !isLoading,
+                      );
+                    },
+                  ),
+
+                  Gap.h(12),
+
+                  /// [Text] widget for the contact number label.
+                  Align(
+                    alignment: .centerLeft,
+                    child: Text(
+                      'Contact Number',
+                      style: AppTextStyles.inputLabel,
                     ),
-                  );
-                },
+                  ),
+                  Gap.h(8),
+
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final isLoading = ref.watch(
+                        authCtrlProvider.select((s) => s.isLoading),
+                      );
+                      return AppTextField(
+                        hint: 'Enter your contact number',
+                        controller: contactController,
+                        keyboardType: .phone,
+                        textInputAction: .next,
+                        enabled: !isLoading,
+                      );
+                    },
+                  ),
+
+                  Gap.h(12),
+
+                  /// [Text] widget for the address label.
+                  Align(
+                    alignment: .centerLeft,
+                    child: Text('Address', style: AppTextStyles.inputLabel),
+                  ),
+                  Gap.h(8),
+
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final isLoading = ref.watch(
+                        authCtrlProvider.select((s) => s.isLoading),
+                      );
+                      return AppTextField(
+                        hint: 'Enter your address',
+                        controller: addressController,
+                        textInputAction: .done,
+                        enabled: !isLoading,
+                      );
+                    },
+                  ),
+
+                  Gap.h(24),
+
+                  /// [errMsg]
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final errMsg = ref.watch(
+                        authCtrlProvider.select((s) => s.profileErrMsg),
+                      );
+
+                      if (errMsg.isEmpty) return const SizedBox.shrink();
+
+                      return Column(
+                        children: [
+                          Text(
+                            errMsg,
+                            style: TextStyle(color: AppColors.error),
+                          ),
+                          Gap.h(8),
+                        ],
+                      );
+                    },
+                  ),
+
+                  /// [AppPrimaryButton] widget for the save action.
+                  AppPrimaryButton(
+                    label: widget.isEditing ? 'Save' : 'Save Profile',
+                    onAsyncPressed: save,
+                  ),
+
+                  Gap.h(16),
+                ],
               ),
-
-              Gap.h(24),
-
-              /// [Text] widget for the full name label.
-              Align(
-                alignment: .centerLeft,
-                child: Text('Full Name', style: AppTextStyles.inputLabel),
-              ),
-              Gap.h(8),
-
-              Consumer(
-                builder: (context, ref, child) {
-                  final isLoading = ref.watch(
-                    authCtrlProvider.select((s) => s.isLoading),
-                  );
-                  return AppTextField(
-                    hint: 'Enter your full name',
-                    controller: fullNameController,
-                    textInputAction: .next,
-                    enabled: !isLoading,
-                  );
-                },
-              ),
-
-              Gap.h(12),
-
-              /// [Text] widget for the contact number label.
-              Align(
-                alignment: .centerLeft,
-                child: Text('Contact Number', style: AppTextStyles.inputLabel),
-              ),
-              Gap.h(8),
-
-              Consumer(
-                builder: (context, ref, child) {
-                  final isLoading = ref.watch(
-                    authCtrlProvider.select((s) => s.isLoading),
-                  );
-                  return AppTextField(
-                    hint: 'Enter your contact number',
-                    controller: contactController,
-                    keyboardType: .phone,
-                    textInputAction: .next,
-                    enabled: !isLoading,
-                  );
-                },
-              ),
-
-              Gap.h(12),
-
-              /// [Text] widget for the address label.
-              Align(
-                alignment: .centerLeft,
-                child: Text('Address', style: AppTextStyles.inputLabel),
-              ),
-              Gap.h(8),
-
-              Consumer(
-                builder: (context, ref, child) {
-                  final isLoading = ref.watch(
-                    authCtrlProvider.select((s) => s.isLoading),
-                  );
-                  return AppTextField(
-                    hint: 'Enter your address',
-                    controller: addressController,
-                    textInputAction: .done,
-                    enabled: !isLoading,
-                  );
-                },
-              ),
-
-              Gap.h(24),
-
-              /// [errMsg]
-              Consumer(
-                builder: (context, ref, child) {
-                  final errMsg = ref.watch(
-                    authCtrlProvider.select((s) => s.profileErrMsg),
-                  );
-
-                  if (errMsg.isEmpty) return const SizedBox.shrink();
-
-                  return Column(
-                    children: [
-                      Text(errMsg, style: TextStyle(color: AppColors.error)),
-                      Gap.h(8),
-                    ],
-                  );
-                },
-              ),
-
-              /// [AppPrimaryButton] widget for the save action.
-              AppPrimaryButton(
-                label: widget.isEditing ? 'Save' : 'Save Profile',
-                onAsyncPressed: save,
-              ),
-
-              Gap.h(16),
-            ],
+            ),
           ),
         ),
       ),

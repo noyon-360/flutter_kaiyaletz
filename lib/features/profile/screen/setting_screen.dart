@@ -21,7 +21,7 @@ class SettingScreen extends ConsumerWidget {
     final profile = ref.watch(profileProvider).user;
 
     return AppScaffold(
-      header: const AppHeader(title: 'Settings'),
+      header: const AppHeader(title: 'Settings', showBack: false),
       body: RefreshIndicator.adaptive(
         onRefresh: () =>
             ref.read(profileProvider.notifier).getUser(forceRefresh: true),
