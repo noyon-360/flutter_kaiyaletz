@@ -59,6 +59,11 @@ kotlin {
     }
 }
 
+dependencies {
+    // AR room measuring (lib/features/measure). Needs minSdk 24.
+    implementation("com.google.ar:core:1.56.0")
+}
+
 flutter {
     source = "../.."
 }

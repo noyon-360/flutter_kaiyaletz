@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_kaiyaletz/core/utils/date_formatter.dart';
 import 'package:flutter_kaiyaletz/core/utils/gap.dart';
+import 'package:flutter_kaiyaletz/core/utils/navigation.dart';
+import 'package:flutter_kaiyaletz/features/measure/screens/ar_measure_screen.dart';
 import 'package:flutter_kaiyaletz/features/catalog/controller/catalog_cotroller.dart';
 import 'package:flutter_kaiyaletz/features/job/controller/job_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -88,9 +90,7 @@ class RoomCaptureStep extends StatelessWidget {
           title: 'Room Scan',
           description: 'Use camera to automatically detect room dimensions',
           badgeLabel: 'AI',
-          onTap: () {
-            // start the camera scan
-          },
+          onTap: () => AppNav.to(const ArMeasureScreen()),
         ),
       ],
     );
