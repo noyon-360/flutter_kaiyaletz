@@ -46,9 +46,7 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
               itemBuilder: (context, i) => InteractiveViewer(
                 minScale: 1,
                 maxScale: 4,
-                child: Center(
-                  child: Image.network(images[i], fit: .contain),
-                ),
+                child: Center(child: Image.network(images[i], fit: .contain)),
               ),
             ),
             Positioned(
@@ -73,10 +71,7 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
                   children: [
                     Text(
                       '${_page + 1} / ${images.length}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
                     ),
                     const Gap(h: 10),
                     Row(
@@ -89,9 +84,7 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
                             width: i == _page ? 16 : 6,
                             height: 6,
                             decoration: BoxDecoration(
-                              color: i == _page
-                                  ? Colors.white
-                                  : Colors.white38,
+                              color: i == _page ? Colors.white : Colors.white38,
                               borderRadius: BorderRadius.circular(3),
                             ),
                           ),

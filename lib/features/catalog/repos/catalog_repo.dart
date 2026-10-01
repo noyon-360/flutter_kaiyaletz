@@ -17,7 +17,7 @@ abstract class CatalogRepo {
     String search = "",
     ProductCategory? category,
     int page = 1,
-    int limit = 20,
+    int limit = 24,
   });
 }
 
@@ -31,7 +31,7 @@ class CatalogRepoImpl implements CatalogRepo {
     String search = "",
     ProductCategory? category,
     int page = 1,
-    int limit = 20,
+    int limit = 24,
   }) {
     return apiClient.getStream(
       endpoint: ApiConstants.catalog.catalogs,

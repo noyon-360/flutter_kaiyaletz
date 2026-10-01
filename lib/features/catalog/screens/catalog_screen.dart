@@ -70,58 +70,70 @@ class _CatalogGrid extends ConsumerWidget {
       catalogProvider.select((s) => s.isLoadingMore),
     );
 
-    if (isLoading && catalogs == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = _columnForWidth(constraints.maxWidth);
 
-    final items = catalogs ?? [];
+        if (isLoading && catalogs == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-    return RefreshIndicator.adaptive(
-      onRefresh: () => ref.read(catalogProvider.notifier).getCatalogs(),
-      child: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          final nearBottom =
-              notification.metrics.pixels >=
-              notification.metrics.maxScrollExtent - 200;
-          if (nearBottom) ref.read(catalogProvider.notifier).loadMore();
-          return false;
-        },
-        child: items.isEmpty
-            ? ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 24),
-                    child: Center(child: Text('No products found')),
-                  ),
-                ],
-              )
-            : CustomScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                slivers: [
-                  SliverGrid.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
+        final items = catalogs ?? [];
+
+        return RefreshIndicator.adaptive(
+          onRefresh: () => ref.read(catalogProvider.notifier).getCatalogs(),
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              final nearBottom =
+                  notification.metrics.pixels >=
+                  notification.metrics.maxScrollExtent - 200;
+              if (nearBottom) ref.read(catalogProvider.notifier).loadMore();
+              return false;
+            },
+            child: items.isEmpty
+                ? ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24),
+                        child: Center(child: Text('No products found')),
+                      ),
+                    ],
+                  )
+                : CustomScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    slivers: [
+                      SliverGrid.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: columns,
                           mainAxisSpacing: 12,
                           crossAxisSpacing: 12,
                           mainAxisExtent: 196,
                         ),
-                    itemCount: items.length,
-                    itemBuilder: (context, i) => _ProductTile(item: items[i]),
-                  ),
-                  if (isLoadingMore)
-                    const SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        child: Center(child: CircularProgressIndicator()),
+                        itemCount: items.length,
+                        itemBuilder: (context, i) =>
+                            _ProductTile(item: items[i]),
                       ),
-                    ),
-                ],
-              ),
-      ),
+                      if (isLoadingMore)
+                        const SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Center(child: CircularProgressIndicator()),
+                          ),
+                        ),
+                    ],
+                  ),
+          ),
+        );
+      },
     );
   }
+}
+
+int _columnForWidth(double width) {
+  if (width < 600) return 2;
+  if (width < 900) return 3;
+  return 4;
 }
 
 class _ProductTile extends StatelessWidget {
