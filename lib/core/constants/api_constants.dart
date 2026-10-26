@@ -3,8 +3,9 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseDomain = 'http://187.77.187.56:5001'; // [OV]
+  // static const String baseDomain = 'http://187.77.187.56:5001'; // [OV]
   // static const String baseDomain = 'http://localhost:5001'; // [Home]
+  static const String baseDomain = 'https://api.snapndesign.us'; // [Live]
 
   static const String baseUrl = '$baseDomain/api/v1';
 
