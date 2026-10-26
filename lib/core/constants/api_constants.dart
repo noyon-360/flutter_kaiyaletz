@@ -94,8 +94,10 @@ class JobEndpoints {
   String saveMeasurements(String id) => "$_base$id/measurements";
   String saveSelectedProducts(String id) => "$_base$id/products";
   String generateAILayout(String id) => "$_base$id/ai-layout";
+  String saveDesign(String id) => "$_base$id/design";
   String saveEstimate(String id) => "$_base$id/estimate";
   String generateProposal(String id) => "$_base$id/proposal";
+  String proposalPdf(String id) => "$_base$id/proposal/pdf";
 }
 
 class CatalogEndpoint {
