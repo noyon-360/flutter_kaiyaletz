@@ -420,7 +420,7 @@ class ApiClient {
         _isRefreshing = true;
         try {
           if (await _refreshToken()) {
-            return _request<T>(
+            return await _request<T>(
               method: method,
               endpoint: endpoint,
               fromJsonT: fromJsonT,
@@ -575,7 +575,7 @@ class ApiClient {
         _isRefreshing = true;
         try {
           if (await _refreshToken()) {
-            return downloadFile(
+            return await downloadFile(
               endpoint: endpoint,
               savePath: savePath,
               isRetry: true,
